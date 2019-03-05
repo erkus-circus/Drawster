@@ -1,0 +1,14 @@
+@font-face {
+	font-family: comic-sans;
+	src: url('font/comic.ttf');
+	font-weight: normal;
+}
+@font-face {
+	font-family: comic-sans;
+	src: url('font/comic.ttf');
+	font-weight: bold;
+}
+@font-face {
+	font-family: comic-sans;
+	src: url('font/comic.ttf');
+}

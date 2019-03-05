@@ -1,0 +1,122 @@
+#canvas {
+	border: 1px solid black;
+	cursor: url('/cursor/cursor20X20.png'),pointer;
+	background-color: white;
+}
+
+canvas {
+	display: block;
+	text-align: center;
+	margin: auto;
+}
+
+.canvas {
+	background-color: black;
+}
+#info-sheet {
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	
+}
+#title {
+	font-size: 28px;
+	width: 75%;
+	background-color: inherit;
+	border: none;
+	text-align: center;
+}
+html {
+	font-family: 'Quicksand', sans-serif;
+}
+#save-img {
+	display: none;
+}
+.range {
+	border-radius: 100px; 
+	font-size: 10px;
+}
+input[type="range"] {
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+}
+input[type="range"]:active {
+	cursor: grabbing;
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
+}
+.brush-controls {
+	border-radius: 36px;
+	height: 600px;
+	max-height: 25%;
+	position: sticky;
+	left: 0;
+	top: 100;
+	overflow-x: hidden;
+	z-index: 1;
+	background-color: black;
+}
+#image-controls {
+	display: none;
+}
+#img-hidden {
+	visibility: hidden;
+}
+body {
+	margin: 0;
+}
+.square {
+	list-style-type: square;
+}
+.body {
+	background-color: black;
+}
+li[onclick]:hover {
+	background-color: blue;
+}
+.line-controls {
+	display: none;
+}
+img {
+	width: 100%;
+	height: 100%;
+}
+.warning {
+	background-color: rgba(255,0,0,0.5);
+	border: 1px solid orange;
+}
+ul {
+	list-style-position: inside;
+}
+.foot {
+	z-index: 11;
+}
+#line-controls {
+	display: none;
+}
+.preview {
+	background-color: white;
+}
+ul.square {
+	list-style-type: square;
+}
+ul.changelog > li {
+	margin-bottom: 50px;
+}
+.top {
+	position: fixed;
+	z-index: 99;
+	right: 0;
+	bottom: 0;
+	background-color: pink;
+}
+@media only screen and (max-width: 768px) {
+	.head-img {
+		display: none;
+	}
+	.header {
+		width: 100%;
+	}
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create New Project - Drawster</title>
+	<script type="text/javascript" src="/js/erklib.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/grid.css">
+	<style type="text/css">
+		form {
+			text-align: center;
+		}
+		form label {
+			margin: 5px;
+			padding: 5px;
+		}
+		input {
+			width: 30vw;
+		}
+		input[type="number"], input[type="text"] {
+			text-align: center;
+		}
+		.form-line {
+			margin-bottom: 10px;
+			font-size: 30%;
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="head"><h1>Create New Erkspace</h1></div>
+	<div class="row">
+		<form method="get" action="draw.html" target="_blank">
+			<div class="form-line">
+				<label> Erkspace Name: </label><input placeholder="Untitled" value="Untitled" type="text" name="title">
+			</div><br>
+			<div class="form-line">
+				<label> Color: </label><input type="color" name="main_color">
+			</div><br>
+			<div class="form-line">
+				<label> Transparency: </label> <input value="10" required type="number" placeholder="2.5"  name="trans" max="
+			</div>10" min="0"><br>
+			<div class="form-line">
+				<label> Width: </label> <input type="number" name="width" max="25000" min="1">
+			</div><br>
+			<div class="form-line">
+				<label> Height: </label> <input type="number" name="height" max="25000" min="1">
+			</div><br>
+			<input name="sub" type="submit">
+		</form>
+		<h2>Your project: </h2>
+		<div class="proj-cur"></div>
+	</div>
+	<div class="foot">Eric Diskin | 2018 | V1.0.0 | Drawster V0.1.8.0</div>
+</body>
+</html>
