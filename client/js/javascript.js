@@ -51,10 +51,11 @@ var canvasObj = {
 }; // redo and undo
 // TODO: redo
 
-var version = '0.9.0', versionFull = {
+var version = '0.8.0', vercsionFull = {
     major: 0,
-    minor: 9,
+    minor: 8,
     build: 0,
+    patch: 0
 };
 
 var menuOpen = null; // the open menu
@@ -154,12 +155,12 @@ function uploadErkspace(input) {
     fr.onload = function (e) {
         var file = e.target.result;
         var obj = JSON.parse(decodeURIComponent(file));
-        if (typeof obj.versionFull === 'undefined' || versionFull.minor == obj.versionFull.minor) {
+        //if (typeof obj.versionFull === 'undefined' ){//|| versionFull.minor == obj.versionFull.minor) {
             drawErkspace(obj);
-        }
-        else {
-            throw new Error('This version of Erkspace is not compatible.  please go to file:///E:/drawing/old/' + obj.version + '/draw.html to edit');
-        }
+        //}
+        //else {
+        //    throw new Error('This version of Erkspace is not compatible.  please go to file:///E:/drawing/old/' + obj.version + '/draw.html to edit');
+       //}
 
     }
 
@@ -305,13 +306,22 @@ _(window).load(function () { // window onload
     $('.nav-menu-item').click(function (e,elem) {
         var panel = $('.panel', e.target)
         //TODO: only one menu should be open at a time.
-        try {
-            if (menuOpen != panel) {
+        
+        if (e.target !== this) {
+            return;
+        }
+
+        if (menuOpen != panel) {
+            try {
                 menuOpen.hide();
+            } catch (e) {
+                
             }
-        } catch {};
-        menuOpen = panel;
+        }
+        
+        
         panel.toggle();
+        menuOpen = panel;
     });
 
     $('.close-panel-btn').click((e)=>{
@@ -356,6 +366,7 @@ _(window).load(function () { // window onload
 
     }, true);
     canvas.addEventListener('mousemove', draw, true);
+    $(canvas).on('contextmenu',(e)=>e.preventDefault());
     //fun calls:
     resizeCanvas('a');
     // other:
@@ -454,6 +465,7 @@ function draw(e) { // draws on the canvas, main function
     brush.lastPos.x = pos.x;
     brush.lastPos.y = pos.y;
     _.find('#mouse-pos').innerHTML = Math.round(pos.x) + ", " + Math.round(pos.y);
+
     if (brush.gramode > 0) {
         _.find('#download').href = canvas.toDataURL('image/png'); // download image on canvas
         if (brush.gramode > 1) {
@@ -463,16 +475,21 @@ function draw(e) { // draws on the canvas, main function
             if (brush.gramode > 2) {
                 setControls();
             }
-
         }
-
     }
-
 }
 
 function undo() { // undo canvas
     let dataImg = canvasObj.oldImages.pop();
     canvasObj.newImages.push(dataImg);
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    c.putImageData(dataImg, 0, 0);
+    c.restore();
+}
+
+function redo() { // redo canvas
+    let dataImg = canvasObj.newImages.pop();
+    canvasObj.oldImages.push(dataImg);
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.putImageData(dataImg, 0, 0);
     c.restore();

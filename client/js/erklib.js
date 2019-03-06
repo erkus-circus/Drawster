@@ -189,9 +189,7 @@
                 }
             }
             return this.forEach(function (elem) {
-                elem.addEventListener(evt, function (evt) {
-                    callback(evt, new List(elem))
-                });
+                elem.addEventListener(evt, callback, false);
             });
         }
 
@@ -203,7 +201,7 @@
                 }
             }
             return this.forEach(function (elem) {
-                elem.removeEventListener(evt, callback);
+                elem.removeEventListener(evt, callback, false);
             });
         };
 
