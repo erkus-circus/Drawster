@@ -1,24 +1,25 @@
-#canvas {
-	border: 1px solid black;
+.canvs {
+    position: relative;
+    border: 1px solid black;
+}
+
+.canv {
+    border: 1px solid black;
 	cursor: url('/cursor/cursor20X20.png'),pointer;
-	background-color: white;
-}
-
-canvas {
-	display: block;
+	background-color: white;	display: block;
 	text-align: center;
-	margin: auto;
+	margin: auto;position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid black;
 }
 
-.canvas {
-	background-color: black;
-}
+
 #info-sheet {
 	position: fixed;
 	display: none;
 	top: 0;
 	left: 0;
-	
 }
 #title {
 	font-size: 28px;

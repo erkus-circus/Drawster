@@ -80,6 +80,12 @@
             return res;
         };
 
+        List.prototype.each = function(callack) {
+            return this.forEach(function(el,i){
+                callack(Erklib(el),i);
+            });
+        }
+
         List.prototype.forEach = function (callback) {
             this.map(callback)
             return this;

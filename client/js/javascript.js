@@ -63,6 +63,7 @@ var menuOpen = null; // the open menu
 var imageURL = '', drawable = true;
 
 let canvas;
+let topCanv, tc;
 let c; // context
 
 var mousedown = false;
@@ -277,26 +278,28 @@ function changeImgStyles(kind, obj) {
 
 _(window).load(function () { // window onload
     //vars:
-    canvas = $('canvas')[0];
+    canvas = $('#canvas')[0];
     c = canvas.getContext('2d');
+    topCanv = $('#top-canvas')[0];
+    tc = topCanv = topCanv.getContext('2d');
+    canvs = $('canvas');
     brush.img = _.find('#brush-img');
     //event listeners:
-    canvas.addEventListener('touchmove', draw, true);
-    canvas.addEventListener('touchstart', function (e) {
+    canvs.on('touchmove', draw, true);
+    canvs.on('touchstart', function (e) {
         mousedown = true;
+        brush.lastPos = mPos(e);
         draw(e);
         c.save();
         canvasObj.oldImages.push(c.getImageData(0, 0, canvas.width, canvas.height));
-    }
-        , true);
-    canvas.addEventListener('mousedown', function (e) {
+    }, true);
+    canvs.on('mousedown', function (e) {
         mousedown = true;
         c.save();
         canvasObj.oldImages.push(c.getImageData(0, 0, canvas.width, canvas.height));
         draw(e);
-    }
-        , true);
-    canvas.addEventListener('click', draw, true);
+    }, true);
+    canvs.on('click', draw, true);
     window.addEventListener('mouseup', function () {
         mousedown = false;
     });
@@ -365,7 +368,7 @@ _(window).load(function () { // window onload
 
 
     }, true);
-    canvas.addEventListener('mousemove', draw, true);
+    canvs.on('mousemove', draw, true);
     $(canvas).on('contextmenu',(e)=>e.preventDefault());
     //fun calls:
     resizeCanvas('a');
@@ -460,6 +463,16 @@ function draw(e) { // draws on the canvas, main function
         c.lineTo(pos.x, pos.y);
         c.stroke();
     }
+
+    if (!mousedown && brush.mode === 'pen') {
+        tc.beginPath()
+        tc.clearRect(0,0,window.innerWidth, window.innerHeight);
+        tc.strokeStyle = brush.color;
+        tc.arc(pos.x,pos.y,brush.size/4+brush.calig.size,0,Math.PI*2);
+        tc.stroke();
+        tc.closePath()
+    }
+    
     c.closePath()
 
     brush.lastPos.x = pos.x;
@@ -537,7 +550,15 @@ function resizeCanvas(dir, val) { // resizes canvas
 
     _.find('#size-x').value = canvas.width;
     _.find('#size-y').value = canvas.height;
-    //_.find('.brush-controls')[0].style.height = canvas.height + 'px';
+
+    
+    $('canvas').each((el,i)=>{
+        el.style('zIndex',i);
+    });
+    
+    topCanv.width = canvas.width
+    topCanv.height = canvas.height;
+    
     c.putImageData(canvasImg, 0, 0, 0, 0, canvas.width, canvas.height);
 }
 
