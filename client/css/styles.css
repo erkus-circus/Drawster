@@ -1,19 +1,25 @@
+.outer-canv-layer {
+	background-color: white;
+	padding: 10px;
+}
+
 .canvs {
-    position: relative;
+	position: relative;
+	float: right;
+	top: 26px;
     border: 1px solid black;
 }
 
 .canv {
-    border: 1px solid black;
-	cursor: url('/cursor/cursor20X20.png'),pointer;
-	background-color: white;	display: block;
-	text-align: center;
-	margin: auto;position: absolute;
-    top: 0;
-    left: 0;
-    border: 1px solid black;
+	margin: auto;
+	background-color: transparent;
+	display: block;
+	position: absolute;
 }
 
+#top-canvas {
+	mix-blend-mode: difference;
+}
 
 #info-sheet {
 	position: fixed;
@@ -48,17 +54,6 @@ input[type="range"]:active {
 	cursor: -moz-grabbing;
 	cursor: -webkit-grabbing;
 }
-.brush-controls {
-	border-radius: 36px;
-	height: 600px;
-	max-height: 25%;
-	position: sticky;
-	left: 0;
-	top: 100;
-	overflow-x: hidden;
-	z-index: 1;
-	background-color: black;
-}
 #image-controls {
 	display: none;
 }
@@ -70,9 +65,6 @@ body {
 }
 .square {
 	list-style-type: square;
-}
-.body {
-	background-color: black;
 }
 li[onclick]:hover {
 	background-color: blue;

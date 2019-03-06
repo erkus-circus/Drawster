@@ -30,7 +30,7 @@
 						<li>
 							<label>0</label><input ondblclick="changeType(this)" value="32" type="range" min="1"
 								max="400" onchange="changeSize(this.value);" id="brush-sizer"><label>400</label>
-							<p>Brush size: <span id="brush-size">32</span></p>
+							<p>Brush size: <span id="brush-size">16</span></p>
 						</li>
 						<li>
 							<input type="color" onchange="bgcup(this.value);" id="color">
@@ -61,9 +61,7 @@
 							<li>
 								<select id="brush-mode" onchange="changeMode(this.value)">
 									<option value="pen">Pen</option>
-									<option value="pixel">Pixel pen</option>
-									<option value="line">line</option>
-									<option value="background">Fill</option>
+									<option value="pixel">Square Dot Marker</option>
 								</select>
 								<div id="line-controls">
 									<label>line from: </label><input value="0" type="number"
@@ -164,16 +162,16 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-12 col-s-12 canvas canvs">
-			<canvas id="canvas" width="500" height="500" class="canv"></canvas>
-			<canvas id="top-canvas" class="canv"></canvas>
+		<div class="col-2 col-s-2">
+
+		</div>
+		<div class="col-10 col-s-10 canvas outer-canv-layer">
+			<div class="canvs">
+				<canvas id="canvas" width="500" height="500" class="canv"></canvas>
+				<canvas id="top-canvas" class="canv"></canvas>
+			</div>
 		</div>
 	</div>
-	</div>
-	<div class="foot">
-		<h2> Eric Diskin | 2018 | <a
-				href="mailto:ericdiskin26@gmail.com?Subject=Drawster%20Bugs&amp;body=Bugs%20in%20drawster:%0D%0A%20%20%20%201.%20">Report
-				bugs</a> | V0.1.8.0</h2>
 	</div>
 	<img src="" alt="Loading" id="img-hidden">
 	<img src="" alt="Loading" id="save-img">

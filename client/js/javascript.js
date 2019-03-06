@@ -126,7 +126,7 @@ function saveErkspace() {
         }
 
     };
-    
+
     var data = 'data:text/erkspace;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj));
     $('#save-space').attr('href', data);
     $('#download').attr('href', canvas.toDataURL('image/png'));
@@ -157,11 +157,11 @@ function uploadErkspace(input) {
         var file = e.target.result;
         var obj = JSON.parse(decodeURIComponent(file));
         //if (typeof obj.versionFull === 'undefined' ){//|| versionFull.minor == obj.versionFull.minor) {
-            drawErkspace(obj);
+        drawErkspace(obj);
         //}
         //else {
         //    throw new Error('This version of Erkspace is not compatible.  please go to file:///E:/drawing/old/' + obj.version + '/draw.html to edit');
-       //}
+        //}
 
     }
 
@@ -281,7 +281,7 @@ _(window).load(function () { // window onload
     canvas = $('#canvas')[0];
     c = canvas.getContext('2d');
     topCanv = $('#top-canvas')[0];
-    tc = topCanv = topCanv.getContext('2d');
+    tc = topCanv.getContext('2d');
     canvs = $('canvas');
     brush.img = _.find('#brush-img');
     //event listeners:
@@ -305,11 +305,11 @@ _(window).load(function () { // window onload
     });
 
     $('.panel').hide();
-    
-    $('.nav-menu-item').click(function (e,elem) {
+
+    $('.nav-menu-item').click(function (e, elem) {
         var panel = $('.panel', e.target)
         //TODO: only one menu should be open at a time.
-        
+
         if (e.target !== this) {
             return;
         }
@@ -318,16 +318,16 @@ _(window).load(function () { // window onload
             try {
                 menuOpen.hide();
             } catch (e) {
-                
+
             }
         }
-        
-        
+
+
         panel.toggle();
         menuOpen = panel;
     });
 
-    $('.close-panel-btn').click((e)=>{
+    $('.close-panel-btn').click((e) => {
         var el = $(e.target).parent();
         el.hide();
     });
@@ -347,13 +347,15 @@ _(window).load(function () { // window onload
             c.clearRect(0, 0, canvas.width, canvas.height);
         }
         else if (cd == 32) {
-            brush.spaceBar = brush.spaceBar == true ? false : true;
+            brush.spaceBar = brush.spaceBar !== true;
         }
-        else if (e.shiftKey && cd == 187) {
-            brush.size++;
+        else if (cd == 221 && e.ctrlKey && !e.shiftKey && !e.altKey) {
+            brush.size += (++brush.size * .04);
+            $('#brush-size').html(Math.floor(brush.size))
         }
-        else if (e.shiftKey && cd == 189) {
-            brush.size--;
+        else if (cd == 219 && e.ctrlKey && !e.shiftKey && !e.altKey) {
+            brush.size -= (++brush.size * .04);
+            $('#brush-size').html(Math.floor(brush.size))
         }
         else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 70) {
             resizeCanvas('f');
@@ -366,10 +368,11 @@ _(window).load(function () { // window onload
             //,1100);
         }
 
+        updateTop();
 
     }, true);
-    canvs.on('mousemove', draw, true);
-    $(canvas).on('contextmenu',(e)=>e.preventDefault());
+    $(window).on('mousemove', draw, true);
+    $(canvas).on('contextmenu', (e) => e.preventDefault());
     //fun calls:
     resizeCanvas('a');
     // other:
@@ -379,8 +382,7 @@ _(window).load(function () { // window onload
     // PARAMS
     var params = _.GET();
     if (params != {}) {
-        newTitle({ value: decur(_.GET("title").replace("+", ' \x0a')) }
-        );
+        newTitle({ value: decur(_.GET("title").replace("+", ' \x0a')) });
 
         brush.color = decur(_.GET("main_color"));
         _("#color").value(brush.color)
@@ -389,7 +391,7 @@ _(window).load(function () { // window onload
         canvas.height = decur(_.GET("height"));
         brush.gramode = decur(_.GET("gramode"));
     }
-    
+
 });
 
 function mPos(e) { // find mouse position on "canvas"
@@ -410,8 +412,10 @@ function mPos(e) { // find mouse position on "canvas"
 function decur(str) { return decodeURIComponent(str); }
 
 function draw(e) { // draws on the canvas, main function
+
     e.preventDefault();
-    var pos = mPos(e);
+    var pos = brush.pos = mPos(e);
+
     if (mousedown && brush.spaceBar) {
         brush.calig.size++;
     }
@@ -428,8 +432,8 @@ function draw(e) { // draws on the canvas, main function
     c.shadowOffsetX = brush.shadow.offX;
     c.shadowOffsetY = brush.shadow.offY;
     c.globalAlpha = brush.transparency;
-    
-    if (mousedown === true && drawable && brush.mode == 'erase') {
+
+    if (mousedown && drawable && brush.mode == 'erase') {
         c.shadowColor = 0;
         c.shadowBlur = 0;
         c.shadowOffsetX = 0;
@@ -438,18 +442,11 @@ function draw(e) { // draws on the canvas, main function
         c.globalAlpha = 1;
         c.clearRect(pos.x - ((brush.size + brush.calig.size) / 2), pos.y - ((brush.size + brush.calig.size) / 2), brush.size + brush.calig.size, brush.size + brush.calig.size);
     }
-    else if (mousedown === true && drawable && brush.mode == 'pixel') {
+    else if (mousedown && drawable && brush.mode == 'pixel') {
         c.fillStyle = brush.color;
-        c.fillRect(pos.x - ((brush.size + brush.calig.size) / 2), pos.y - ((brush.size + brush.calig.size) / 2), brush.size + brush.calig.size, brush.size + brush.calig.size);
+        c.fillRect(pos.x - ((brush.size + brush.calig.size) / 4), pos.y - ((brush.size + brush.calig.size) / 4), (brush.size + brush.calig.size) / 2, (brush.size + brush.calig.size) / 2);
     }
-    else if (mousedown === true && drawable && brush.mode == 'line') {
-        c.strokeSyle = brush.color;
-        c.lineWidth = brush.line.lineWidth;
-        c.moveTo(brush.line.from[0], brush.line.from[1]);
-        c.lineTo(pos.x, pos.y);
-        c.stroke();
-    }
-    else if (mousedown === true && drawable && brush.mode == 'image') {
+    else if (mousedown && drawable && brush.mode == 'image') {
         c.strokeStyle = brush.color;
         c.lineWidth = brush.line.lineWidth;
         c.drawImage(brush.img, pos.x - (brush.width / 2), pos.y - (brush.height / 2), brush.width, brush.height);
@@ -464,15 +461,8 @@ function draw(e) { // draws on the canvas, main function
         c.stroke();
     }
 
-    if (!mousedown && brush.mode === 'pen') {
-        tc.beginPath()
-        tc.clearRect(0,0,window.innerWidth, window.innerHeight);
-        tc.strokeStyle = brush.color;
-        tc.arc(pos.x,pos.y,brush.size/4+brush.calig.size,0,Math.PI*2);
-        tc.stroke();
-        tc.closePath()
-    }
-    
+    updateTop()
+
     c.closePath()
 
     brush.lastPos.x = pos.x;
@@ -489,6 +479,31 @@ function draw(e) { // draws on the canvas, main function
                 setControls();
             }
         }
+    }
+}
+
+function updateTop() {
+    var pos = brush.pos;
+    console.log(pos);
+
+    tc.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    if (brush.mode === 'pen') {
+        tc.beginPath()
+        tc.strokeStyle = brush.color;
+        tc.shadowColor = 'black';
+        tc.shadowBlur = 1;
+        tc.arc(pos.x, pos.y, brush.size / 4 + brush.calig.size / 2, 0, Math.PI * 2);
+        tc.stroke();
+        tc.closePath()
+    }
+    else if (brush.mode === 'pixel') {
+        tc.beginPath()
+        tc.fillStyle = brush.color;
+        tc.rect(pos.x - ((brush.size + brush.calig.size)) / 4,
+            pos.y - ((brush.size + brush.calig.size)) / 4, (brush.size + brush.calig.size) / 2,
+            (brush.size + brush.calig.size) / 2);
+        tc.stroke()
+        tc.closePath()
     }
 }
 
@@ -551,14 +566,17 @@ function resizeCanvas(dir, val) { // resizes canvas
     _.find('#size-x').value = canvas.width;
     _.find('#size-y').value = canvas.height;
 
-    
-    $('canvas').each((el,i)=>{
-        el.style('zIndex',i);
+    $('.canvs').csswidth(canvas.width + 'px')
+    $('.canvs').cssheight(canvas.height + 'px')
+
+
+    $('canvas').each((el, i) => {
+        el.style('zIndex', i);
     });
-    
+
     topCanv.width = canvas.width
     topCanv.height = canvas.height;
-    
+
     c.putImageData(canvasImg, 0, 0, 0, 0, canvas.width, canvas.height);
 }
 
