@@ -45,6 +45,8 @@ var brush = {
 
 brush.spaceBar = false; // is the spaceBar toggled?
 
+var webApp = false;
+
 var canvasObj = {
     oldImages: [],
     newImages: []
@@ -60,7 +62,7 @@ var version = '0.8.0', vercsionFull = {
 
 var menuOpen = null; // the open menu
 
-var imageURL = '', drawable = true;
+var imageURL = '', drawable = true, makingSomething = 0;
 
 let canvas;
 let topCanv, tc;
@@ -304,6 +306,20 @@ _(window).load(function () { // window onload
         mousedown = false;
     });
 
+    $('.modal').modal();
+
+    $('#load-modal').show();
+
+    $('#stay-here-btn').click(function (e) {
+        $('#load-modal').hide();
+    });
+
+    $('#web-version').click(function (e) {
+        webApp = true;
+        initWeb();
+        $('#load-modal').hide();
+    });
+
     $('.panel').hide();
 
     $('.nav-menu-item').click(function (e, elem) {
@@ -354,7 +370,9 @@ _(window).load(function () { // window onload
             $('#brush-size').html(Math.floor(brush.size))
         }
         else if (cd == 219 && e.ctrlKey && !e.shiftKey && !e.altKey) {
-            brush.size -= (++brush.size * .04);
+            if (brush.size > 2) {
+                brush.size -= (++brush.size * .04);
+            }
             $('#brush-size').html(Math.floor(brush.size))
         }
         else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 70) {
@@ -375,6 +393,8 @@ _(window).load(function () { // window onload
     $(canvas).on('contextmenu', (e) => e.preventDefault());
     //fun calls:
     resizeCanvas('a');
+    initAdvancedBrushSets()
+    
     // other:
     _.find('#color').value = (sessionStorage.getItem('color')) ? sessionStorage.getItem('color') : '#000000';
 
@@ -460,7 +480,6 @@ function draw(e) { // draws on the canvas, main function
         c.lineTo(pos.x, pos.y);
         c.stroke();
     }
-
     updateTop()
 
     c.closePath()
@@ -472,7 +491,6 @@ function draw(e) { // draws on the canvas, main function
     if (brush.gramode > 0) {
         _.find('#download').href = canvas.toDataURL('image/png'); // download image on canvas
         if (brush.gramode > 1) {
-            if (true) { }
 
             saveErkspace();
             if (brush.gramode > 2) {
@@ -486,25 +504,31 @@ function updateTop() {
     var pos = brush.pos;
     console.log(pos);
 
+    tc.beginPath()
     tc.clearRect(0, 0, window.innerWidth, window.innerHeight);
     if (brush.mode === 'pen') {
-        tc.beginPath()
         tc.strokeStyle = brush.color;
-        tc.shadowColor = 'black';
-        tc.shadowBlur = 1;
+        tc.shadowColor = 'white';
+        tc.shadowBlur = 10;
         tc.arc(pos.x, pos.y, brush.size / 4 + brush.calig.size / 2, 0, Math.PI * 2);
+        tc.stroke()
+        tc.arc(pos.x + c.shadowOffsetX, pos.y + c.shadowOffsetY, (brush.size / 4 + brush.calig.size + c.shadowBlur / 1.5 / 2 ), 0, Math.PI * 2);
         tc.stroke();
-        tc.closePath()
     }
     else if (brush.mode === 'pixel') {
         tc.beginPath()
         tc.fillStyle = brush.color;
         tc.rect(pos.x - ((brush.size + brush.calig.size)) / 4,
-            pos.y - ((brush.size + brush.calig.size)) / 4, (brush.size + brush.calig.size) / 2,
-            (brush.size + brush.calig.size) / 2);
+        pos.y - ((brush.size + brush.calig.size)) / 4, (brush.size + brush.calig.size) / 2,
+        (brush.size + brush.calig.size) / 2);
         tc.stroke()
         tc.closePath()
     }
+    tc.closePath()
+}
+
+function makeBox() {
+    
 }
 
 function undo() { // undo canvas
@@ -587,6 +611,25 @@ function changeType(obj) { // change types on <input>
     else {
         obj.type = 'range';
     }
+
+}
+
+function initAdvancedBrushSets() {
+    //initalize advanced brush settings
+    var sets = [
+        "source-over", "source-in", "source-out", "source-atop", "destination-over",
+        "destination-in", "destination-out", "destination-atop", "lighter", "copy",
+        "xor", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge",
+        "color-burn", "hard-light", "soft-light", "difference", "exclusion", "hue",
+        "saturation", "color", "luminosity"
+    ]
+
+    sets.forEach(type => {
+        $('#glbl-compos-select').append($('<option>').val(type).html(type.replace('-', ' ')))
+        .change(function () {
+            c.globalCompositeOperation = this.value;
+        });
+    });
 
 }
 

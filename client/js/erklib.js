@@ -136,7 +136,7 @@
             List.prototype[title] = function (callback) {
                 if (isUndef(callback)) {
                     return this.forEach(el => {
-                        el[attr]();
+                        el[attr];
                     });
                 }
                 return this.on(attr, callback);
@@ -144,7 +144,7 @@
         }
 
         List.prototype.append = function (elems) {
-            this.forEach(function (elemP, i) {
+            return this.forEach(function (elemP, i) {
                 elems.forEach(function (childElem) {
                     if (i > 0) {
                         childElem = childElem.cloneNode(true);
@@ -152,14 +152,15 @@
                     elemP.appendChild(childElem);
                 });
             });
-            return this;
         };
+        
         List.prototype.copy = function (tf) {
             tf = typeof tf === "boolean" ? tf : false;
             return new List(this.map(function (elem) {
                 return elem.cloneNode(tf);
             }), this.selector);
         };
+
         List.prototype.prepend = function (elems) {
             return this.forEach(function (elemP, i) {
                 for (var e = elems.length - 1; e >= 0; e--) {
@@ -275,7 +276,7 @@
         //ATTRS:
         _attr('innerHTML', 'html') // change innerHTML
         _attr('innerText', 'text') // change Text
-        _attr('value')
+        _attr('value','val')
         _attr('download')
         _attr('id')
         _attr('checked')
@@ -290,6 +291,7 @@
         _css('height', 'cssheight')
         _css('cursor')
         _css('backroundColor', 'bgcolor')
+        _css('cursor');
         _css('fontSize')
         _css('background', 'bg')
         _css('color')
@@ -311,6 +313,7 @@
         // events:
         _evt('click');
         _evt('focus');
+        _evt('change')
         _evt('unfocus');
         _evt('mouseenter', 'mouseover');
         _evt('mouseleave', 'mouseout');

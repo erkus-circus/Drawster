@@ -54,7 +54,7 @@ input:checked + .slider::before {
 	transform: translateX(26px);
 }
 .head {
-	background-color: rgb(69, 30, 245);
+	background-color: rgb(69, 200, 245);
 	color: rgb(155, 74, 74);
 	text-align: center;
 	padding: 15px;
@@ -66,7 +66,7 @@ input:checked + .slider::before {
 	margin: 0;
 	border: 1px solid black;
 	width: 100%;
-	background-color: rgb(69, 30, 245);
+	background-color: rgb(69, 200, 245);
 	z-index: 998;
 	position: fixed;
 	display: block;
@@ -127,13 +127,13 @@ input:checked + .slider::before {
 	padding: 8px;
 	list-style-type: none;
 	margin-bottom: 7px;
-	background-color: rgb(69, 30, 245);
+	background-color: rgb(69, 200, 245);
 	color: rgb(255, 0, 0);
 	box-shadow: 0 0 1px black, 0 0 3px grey;
 }
 .aside {
 	text-align: center;
-	background-color: rgb(69, 30, 245);
+	background-color: rgb(69, 200, 245);
 	color: rgb(255,0,0);
 }
 .aside h1, h2, h3, h4, h5, h6 {
@@ -146,7 +146,7 @@ input:checked + .slider::before {
 .foot {
 	border-radius: 10px;
 	padding: 5px;
-	background-color: rgb(69, 30, 245);
+	background-color: rgb(69, 200, 245);
 	text-align: center;
 	color: rgb(255,0,0);
 }

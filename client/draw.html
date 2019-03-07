@@ -3,9 +3,10 @@
 
 <head>
 	<!-- Eric Diskin 2018 Version 0.1.8.0-->
-	<link rel="stylesheet" type="text/css" href="/css/sheets/comic-sans.css">
-	<link rel="stylesheet" type="text/css" href="/css/styles.css">
-	<link rel="icon" type="image/png" href="/cursor/cursor16X16.png">
+	<link rel="stylesheet" type="text/css" href="css/sheets/comic-sans.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="icon" type="image/png" href="cursor/cursor16X16.png">
+	<link rel="stylesheet" href="css/modal.css">
 	<title>Drawster - Untitled</title>
 	<!-- metas -->
 	<meta charset="utf-8" />
@@ -13,13 +14,20 @@
 	<meta name="description" content="A simple image creator/editor" />
 	<meta name="author" content="Eric Diskin" />
 	<meta name="keywords" content="image,editor,drawster,creator,eric,diskin" />
-	<script type="text/javascript" src="/js/erklib.js"></script>
-	<script src="/js/hover.js"></script>
+	<script type="text/javascript" src="js/erklib.js"></script>
+	<script src="js/modals.js"></script>
 
-	<link rel="stylesheet" href="/css/grid.css">
+	<link rel="stylesheet" href="css/grid.css">
 </head>
 
 <body class="body">
+	<div class="modal" id="load-modal">
+		<div class="modal-content aside">
+			<h1>Welcome to Drawster</h1>
+			<h3>If you are using this as an offline app, please click <a href="javascript:void(0);" id="web-version">here</a>. if not,
+				click <a href="javascript:void(0);" id="stay-here-btn">here</a>.</h3>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-12 col-s-12 nav-menu">
 			<div class="nav-menu-item">
@@ -78,6 +86,13 @@
 								<span class="slider"></span>
 							</label>
 							<p id="mode-draw">Drawing mode</p>
+						</li>
+						<li>
+							<details>
+								<summary>Advanced</summary>
+								<p>Global Composition: <select id="glbl-compos-select">
+								</select></p>
+							</details>
 						</li>
 					</ul>
 				</div>
@@ -175,6 +190,8 @@
 	</div>
 	<img src="" alt="Loading" id="img-hidden">
 	<img src="" alt="Loading" id="save-img">
-	<script type="text/javascript" src="/js/javascript.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	
+	<script type="text/javascript" src="js/javascript.js"></script>
 </body>
 </html>
