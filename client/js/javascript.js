@@ -307,7 +307,7 @@ _(window).load(function () { // window onload
     });
 
     $('.modal').modal();
-    
+    $('#load-modal').show();
     $('.panel').hide();
 
     $('.nav-menu-item').click(function (e, elem) {
