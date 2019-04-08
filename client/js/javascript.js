@@ -307,19 +307,7 @@ _(window).load(function () { // window onload
     });
 
     $('.modal').modal();
-
-    $('#load-modal').show();
-
-    $('#stay-here-btn').click(function (e) {
-        $('#load-modal').hide();
-    });
-
-    $('#web-version').click(function (e) {
-        webApp = true;
-        initWeb();
-        $('#load-modal').hide();
-    });
-
+    
     $('.panel').hide();
 
     $('.nav-menu-item').click(function (e, elem) {
