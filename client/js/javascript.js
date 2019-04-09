@@ -295,6 +295,10 @@ _(window).load(function () { // window onload
         c.save();
         canvasObj.oldImages.push(c.getImageData(0, 0, canvas.width, canvas.height));
     }, true);
+    canvs.on('touchend',function(e){
+        mousedown = false;
+        draw(e);
+    });
     canvs.on('mousedown', function (e) {
         mousedown = true;
         c.save();
