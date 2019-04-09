@@ -307,19 +307,7 @@ _(window).load(function () { // window onload
     });
 
     $('.modal').modal();
-
     $('#load-modal').show();
-
-    $('#stay-here-btn').click(function (e) {
-        $('#load-modal').hide();
-    });
-
-    $('#web-version').click(function (e) {
-        webApp = true;
-        initWeb();
-        $('#load-modal').hide();
-    });
-
     $('.panel').hide();
 
     $('.nav-menu-item').click(function (e, elem) {
@@ -394,7 +382,7 @@ _(window).load(function () { // window onload
     //fun calls:
     resizeCanvas('a');
     initAdvancedBrushSets()
-    
+
     // other:
     _.find('#color').value = (sessionStorage.getItem('color')) ? sessionStorage.getItem('color') : '#000000';
 
@@ -480,7 +468,9 @@ function draw(e) { // draws on the canvas, main function
         c.lineTo(pos.x, pos.y);
         c.stroke();
     }
-    updateTop()
+    if (e.target == topCanv) {
+        updateTop()
+    }
 
     c.closePath()
 
@@ -502,9 +492,7 @@ function draw(e) { // draws on the canvas, main function
 
 function updateTop() {
     var pos = brush.pos;
-    console.log(pos);
-
-    tc.beginPath()
+    tc.beginPath();
     tc.clearRect(0, 0, window.innerWidth, window.innerHeight);
     if (brush.mode === 'pen') {
         tc.strokeStyle = brush.color;
@@ -512,24 +500,21 @@ function updateTop() {
         tc.shadowBlur = 10;
         tc.arc(pos.x, pos.y, brush.size / 4 + brush.calig.size / 2, 0, Math.PI * 2);
         tc.stroke()
-        tc.arc(pos.x + c.shadowOffsetX, pos.y + c.shadowOffsetY, (brush.size / 4 + brush.calig.size + c.shadowBlur / 1.5 / 2 ), 0, Math.PI * 2);
+        tc.arc(pos.x + c.shadowOffsetX, pos.y + c.shadowOffsetY, (brush.size / 4 + brush.calig.size + c.shadowBlur / 1.5 / 2), 0, Math.PI * 2);
         tc.stroke();
     }
     else if (brush.mode === 'pixel') {
         tc.beginPath()
         tc.fillStyle = brush.color;
         tc.rect(pos.x - ((brush.size + brush.calig.size)) / 4,
-        pos.y - ((brush.size + brush.calig.size)) / 4, (brush.size + brush.calig.size) / 2,
-        (brush.size + brush.calig.size) / 2);
+            pos.y - ((brush.size + brush.calig.size)) / 4, (brush.size + brush.calig.size) / 2,
+            (brush.size + brush.calig.size) / 2);
         tc.stroke()
         tc.closePath()
     }
     tc.closePath()
 }
 
-function makeBox() {
-    
-}
 
 function undo() { // undo canvas
     let dataImg = canvasObj.oldImages.pop();
@@ -579,7 +564,7 @@ function resizeCanvas(dir, val) { // resizes canvas
     }
 
     if (dir == 'a') { // auto
-        canvas.width = window.innerWidth / 1.4;
+        canvas.width = window.innerWidth / 1.05;
         canvas.height = window.innerHeight / 1.15;
     }
     else if (dir == 'f') {
@@ -611,7 +596,6 @@ function changeType(obj) { // change types on <input>
     else {
         obj.type = 'range';
     }
-
 }
 
 function initAdvancedBrushSets() {
@@ -626,9 +610,9 @@ function initAdvancedBrushSets() {
 
     sets.forEach(type => {
         $('#glbl-compos-select').append($('<option>').val(type).html(type.replace('-', ' ')))
-        .change(function () {
-            c.globalCompositeOperation = this.value;
-        });
+            .change(function () {
+                c.globalCompositeOperation = this.value;
+            });
     });
 
 }

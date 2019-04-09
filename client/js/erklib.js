@@ -46,10 +46,12 @@
         function List(elems, sel, scope) {
             for (var i = 0; i < elems.length; i++) {
                 this[i] = elems[i];
-                if (typeof this[i].style !== 'undefined') {
+                if (this[i] !== null && this[i].hasOwnProperty('style')) {
                     this[i].disp = this[i].style.display;
                 } else {
-                    this[i].disp = ''
+                    if (this[i] !== null) {
+                        this[i].disp = '';
+                    }
                 }
             }
             this.length = elems.length || 0;
@@ -280,6 +282,8 @@
         _attr('download')
         _attr('id')
         _attr('checked')
+        _attr('className');
+        _attr('checked')
         _attr('title')
         _attr('src')
 
@@ -294,6 +298,8 @@
         _css('cursor');
         _css('fontSize')
         _css('background', 'bg')
+        _css('zIndex')
+        _css('scrollOverflow')
         _css('color')
         _css('transparency', 'transp')
         _css('visibility', 'visi')
@@ -450,6 +456,7 @@
                     elems = [sel];
                 }
                 List.prototype = Erklib.fn;
+
                 return new List(elems, sel, scope)
             } else {
                 return this;
