@@ -24,6 +24,6 @@ io.on('connection', (socket)=>{
 // HTTP LISTEN //
 /////////////////
 
-http.listen(80,function () {
+http.listen(8000,function () {
     console.log('listening');
 });
