@@ -528,6 +528,18 @@ function updateTop() {
     tc.closePath()
 }
 
+function changeTipSize(val) {
+    var n = Math.floor(val);
+    if (n != 0) {
+        $(".canvas").className("canvas outer-canv-layer " + "col-" + (12 - n) + " col-s-" + (12 - n));
+    } else {
+        var on = n;
+        n = 0;
+        $(".canvas").className("canvas outer-canv-layer " + "col-" + (12 - n) + " col-s-" + (12 - n));
+        n = on;
+    }
+    $(".side-bar").className("side-bar " + "col-" + (n) + " col-s-" + (n));
+}
 
 function undo() { // undo canvas
     let dataImg = canvasObj.oldImages.pop();

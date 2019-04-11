@@ -55,7 +55,11 @@
 					<option value="Canvas">Canvas</option>
 					<option value="Project">Project</option>
                 </select>
-            </p>
+			</p>
+			<p>
+				Quick tip size (1-12):
+				<input type="range" min="1" max="12" ondblclick="changeType(this);" onchange="changeTipSize(this.value);">
+			</p>
         </div>
     </div>
 	<div class="col-12 col-s-12 nav-menu">
