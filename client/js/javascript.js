@@ -577,7 +577,7 @@ function resizeCanvas(dir, val) { // resizes canvas
     }
 
     if (dir == 'a') { // auto
-        canvas.width = window.innerWidth / 1.53;
+        canvas.width = window.innerWidth / 1.48;
         canvas.height = window.innerHeight / 1.2;
     }
     else if (dir == 'f') {
