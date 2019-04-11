@@ -21,71 +21,66 @@
 </head>
 
 <body class="body">
-    <div class="modal" id="load-modal">
+	<div class="modal" id="load-modal">
+		<div class="modal-content aside">
+			<span class="close-btn"></span>
+			<h1>Welcome to Drawster</h1>
+			<h3>Version 1.1</h3 style="margin:0;padding:0;">
+			<h2>
+				Changes:
+				<ul>
+                    <li>Added the option to toggle if the mouse appears on the canvas.</li>
+				</ul>
+			</h2>
+		</div>
+    </div>
+    <div class="modal" id="settings-modal">
         <div class="modal-content aside">
             <span class="close-btn"></span>
-            <h1>Welcome to Drawster</h1>
-            <h3>Version 1.0</h3>
-            <h3>
-                Changes:
-                <ul>
-                    <li>Added the option to toggle if the mouse appears on the canvas.</li>
-                </ul>
-            </h3>
+            <h2>Settings</h2>
+            <p>
+                Show cursor on canvas
+                <label class="switch">
+                    <input onchange="canvs.cursor(this.checked ? 'pointer' : 'none')" type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </p>
+            <p>
+                Quick tip:
+                <select id="quick-select" value="Brush">
+					<option value="File">File</option>
+					<option value="Edit">Edit</option>
+					<option value="Brush">Brush</option>
+					<option value="Canvas">Canvas</option>
+					<option value="Project">Project</option>
+                </select>
+            </p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 col-s-12 nav-menu">
+	<div class="row">
+		<div class="col-12 col-s-12 nav-menu">
+			<div class="nav-menu-item">	
+				File
+				<div class="panel">
+					<span class="close-panel-btn"></span>
+					<ul class="menu" id="File-tip">
+						<li class="hover" onclick="sessionStorage.clear();window.location.reload(true);">
+							New
+                        </li>
+                        <li class="hover" id="open-img">
+                            Open
+                        </li>
+                        <li class="hover" id="save">
+                            Save
+                        </li>
+					</ul>
+				</div>
+            </div>
             <div class="nav-menu-item">
-                Brush
+                Edit
                 <div class="panel">
-                    <span class="close-panel-btn"></span>
-                    <ul class="menu">
-                        <li>
-                            <label>0</label><input ondblclick="changeType(this)" value="32" type="range" min="1"
-                                                   max="400" onchange="changeSize(this.value);" id="brush-sizer"><label>400</label>
-                            <p>Brush size: <span id="brush-size">16</span></p>
-                        </li>
-                        <li>
-                            <input type="color" onchange="bgcup(this.value);" id="color">
-                            <p>Color</p>
-                        </li>
-                        <li>
-                            Shadows
-                            <label>Shadow blur: </label><input type="range" min="0" value="0" max="100" onchange="changeBlur(this);"
-                                                               ondblclick="changeType(this)"><br>
-                            <label>Shadow color: </label><input type="color" onchange="changeScolor(this)" id="shadow-color"><br>
-                            <label>Shadow offset X: </label><input type="range" onchange="changeOFF('x',this);" min="-200" value="0" max="200"
-                                                                   ondblclick="changeType(this);" id="shadow-offX"><br>
-                            <label>Shadow offset Y: </label><input type="range" onchange="changeOFF('y',this);" min="-200" max="200" value="0"
-                                                                   ondblclick="changeType(this);" id="shadow-offY"><br>
-                        </li>
-                        <li>
-                            <input type="number" ondblclick="changeType(this);" onchange="trans(this.value);" value="10" min="1" max="10"
-                                   id="trans">
-                            <p>Transparency (1 - 10)</p>
-                        </li>
-                        <li>
-                            <label class="switch">
-                                <input type="checkbox" onchange="toggleSwitch('eraser');" id="eraser">
-                                <span class="slider"></span>
-                            </label>
-                            <p>Eraser mode: <span id="draw-mode">off</span></p>
-                        </li>
-                        <li>
-                            <select id="brush-mode" onchange="changeMode(this.value)">
-                                <option value="pen">Pen</option>
-                                <option value="pixel">Square Dot Marker</option>
-                            </select>
-                            <div id="line-controls">
-                                <label>line from: </label><input value="0" type="number"
-                                                                 onchange="lineChange('x',this.value);" id="line-from-x">,<input type="number"
-                                                                                                                                 id="line-from-y" value="0" onchange="lineChange('y',this.value);">.<br>
-                                <label>line width: </label><input type="range" ondblclick="changeType(this)" min="1"
-                                                                  max="500" onchange="brush.line.lineWidth = this.value;">
-                            </div>
-                            <p>Brush mode</p>
-                        </li>
+					<span class="close-panel-btn"></span>
+                    <ul class="menu" id="Edit-tip">
                         <li>
                             <label class="switch">
                                 <input onchange="toggleSwitch('draw')" checked type="checkbox" id="draw-mode-switch">
@@ -93,110 +88,23 @@
                             </label>
                             <p id="mode-draw">Drawing mode</p>
                         </li>
-                        <li>
-                            <details>
-                                <summary>Advanced</summary>
-                                <p>
-                                    Global Composition: <select id="glbl-compos-select"></select>
-                                </p>
-                            </details>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="nav-menu-item">
-                Canvas
-                <div class="panel">
-                    <span class="close-panel-btn"></span>
-                    <ul class="menu">
-                        <li onclick="c.clearRect(0,0,canvas.width,canvas.height);">
+                        <li class="hover" onclick="c.clearRect(0,0,canvas.width,canvas.height);">
                             <p>Clear</p>
                         </li>
-                        <li onclick="undo();">
+                        <li class="hover" onclick="undo();">
                             <p>Undo</p>
                         </li>
-                        <li onclick="redo()">
+                        <li class="hover" onclick="redo()">
                             <p>Redo</p>
-                        </li>
-                        <li>
-                            Show Cursor
-                            <label class="switch">
-                                <input onchange="canvs.cursor(this.checked ? 'pointer' : 'none')" type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                        <li>
-                            <p>
-                                Adjust canvas size
-                                <br>
-                                <label>Width: </label><input value="500" onchange="resizeCanvas('w',this.value);" type="number"
-                                                             id="size-x"><label> pixels</label>
-                                <br>
-                                <label>Height: </label><input value="500" type="number" id="size-y"
-                                                              onchange="resizeCanvas('h',this.value);"><label> pixels</label>
-                                <br>
-                                <button onclick="resizeCanvas('a')">set Auto</button>
-                                <br>
-                                <br>
-                                <span class="warning">WARNING! this may delete your drawing if you resize. </span><br>
-                            </p>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="nav-menu-item">
-                Project
-                <div class="panel">
-                    <span class="close-panel-btn"></span>
-                    <ul class="menu">
-                        <li>
-                            <input type="text" id="title" onchange="newTitle(this)" value="Untitled" placeholder="Erkspace">
-                        </li>
-                        <li>
-                            Mouse position:<br> <span id="mouse-pos">mouse not found</span>
-                        </li>
-                        <li>
-                            <p>Image stretch: <span id="img-stretch-show">on</span></p>
-                            <label class="switch">
-                                <input checked type="checkbox" onchange="toggleSwitch('img')" id="img-stretch">
-                                <span class="slider"></span>
-                            </label><br>
-                            <label>Choose image</label><input type="file" id="image" onchange="changeBrushImg(this);" accept="image/*">
-                            <label>Image: </label><img class="preview" id="img" alt="image"><br>
-                            <p>Image</p>
-                        </li>
-	<div class="modal" id="load-modal">
-		<div class="modal-content aside">
-			<span class="close-btn"></span>
-			<h1>Welcome to Drawster</h1>
-			<h3>Version 1.0</h3 style="margin:0;padding:0;">
-			<h2>
-				Changes:
-				<ul>
-					<li>Added the option to toggle if the mouse appears on the canvas.</li>
-				</ul>
-			</h2>
-			
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12 col-s-12 nav-menu">
-			<div class="nav-menu-item">	
-				File
-				<div class="panel">
-					<span class="close-panel-btn"></span>
-					<ul class="menu">
-						<li onclick="sessionStorage.clear();window.location.reload(true);">
-							New
-						</li>
-					</ul>
-				</div>
-			</div>
 			<div class="nav-menu-item">
 				Brush
 				<div class="panel">
 					<span class="close-panel-btn"></span>
-					<ul class="menu">
+					<ul class="menu" id="Brush-tip">
 						<li>
 							<label>0</label><input ondblclick="changeType(this)" value="32" type="range" min="1"
 								max="400" onchange="changeSize(this.value);" id="brush-sizer"><label>400</label>
@@ -233,22 +141,8 @@
 									<option value="pen">Pen</option>
 									<option value="pixel">Square Dot Marker</option>
 								</select>
-								<div id="line-controls">
-									<label>line from: </label><input value="0" type="number"
-										onchange="lineChange('x',this.value);" id="line-from-x">,<input type="number"
-										id="line-from-y" value="0" onchange="lineChange('y',this.value);">.<br>
-									<label>line width: </label><input type="range" ondblclick="changeType(this)" min="1"
-										max="500" onchange="brush.line.lineWidth = this.value;">
-								</div>
 								<p>Brush mode</p>
 							</li>
-						<li>
-							<label class="switch">
-								<input onchange="toggleSwitch('draw')" checked type="checkbox" id="draw-mode-switch">
-								<span class="slider"></span>
-							</label>
-							<p id="mode-draw">Drawing mode</p>
-						</li>
 						<li>
 							<details>
 								<summary>Advanced</summary>
@@ -263,26 +157,10 @@
 				Canvas
 				<div class="panel">
 					<span class="close-panel-btn"></span>
-					<ul class="menu">
-						<li onclick="c.clearRect(0,0,canvas.width,canvas.height);">
-							<p>Clear</p>
-						</li>
-						<li onclick="undo();">
-							<p>Undo</p>
-						</li>
-						<li onclick="redo()">
-							<p>Redo</p>
-						</li>
-						<li>
-							Show Cursor
-							<label class="switch">
-								<input onchange="canvs.cursor(this.checked ? 'pointer' : 'none')" checked type="checkbox">
-								<span class="slider"></span>
-							</label>
-						</li>
+                    <ul id="Canvas-tip">
 						<li>
 							<p>
-								Adjust canvas size
+								Adjust image size
 								<br>
 								<label>Width: </label><input value="500" onchange="resizeCanvas('w',this.value);" type="number"
 									id="size-x"><label> pixels</label>
@@ -293,9 +171,8 @@
 								<button onclick="resizeCanvas('a')">set Auto</button>
 								<br>
 								<br>
-								<span class="warning">WARNING! this may delete your drawing if you resize. </span><br>
 							</p>
-						</li>
+                        </li>
 					</ul>
 				</div>
 			</div>
@@ -303,7 +180,7 @@
 				Project
 				<div class="panel">
 					<span class="close-panel-btn"></span>
-					<ul class="menu">
+					<ul class="menu" id="Project-tip">
 						<li>
 							<input type="text" id="title" onchange="newTitle(this)" value="Untitled" placeholder="Erkspace">
 						</li>
@@ -320,7 +197,6 @@
 							<label>Image: </label><img class="preview" id="img" alt="image"><br>
 							<p>Image</p>
 						</li>
-
                         <li>
                             <input type="file" accept=".erkspace" onchange="uploadErkspace(this)">
                             <p>Upload Erkspace</p>
@@ -333,28 +209,22 @@
                                 button first)
                             </a>
                         </li>
-                        <li>
-                            <p>
-                                Click for your computer (click bad for best drawing performance and click awesome for more
-                                features):
-                            </p>
-                            <button onclick="brush.gramode = 2;">awesome computer</button>
-                            <button onclick="brush.gramode = 1;">okay computer</button>
-                            <button onclick="brush.gramode = 0;">bad computer</button>
-                        </li>
-                        <li>
-                            <p id="pack-info-name"></p>
-                        </li>
                     </ul>
                 </div>
             </div>
+            <div class="nav-menu-item" onclick="openSettings();">
+                Settings
+            </div>
         </div>
-        <div class="col-2 col-s-2">
-
+        <div class="col-4 col-s-4 side-bar">
+            <div class="menu" id="quick-tip">
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus illo ab in, sint commodi inventore omnis, id dolorem dicta distinctio laborum assumenda magni molestiae numquam aperiam maiores, culpa quidem ut.</li>
+            </div>
         </div>
-        <div class="col-10 col-s-10 canvas outer-canv-layer">
+        <br>
+        <div class="col-8 col-s-8 canvas outer-canv-layer" style="padding:0;">
             <div class="canvs">
-                <canvas id="canvas" width="500" height="500" class="canv"></canvas>
+                <canvas id="canvas" class="canv"></canvas>
                 <canvas id="top-canvas" class="canv"></canvas>
             </div>
         </div>

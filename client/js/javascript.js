@@ -376,11 +376,19 @@ _(window).load(function () { // window onload
             //		_('#info-sheet').fade();
             //	}
             //,1100);
+
         }
-
         updateTop();
-
     }, true);
+
+    $("#quick-select").change(function (e) {
+        console.log($("#" + e.target.value + "-tip").html()[0]);
+        
+        $("#quick-tip").html($("#" + e.target.value + "-tip").html()[0]);
+    });
+
+    $("#quick-tip").html($("#Brush-tip").html()[0]);
+
     $(window).on('mousemove', draw, true);
     $(canvas).on('contextmenu', (e) => e.preventDefault());
     //fun calls:
@@ -403,7 +411,6 @@ _(window).load(function () { // window onload
         canvas.height = decur(_.GET("height"));
         brush.gramode = decur(_.GET("gramode"));
     }
-
 });
 
 function mPos(e) { // find mouse position on "canvas"
@@ -425,7 +432,6 @@ function decur(str) { return decodeURIComponent(str); }
 
 function draw(e) { // draws on the canvas, main function
 
-    e.preventDefault();
     var pos = brush.pos = mPos(e);
 
     if (mousedown && brush.spaceBar) {
@@ -437,14 +443,18 @@ function draw(e) { // draws on the canvas, main function
     else {
         brush.calig.size = 0;
     }
-    c.beginPath();
 
+    
     c.shadowColor = brush.shadow.color;
     c.shadowBlur = brush.shadow.blur;
     c.shadowOffsetX = brush.shadow.offX;
     c.shadowOffsetY = brush.shadow.offY;
     c.globalAlpha = brush.transparency;
-
+    
+    if (!pos.x < 0 || !pos.x > canvas.width || !pos.y < 0 || !pos.y > canvas.height) {
+        e.preventDefault();
+    }
+    c.beginPath();
     if (mousedown && drawable && brush.mode == 'erase') {
         c.shadowColor = 0;
         c.shadowBlur = 0;
@@ -472,20 +482,18 @@ function draw(e) { // draws on the canvas, main function
         c.lineTo(pos.x, pos.y);
         c.stroke();
     }
-    if (e.target == topCanv) {
-        updateTop()
-    }
-
+    
     c.closePath()
-
+    
+    updateTop();
     brush.lastPos.x = pos.x;
     brush.lastPos.y = pos.y;
     _.find('#mouse-pos').innerHTML = Math.round(pos.x) + ", " + Math.round(pos.y);
-
+    
     if (brush.gramode > 0) {
         _.find('#download').href = canvas.toDataURL('image/png'); // download image on canvas
         if (brush.gramode > 1) {
-
+            
             saveErkspace();
             if (brush.gramode > 2) {
                 setControls();
@@ -498,6 +506,7 @@ function updateTop() {
     var pos = brush.pos;
     tc.beginPath();
     tc.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    
     if (brush.mode === 'pen') {
         tc.strokeStyle = brush.color;
         tc.shadowColor = 'white';
@@ -511,8 +520,8 @@ function updateTop() {
         tc.beginPath()
         tc.fillStyle = brush.color;
         tc.rect(pos.x - ((brush.size + brush.calig.size)) / 4,
-            pos.y - ((brush.size + brush.calig.size)) / 4, (brush.size + brush.calig.size) / 2,
-            (brush.size + brush.calig.size) / 2);
+        pos.y - ((brush.size + brush.calig.size)) / 4, (brush.size + brush.calig.size) / 2,
+        (brush.size + brush.calig.size) / 2);
         tc.stroke()
         tc.closePath()
     }
@@ -568,16 +577,16 @@ function resizeCanvas(dir, val) { // resizes canvas
     }
 
     if (dir == 'a') { // auto
-        canvas.width = window.innerWidth / 1.05;
-        canvas.height = window.innerHeight / 1.15;
+        canvas.width = window.innerWidth / 1.53;
+        canvas.height = window.innerHeight / 1.2;
     }
     else if (dir == 'f') {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
 
-    _.find('#size-x').value = canvas.width;
-    _.find('#size-y').value = canvas.height;
+    $('#size-x').val(canvas.width);
+    $('#size-y').val(canvas.height);
 
     $('.canvs').csswidth(canvas.width + 'px')
     $('.canvs').cssheight(canvas.height + 'px')
@@ -623,4 +632,8 @@ function initAdvancedBrushSets() {
 
 function degTrad(deg) {
     return deg * Math.PI / 180;
+}
+
+function openSettings() {
+    $("#settings-modal").show();
 }

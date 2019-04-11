@@ -198,7 +198,7 @@
                 }
             }
             return this.forEach(function (elem) {
-                elem.addEventListener(evt, callback, false);
+                elem.addEventListener(evt, callback, false,Erklib(elem));
             });
         }
 

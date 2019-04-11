@@ -1,25 +1,38 @@
 .outer-canv-layer {
+	margin-top: 40px;
 	background-color: white;
-	padding: 10px;
+    border: 1px solid black;
+	overflow: auto;
 }
 
 .canvs {
 	position: relative;
-	float: right;
 	cursor: none;
 	top: 26px;
-    border: 1px solid black;
+}
+
+#quick-tip {
+	text-align: center;
 }
 
 .canv {
-	margin: auto;
+	padding: 0;
+	border: 1px solid black;
+	border-collapse: collapse;
 	background-color: transparent;
 	display: block;
 	position: absolute;
-	mix-blend-mode: difference;
+}
+
+.side-bar {
+	margin-top: 60px;
+	background-color: white;
+    border: 1px solid black;
+	overflow: auto;
 }
 
 #top-canvas {
+	mix-blend-mode: difference;
 }
 
 #info-sheet {
@@ -68,8 +81,8 @@ body {
 .square {
 	list-style-type: square;
 }
-li[onclick]:hover {
-	background-color: blue;
+#settings-modal{
+	z-index: 9999;
 }
 .line-controls {
 	display: none;

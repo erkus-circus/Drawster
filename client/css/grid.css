@@ -67,7 +67,7 @@ input:checked + .slider::before {
 	border: 1px solid black;
 	width: 100%;
 	background-color: rgb(69, 200, 245);
-	z-index: 998;
+	z-index: 99;
 	position: fixed;
 	display: block;
 }
@@ -132,6 +132,11 @@ input:checked + .slider::before {
 	color: rgb(255, 0, 0);
 	box-shadow: 0 0 1px black, 0 0 3px grey;
 }
+
+.menu .hover:hover {
+	background-color: blue;
+}
+
 .aside {
 	text-align: center;
 	background-color: rgb(69, 200, 245);
