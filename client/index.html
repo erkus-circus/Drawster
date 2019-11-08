@@ -1,10 +1,12 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Drawster - Home</title>
-	<link rel="stylesheet" type="text/css" href="/css/grid.css">
-	<link rel="stylesheet" type="text/css" href="/css/styles.css">
-	<link rel="icon" type="image/png" href="/cursor/cursor16X16.png">
+
+<head>	
+	<link rel="stylesheet" type="text/css" href="css/sheets/comic-sans.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="icon" type="image/png" href="cursor/cursor16X16.png">
+	<link rel="stylesheet" href="css/modal.css">
 	<title>Drawster - Untitled</title>
 	<!-- metas -->
 	<meta charset="utf-8" />
@@ -12,66 +14,223 @@
 	<meta name="description" content="A simple image creator/editor" />
 	<meta name="author" content="Eric Diskin" />
 	<meta name="keywords" content="image,editor,drawster,creator,eric,diskin" />
-	<script type="text/javascript" src="/js/erklib.js"></script>
+	<script type="text/javascript" src="js/erklib.js"></script>
+	<script src="js/modals.js"></script>
+
+    <link rel="stylesheet" href="css/grid.css">
 </head>
-<body>
-	<div class="head">
-		<h1>Drawster</h1>
-		<h2>By Eric Diskin</h2>
+
+<body class="body">
+	<div class="modal" id="load-modal">
+		<div class="modal-content aside">
+			<span class="close-btn"></span>
+			<h1>Welcome to Drawster</h1>
+			<h3>Version 0.2.1.0</h3 style="margin:0;padding:0;">
+			<h2>
+				Changes:
+				<ul>
+					<li>Many bug fixes</li>
+					<li>Removed Buggy features (don't worry they will be back!)</li>
+				</ul>
+			</h2>
+		</div>
+	</div>
+	<div class="modal" id="loading-modal">
+		<div class="modal-content aside">
+			<h1>Drawster is loading...</h1>
+		</div>
+	</div>
+    <div class="modal" id="settings-modal">
+        <div class="modal-content aside">
+            <span class="close-btn"></span>
+            <h2>Settings</h2>
+            <p>
+                Show cursor on canvas
+                <label class="switch">
+                    <input onchange="canvs.cursor(this.checked ? 'pointer' : 'none')" type="checkbox">
+                    <span class="slider"></span>
+                </label>
+			</p>
+            <p>
+                Quick tip:
+                <select class="quick-select" value="Brush">
+					<option value="File">File</option>
+					<option value="Edit">Edit</option>
+					<option value="Brush">Brush</option>
+					<option value="Canvas">Canvas</option>
+					<option value="Project">Project</option>
+                </select>
+			</p>
+			<p>
+				Quick tip size (1-12):
+				<input type="range" min="1" max="12" ondblclick="changeType(this);" onchange="changeTipSize(this.value);">
+			</p>
+        </div>
+    </div>
+	<div class="col-12 col-s-12 nav-menu">
+		<div class="nav-menu-item">	
+			File
+			<div class="panel">
+				<span class="close-panel-btn"></span>
+				<ul class="menu" id="File-tip">
+					<li class="hover" onclick="sessionStorage.clear();window.location.reload(true);">
+						New
+					</li>
+					<li class="hover" class="open-img">
+						Open
+					</li>
+					<li class="hover" class="save">
+						Save
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="nav-menu-item">
+			Edit
+			<div class="panel">
+				<span class="close-panel-btn"></span>
+				<ul class="menu" id="Edit-tip">
+					<li>
+						<label class="switch">
+							<input onchange="toggleSwitch('draw',this)" checked type="checkbox" class="draw-mode-switch">
+							<span class="slider"></span>
+						</label>
+						<p class="mode-draw">Drawing mode</p>
+					</li>
+					<li class="hover" onclick="c.clearRect(0,0,canvas.width,canvas.height);">
+						<p>Clear</p>
+					</li>
+					<li class="hover" onclick="undo();">
+						<p>Undo</p>
+					</li>
+					<li class="hover" onclick="redo()">
+						<p>Redo</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="nav-menu-item">
+			Brush
+			<div class="panel">
+				<span class="close-panel-btn"></span>
+				<ul class="menu" id="Brush-tip">
+					<li>
+						<input type="text" class="title" onchange="newTitle(this)" value="Untitled" placeholder="Erkspace">
+					</li>
+					<li>
+						Mouse position:<br> <span class="mouse-pos">mouse not found</span>
+					</li>
+					<li>
+						<label>0</label><input ondblclick="changeType(this)" value="32" type="range" min="1"
+							max="400" onchange="changeSize(this.value);" class="brush-sizer"><label>400</label>
+						<p>Brush size: <span class="brush-size">16</span></p>
+					</li>
+					<li>
+						<input type="color" onchange="changeBrushColor(this.value);" class="color">
+						<p>Color</p>
+					</li>
+					<li>
+						Shadows
+						<label>Shadow blur: </label><input class="shadow-blur-change" type="range" min="0" value="0" max="100" onchange="changeBlur(this);"
+						ondblclick="changeType(this)"><br>
+						<label>Shadow color: </label><input type="color" onchange="changeScolor(this)" class="shadow-color"><br>
+						<label>Shadow offset X: </label><input type="range" onchange="changeOFF('x',this);" min="-200" value="0" max="200"
+							ondblclick="changeType(this);" class="shadow-offX"><br>
+						<label>Shadow offset Y: </label><input type="range" onchange="changeOFF('y',this);" min="-200" max="200" value="0"
+							ondblclick="changeType(this);" class="shadow-offY"><br>
+						</li>
+						<li>
+							<input type="number" ondblclick="changeType(this);" onchange="setTransparency(this.value);" value="10" min="1" max="10"
+							class="trans">
+							<p>Transparency (1 - 10)</p>
+						</li>
+						<li>
+							<label class="switch">
+								<input type="checkbox" onchange="toggleSwitch('eraser',this);" class="eraser">
+								<span class="slider"></span>
+							</label>
+							<p>Eraser mode: <span class="draw-mode">off</span></p>
+						</li>
+						<li>
+							<select class="brush-mode" onchange="changeBrushMode(this.value)">
+								<option value="pen">Pen</option>
+								<option value="pixel">Square Dot Marker</option>
+								<option value="grid">Grid</option>
+
+							</select>
+							<p>Brush mode</p>
+						</li>
+					<li>
+						<details>
+							<summary>Advanced</summary>
+							<p>Global Composition: <select class="glbl-compos-select">
+							</select></p>
+						</details>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="nav-menu-item"> <!-- put grid settings in here -->
+			Canvas
+			<div class="panel">
+				<span class="close-panel-btn"></span>
+				<ul class="menu" id="Canvas-tip">
+					<li>
+						<p>
+							Adjust image size
+							<br>
+							<label>Width: </label><input value="500" onchange="resizeCanvas('w',this.value,this);" type="number"
+								class="size-x"><label> pixels</label>
+							<br>
+							<label>Height: </label><input value="500" type="number" class="size-y"
+								onchange="resizeCanvas('h',this.value,this);"><label> pixels</label>
+							<br>
+							<button onclick="resizeCanvas('a')">set Auto</button>
+							<br>
+							<br>
+						</p>
+					</li>
+					<li>
+						<p>
+							<label class="switch">
+								<input type="checkbox" onchange="toggleSwitch('grid',this);" class="canvas-grid-switch">
+								<span class="slider"></span>
+							</label>
+							<p>Canvas grid: <span class="canvas-grid-text">off</span></p>
+						</p>
+					</li>
+					<li class="grid-option">
+						<p>
+							Grid Size:
+							<input type="number" ondblclick="changeType(this);" onchange="setGridSize(this.value);" value="8" class="grid-size">
+						</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="nav-menu-item" onclick="openSettings();">
+			Settings
+		</div>
 	</div>
 	<div class="row">
-		<div class="col-3 col-s-3 menu">
-			<ul>
-				<a target="_blank" href="changelog.html"><li>Go to changlog</li></a>
-				<a target="_blank" href="draw.html"><li>Go to editor</li></a>
-				<a href="newProj.html"><li>Create new project</li></a>
-			</ul>
-		</div>
-		<div class="col-4 col-s-4">
-			<h3>What is Drawster?</h3>
-			<p>Drawster is a very simple image creator. Drawster has many features and even some that most (image) editors don't have.</p>
-		</div>
-		<div class="aside col-s-5 col-5">
-			<h3>&larr;&larr;Whats new in version 0.1.7.0?&larr;&larr;</h3>
-			<ul class="left">
-				<li>Erkspace:
-					<ul class="square">
-						<li>Upload an erkspace to continue where you left off</li>
-						<li>Dowload an erkspace to save your workspace so you can finish later</li>
-					</ul>
-				</li>
-				<li>Add titles to your pictures</li>
-			</ul>
-			<h3>&larr;&larr;Whats new in version 0.1.8.0?&larr;&larr;</h3>
-			<ul class="left">
-				<li>Less lag when drawing</li>
-				<li>Erkspace improvements</li>
-				<li>Pen mode updated. pen mode is now much, MUCH better than the old pen.</li>
-				<li>The old pen mode is now circle mode</li>
-				<li>Circle mode is deprecated. it will be removed in future versions.</li>
-				<li>&lt;Version 0.1.8.1:
-					<ul>
-						<li>click the space bar for new drawing settings</li>
-						<li>on the bottom of the controls you now have a selector to choose what kind of computer you have.</li>
-						<li>if you click the awesome computer button then you do not have to click the update links button.</li>
-					</ul>
-					&gt;
-				</li>
-			</ul>
-			<p>For the full changelog click <a href="changelog.html" target="_blank">here</a>.</p>
-		</div>
-		<div class="col-4 col-s-4">
-			<img src="images/drawster alien pic.png">
-		</div>
-		<div class="col-8 col-s-8 aside">
-			<h2>A fast, yet simple image creator</h2>
-			<p class="large">Drawster is a simple image creator that comes packed with tons of features.
-			Drawster gets updates frequently and still remains easy to use.  there is no dowload needed with Drawster, so you can skip the wait and start creating right away!  Drawster can be used for a variety of different things (letter, images, etc.)  Drawster is safe and stable.
-			</p>
-		</div>
-	</div>
-	<div class="foot">
-		<h2>Eric Diskin | 2018 | Drawster V0.1.8.0</h2>
-	</div>
+        <div class="col-3 col-s-3 side-bar">
+            <div class="menu" id="quick-tip">
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus illo ab in, sint commodi inventore omnis, id dolorem dicta distinctio laborum assumenda magni molestiae numquam aperiam maiores, culpa quidem ut.</li>
+            </div>
+        </div>
+        <br>
+        <div class="col-9 col-s-9 canvas outer-canv-layer" style="padding:0;">
+            <div class="canvs">
+                <canvas id="canvas" class="canv"></canvas>
+                <canvas id="top-canvas" class="canv difference-canvas"></canvas>
+                <canvas id="grid-canvas" class="canv"></canvas>
+            </div>
+        </div>
+    </div>
+    </div>
+    <img src="" alt="Loading" class="img-hidden hidden">
+    <img src="" alt="Loading" class="save-img hidden">
+
+    <script type="text/javascript" src="js/javascript.js"></script>
 </body>
 </html>

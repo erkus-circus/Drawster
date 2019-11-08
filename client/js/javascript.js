@@ -1,11 +1,19 @@
 /*\
 |||\ Eric Diskin
 |||| 2018
-|||/ Version: 0.1.8.0
+|||/ Version: 1.3.0
 \*/
 //(function(window,document) {
-
+var projectVersion = 0;
+var altPressed = false;
 var brush = {
+
+    // show grid ontop of canvas.
+    grid: false,
+
+    // size of boxes
+    gridSize: 8,
+
     // brush is big object of everything that  the cursor can do. includes some canvas objects
     mode: 'pen',
     oldMode: 'pixel',
@@ -77,155 +85,61 @@ function newTitle(elem) {
     _.find('#save-space').download = brush.title + '.erkspace';
 }
 
-function changeBrushImg(obj) {
-    // TODO: identify
-    var reader = new FileReader();
-    reader.onload = function (eve) {
-        var img = _.find('#img-hidden');
-        _.find('#img-hidden').style.display = 'block';
-        img.src = eve.target.result;
-        brush.width = img.width;
-        brush.height = img.height;
-        brush.img = img;
-        if (_.find('#img-stretch').checked) {
-            //	var cImg = c.getImageData(0,0,canvas.width,canvas.height);
-            //		c.putImageData(cImg,0,0);
-            brush.img.onload = function () {
-                c.drawImage(brush.img, 0, 0, canvas.width, canvas.height);
-                _.find('#img-hidden').style.display = 'none';
-            }
-                ;
-        }
-        else {
-            img.onload = function () {
-                resizeCanvas('w', brush.width);
-                resizeCanvas('h', brush.height);
-                c.drawImage(brush.img, 0, 0, brush.width, brush.height);
-                _.find('#img-hidden').style.display = 'none';
-            }
-
-        }
-
-        img = _.find('#img');
-        img.style.width = 25 + '%';
-        img.src = eve.target.result;
-        img.style.height = 25 + '%';
-    }
-
-    reader.readAsDataURL(obj.files[0]);
-}
-
-function saveErkspace() {
-    // make the erkspace links downloadable
-    var obj = {
-        "brush": brush,
-        "version": version,
-        "versionFull": versionFull,
-        "canvas": {
-            "width": canvas.width,
-            "height": canvas.height,
-            "img": canvas.toDataURL('image/png')
-        }
-
-    };
-
-    var data = 'data:text/erkspace;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj));
-    $('#save-space').attr('href', data);
-    $('#download').attr('href', canvas.toDataURL('image/png'));
-    $('#download').download(brush.title + '.png');
-}
-
-function drawErkspace(obj) {
-    // draw the erkspace obj on screen
-    canvas.width = obj.canvas.width;
-    canvas.height = obj.canvas.height;
-    brush = obj.brush;
-    var img = _.find('#save-img');
-    img.style.display = 'block';
-    img.src = obj.canvas.img;
-    $(document).title('Drawster - ' + brush.title);
-    img.onload = function () {
-        c.drawImage(img, 0, 0);
-        img.style.display = 'none';
-    }
-
-    setControls();
-}
-
-function uploadErkspace(input) {
-    // upload an erkspace for editiing
-    var fr = new FileReader();
-    fr.onload = function (e) {
-        var file = e.target.result;
-        var obj = JSON.parse(decodeURIComponent(file));
-        //if (typeof obj.versionFull === 'undefined' ){//|| versionFull.minor == obj.versionFull.minor) {
-        drawErkspace(obj);
-        //}
-        //else {
-        //    throw new Error('This version of Erkspace is not compatible.  please go to file:///E:/drawing/old/' + obj.version + '/draw.html to edit');
-        //}
-
-    }
-
-    fr.readAsText(input.files[0]);
-}
-
 function setControls() {
     // change the title of the document.
     document.title = 'Drawster - ' + brush.title;
-    _.find('#title').value = brush.title;
+    $('.title').value(brush.title);
 }
 
-function toggleSwitch(type) { // for toggle switches
-    // switch a .switch  for `type`.
-    if (type == 'eraser' && _.find('#eraser').checked) {
-        _.find('#draw-mode').innerHTML = 'on';
+function toggleSwitch(type, elem) { // for toggle switches
+
+    // make all toggle switches have same value.
+    var erkElem = $("." + elem.className).checked(elem.checked);
+    var checked = erkElem.checked()[0];
+    
+    if (type == 'eraser' && checked) {
+        $('.draw-mode').html('on');
         brush.oldMode = brush.mode;
         brush.mode = 'erase';
     }
+
     else if (type == 'eraser') {
-        _.find('#draw-mode').innerHTML = "off";
+        $('.draw-mode').html("off");
         brush.mode = brush.oldMode;
     }
-    else if (type == 'shadow') {
-        brush.shadow = {
-            on: false,
-            blur: 0,
-            offX: 0,
-            offY: 0,
-            color: brush.color
-        }
 
-        _.find('#shadow-controls').style.display = 'none';
+    if (type == 'grid') {
+        if (checked) {
+            brush.grid = true;
+            drawCanvGrid();
+            $('.grid-option').show();
+            $('.canvas-grid-text').html("on")
+        }
+        else {
+            brush.grid = false;
+            drawCanvGrid();
+            $('.grid-option').hide();
+            $('.canvas-grid-text').html("off");
+        }
     }
 
-    if (type == 'draw' && _.find('#draw-mode-switch').checked) {
+
+    if (type == 'draw' && checked) {
         drawable = true;
-        _.find('#mode-draw').innerHTML = 'Draw mode';
+        $('.mode-draw').html('Draw mode');
     } else if (type === "draw") {
         drawable = false;
-        _.find('#mode-draw').innerHTML = 'View mode';
+        $('.mode-draw').html('View mode');
     }
 
     if (type == 'img') {
-        if (_.find('#img-stretch').checked) {
-            _.find('#img-stretch-show').innerHTML = 'on';
+        if (checked) {
+            $('.img-stretch-show').html('on');
         }
         else {
-            _.find('#img-stretch-show').innerHTML = 'off';
+            $('.img-stretch-show').html('off');
         }
     }
-}
-
-function lineChange(kind, value) { // change point from c.moveTo in line mode
-    //TODO: ad better support for line making
-    if (kind == 'x') {
-        brush.line.from[0] = value;
-    }
-    else if (kind == 'y') {
-        brush.line.from[1] = value;
-    }
-
 }
 
 function changeOFF(kind, obj) { // change offset for shadows
@@ -248,7 +162,7 @@ function changeScolor(obj) { // change shadow color
 function changeSize(val) { // change brush size
     // change size of brush
     brush.size = val;
-    _.find('#brush-size').innerHTML = val;
+    $('.brush-size').html(val);
 }
 
 function changeBlur(obj) {// change shadow blur
@@ -257,29 +171,9 @@ function changeBlur(obj) {// change shadow blur
     brush.shadow.blur = val;
 }
 
-function changeMode(val) { // change brush modes
-    brush.mode = val;
-    if (brush.mode == 'line') {
-        _.find('#line-controls').style.display = 'block';
-    }
-    else {
-        _.find('#line-controls').style.display = 'none';
-    }
-
-}
-
-function changeImgStyles(kind, obj) {
-    if (kind == 'w') {
-        brush.width = obj.value;
-    }
-    else if (kind == 'h') {
-        brush.height = obj.value;
-    }
-
-}
-
-_(window).load(function () { // window onload
+$(window).load(function () { // window onload
     //vars:
+    
     canvas = $('#canvas')[0];
     c = canvas.getContext('2d');
     topCanv = $('#top-canvas')[0];
@@ -289,6 +183,8 @@ _(window).load(function () { // window onload
     //event listeners:
     canvs.on('touchmove', draw, true);
     canvs.on('touchstart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         mousedown = true;
         brush.lastPos = mPos(e);
         draw(e);
@@ -296,10 +192,14 @@ _(window).load(function () { // window onload
         canvasObj.oldImages.push(c.getImageData(0, 0, canvas.width, canvas.height));
     }, true);
     canvs.on('touchend',function(e){
+        e.preventDefault();
+        e.stopPropagation();
         mousedown = false;
         draw(e);
     });
     canvs.on('mousedown', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         mousedown = true;
         c.save();
         canvasObj.oldImages.push(c.getImageData(0, 0, canvas.width, canvas.height));
@@ -313,20 +213,20 @@ _(window).load(function () { // window onload
     $('.modal').modal();
     $('#load-modal').show();
     $('.panel').hide();
-
+    drawCanvGrid();
+    $('#loading-modal').show();
     $('.nav-menu-item').click(function (e, elem) {
         var panel = $('.panel', e.target)
-        //TODO: only one menu should be open at a time.
-
+        
         if (e.target !== this) {
             return;
         }
-
+        
         if (menuOpen != panel) {
             try {
                 menuOpen.hide();
             } catch (e) {
-
+                
             }
         }
 
@@ -340,7 +240,7 @@ _(window).load(function () { // window onload
         el.hide();
     });
 
-    window.addEventListener('keydown', function (e) {
+    $(window).on('keydown', function (e) {
         var cd = e.keyCode || e.wich;
         if (cd == 90 && e.ctrlKey) {
             undo();
@@ -349,7 +249,7 @@ _(window).load(function () { // window onload
             redo();
         }
         else if (e.ctrlKey && e.altKey && !e.shiftKey && cd == 67) {
-            _.find('#color').click();
+            $('.color').click();
         }
         else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 67) {
             c.clearRect(0, 0, canvas.width, canvas.height);
@@ -359,13 +259,13 @@ _(window).load(function () { // window onload
         }
         else if (cd == 221 && e.ctrlKey && !e.shiftKey && !e.altKey) {
             brush.size += (++brush.size * .04);
-            $('#brush-size').html(Math.floor(brush.size))
+            $('.brush-size').html(Math.floor(brush.size))
         }
         else if (cd == 219 && e.ctrlKey && !e.shiftKey && !e.altKey) {
             if (brush.size > 2) {
                 brush.size -= (++brush.size * .04);
             }
-            $('#brush-size').html(Math.floor(brush.size))
+            $('.brush-size').html(Math.floor(brush.size))
         }
         else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 70) {
             resizeCanvas('f');
@@ -376,55 +276,74 @@ _(window).load(function () { // window onload
             //		_('#info-sheet').fade();
             //	}
             //,1100);
-
         }
         updateTop();
     }, true);
-
-    $("#quick-select").change(function (e) {
+    
+    // for some reason it doesent auto set.
+    
+    $(".quick-select").change(function(e) {
         console.log($("#" + e.target.value + "-tip").html()[0]);
         
         $("#quick-tip").html($("#" + e.target.value + "-tip").html()[0]);
     });
-
-    $("#quick-tip").html($("#Brush-tip").html()[0]);
-
+    
+    $("#quick-tip").html($("#" + "Brush" + "-tip").html()[0]);
+    
+    // keep all inputs uniform
+    $("input").change(uniformChange);
+    $("select").change(uniformChange);
+    
+    $("#quick-tip").html($(".Brush-tip").html()[0]);
+    
     $(window).on('mousemove', draw, true);
     $(canvas).on('contextmenu', (e) => e.preventDefault());
     //fun calls:
-    resizeCanvas('a');
-    initAdvancedBrushSets()
-
+    initAdvancedBrushSets();
+    
     // other:
-    _.find('#color').value = (sessionStorage.getItem('color')) ? sessionStorage.getItem('color') : '#000000';
+    $('.color').val((sessionStorage.getItem('color')) ? sessionStorage.getItem('color') : '#000000');
+    
 
+    // set css width and height so no errors occur
+    canvs.csswidth(canvs.width()[0] + 'px');
+    canvs.cssheight(canvs.height()[0] + 'px');
+
+
+    // zoom in and out
+    $('canvas').on('wheel', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var oldWidth = canvs.csswidth()[0];
+        var oldHeight = canvs.cssheight()[0];
+        console.log(oldWidth.substring(0, oldWidth.length - 2))
+        
+        canvs.csswidth((parseInt(oldWidth.substring(0,oldWidth.length - 2)) - e.deltaY) + "px");
+        canvs.cssheight((parseInt(oldHeight.substring(0, oldHeight.length - 2)) - e.deltaY) + "px");
+    })
+    
     // other onload
     // PARAMS
-    var params = _.GET();
-    if (params != {}) {
-        newTitle({ value: decur(_.GET("title").replace("+", ' \x0a')) });
+    resizeCanvas('a');
+    $('#loading-modal').hide();
 
-        brush.color = decur(_.GET("main_color"));
-        _("#color").value(brush.color)
-        brush.transparency = decur(params.trans) / 10;
-        canvas.width = decur(_.GET("width"));
-        canvas.height = decur(_.GET("height"));
-        brush.gramode = decur(_.GET("gramode"));
-    }
 });
 
 function mPos(e) { // find mouse position on "canvas"
-    var rt = canvas.getBoundingClientRect();
+    var rt = canvas.getBoundingClientRect(), // abs. size of element
+        scaleX = canvas.width / rt.width,    // relationship bitmap vs. element for X
+        scaleY = canvas.height / rt.height;  // relationship bitmap vs. element for Y
+
     if (e.touches) {
         // if touch evt
         return {
-            x: e.touches[0].clientX - rt.left,
-            y: e.touches[0].clientY - rt.top
+            x: (e.touches[0].clientX - rt.left) * scaleX,
+            y: (e.touches[0].clientY - rt.top) * scaleY
         };
     }
     return {
-        x: e.clientX - rt.left,
-        y: e.clientY - rt.top
+        x: (e.clientX - rt.left) * scaleX,
+        y: (e.clientY - rt.top) * scaleY
     };
 }
 
@@ -443,7 +362,6 @@ function draw(e) { // draws on the canvas, main function
     else {
         brush.calig.size = 0;
     }
-
     
     c.shadowColor = brush.shadow.color;
     c.shadowBlur = brush.shadow.blur;
@@ -482,23 +400,28 @@ function draw(e) { // draws on the canvas, main function
         c.lineTo(pos.x, pos.y);
         c.stroke();
     }
+    else if (mousedown && brush.mode == 'grid' && drawable) {
+            c.beginPath()
+            c.fillStyle = brush.color;
+            var x = Math.floor(pos.x / brush.gridSize) * brush.gridSize,
+                y = Math.floor(pos.y / brush.gridSize) * brush.gridSize,
+                dx = brush.gridSize,
+                dy = brush.gridSize;
+            c.rect(x, y, dx, dy);
+            c.fill();
+            c.closePath();
+    }
     
     c.closePath()
     
     updateTop();
     brush.lastPos.x = pos.x;
     brush.lastPos.y = pos.y;
-    _.find('#mouse-pos').innerHTML = Math.round(pos.x) + ", " + Math.round(pos.y);
-    
-    if (brush.gramode > 0) {
-        _.find('#download').href = canvas.toDataURL('image/png'); // download image on canvas
-        if (brush.gramode > 1) {
-            
-            saveErkspace();
-            if (brush.gramode > 2) {
-                setControls();
-            }
-        }
+    if (brush.grid) {
+        $('.mouse-pos').html(Math.round(pos.x / brush.gridSize) + ", " + Math.round(pos.y / brush.gridSize));
+    }
+    else {
+        $('.mouse-pos').html(Math.round(pos.x) + ", " + Math.round(pos.y));
     }
 }
 
@@ -507,6 +430,21 @@ function updateTop() {
     tc.beginPath();
     tc.clearRect(0, 0, window.innerWidth, window.innerHeight);
     
+    // check if grid
+    if (brush.mode == 'grid') {
+        tc.beginPath()
+        tc.lineWidth = 1;
+        tc.globalAlpha = .5
+        tc.fillStyle = brush.color;
+        var x = Math.floor(pos.x / brush.gridSize) * brush.gridSize,
+            y = Math.floor(pos.y / brush.gridSize) * brush.gridSize,
+            dx = brush.gridSize,
+            dy = brush.gridSize;
+        tc.rect(x, y, dx, dy);
+        tc.fill();
+        tc.closePath();
+    }
+
     if (brush.mode === 'pen') {
         tc.strokeStyle = brush.color;
         tc.shadowColor = 'white';
@@ -526,6 +464,31 @@ function updateTop() {
         tc.closePath()
     }
     tc.closePath()
+}
+
+function drawCanvGrid() {
+    $("#loading-modal").show();
+    var gc = $("#grid-canvas")[0].getContext('2d');
+    gc.clearRect(0, 0, canvas.width, canvas.height);
+    setTimeout(() => {
+        if (brush.grid) {
+            for (let y = 0; y < canvas.height; y += brush.gridSize) {
+                
+                // draw grid
+                gc.beginPath();
+                gc.moveTo(0, y);
+                gc.lineTo(canvas.width, y);
+                gc.stroke();
+            }
+            for (let x = 0; x < canvas.width; x += brush.gridSize) {
+                gc.moveTo(x, 0);
+                gc.lineTo(x, canvas.height);
+                gc.stroke();
+            }
+        }
+        $("#loading-modal").hide();
+    }, 10);
+
 }
 
 function changeTipSize(val) {
@@ -557,37 +520,39 @@ function redo() { // redo canvas
     c.restore();
 }
 
-function uploadPack(input) {
-    var fr = new FileReader();
-    _(fr).ripe(function (e) {
-        var obj = JSON.parse(decodeURIComponent(e.target.result));
-        brush.pack = obj;
-    }
-    );
-    fr.readAsText(input.files[0]);
-}
-
-function bgcup(val) { // change color of brush,
+function changeBrushColor(val) { // change color of brush,
     // sets it in session storage
     brush.color = val;
     sessionStorage.setItem('color', val);
 }
 
-function trans(val) { // sets tranparency
+
+function setGridSize(value){
+    brush.gridSize = parseInt(value);
+    drawCanvGrid();
+}
+
+/**
+ * set the brush tranparency
+ * @param {int} val the value to set the brush transparency to. 0 - 10
+ */
+function setTransparency(val) { // sets tranparency
     var t = val / 10; // / 10 because val is 1 through 10
     brush.transparency = t;
 }
 
-function resizeCanvas(dir, val) { // resizes canvas
+function resizeCanvas(dir, val, elem) { // resizes canvas
+    console.log(dir,val);
+    
     var canvasImg = c.getImageData(0, 0, canvas.width, canvas.height);
     if (dir == 'w') { // width
         canvas.width = val;
     }
-
+    
     if (dir == 'h') { // height
         canvas.height = val;
     }
-
+    
     if (dir == 'a') { // auto
         canvas.width = window.innerWidth / 1.48;
         canvas.height = window.innerHeight / 1.2;
@@ -596,22 +561,28 @@ function resizeCanvas(dir, val) { // resizes canvas
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
+    
+    $('.size-x').val(canvas.width);
+    $('.size-y').val(canvas.height);
+    
+    canvs.width(canvas.width)
+    canvs.height(canvas.height)
 
-    $('#size-x').val(canvas.width);
-    $('#size-y').val(canvas.height);
-
-    $('.canvs').csswidth(canvas.width + 'px')
-    $('.canvs').cssheight(canvas.height + 'px')
-
-
+    canvs.csswidth(canvas.width + 'px')
+    canvs.cssheight(canvas.height + 'px')
+    
+    
     $('canvas').each((el, i) => {
         el.style('zIndex', i);
+        el.width(canvas.width)
+        el.height(canvas.height);
     });
 
-    topCanv.width = canvas.width
-    topCanv.height = canvas.height;
-
+    
     c.putImageData(canvasImg, 0, 0, 0, 0, canvas.width, canvas.height);
+
+    // set uniform
+    $("." + elem.className).value(elem.value);
 }
 
 function changeType(obj) { // change types on <input>
@@ -634,18 +605,21 @@ function initAdvancedBrushSets() {
     ]
 
     sets.forEach(type => {
-        $('#glbl-compos-select').append($('<option>').val(type).html(type.replace('-', ' ')))
-            .change(function () {
-                c.globalCompositeOperation = this.value;
-            });
-    });
+        $('.glbl-compos-select').append($('<option>').val(type).html(type.replace('-', ' '))).change(function () {
+            c.globalCompositeOperation = this.value;
+        });
+    }); 
 
-}
-
-function degTrad(deg) {
-    return deg * Math.PI / 180;
 }
 
 function openSettings() {
     $("#settings-modal").show();
+}
+
+function uniformChange(e) {
+    $("." + e.target.className).val(e.target.value);
+}
+
+function changeBrushMode(value) {
+    brush.mode = value;
 }

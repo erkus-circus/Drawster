@@ -11,6 +11,10 @@
 	top: 26px;
 }
 
+.hidden {
+	display: none;
+}
+
 #quick-tip {
 	text-align: center;
 	overflow: auto;
@@ -32,9 +36,10 @@
 	overflow: auto;
 }
 
-#top-canvas {
+.difference-canvas {
 	mix-blend-mode: difference;
 }
+
 
 #info-sheet {
 	position: fixed;
@@ -50,6 +55,11 @@
 	border: none;
 	text-align: center;
 }
+
+.grid-option {
+	display: none;
+}
+
 html {
 	font-family: 'Quicksand', sans-serif;
 }
@@ -121,6 +131,8 @@ ul.changelog > li {
 	bottom: 0;
 	background-color: pink;
 }
+
+
 @media only screen and (max-width: 768px) {
 	.head-img {
 		display: none;

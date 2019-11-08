@@ -276,16 +276,17 @@
         };
 
         //ATTRS:
-        _attr('innerHTML', 'html') // change innerHTML
-        _attr('innerText', 'text') // change Text
-        _attr('value','val')
-        _attr('download')
-        _attr('id')
+        _attr('innerHTML', 'html'); // change innerHTML
+        _attr('innerText', 'text'); // change Text
+        _attr('value', 'val');
+        _attr('download');
+        _attr('id');
+        _attr("href");
         _attr('checked')
         _attr('className');
-        _attr('checked')
-        _attr('title')
-        _attr('src')
+        _attr('checked');
+        _attr('title');
+        _attr('src');
 
         _attr('className', 'classes')
         _attr('width')
@@ -297,6 +298,7 @@
         _css('backroundColor', 'bgcolor')
         _css('cursor');
         _css('fontSize')
+        _css('display');
         _css('background', 'bg')
         _css('zIndex')
         _css('scrollOverflow')
