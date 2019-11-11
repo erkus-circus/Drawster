@@ -312,14 +312,22 @@ $(window).load(function () { // window onload
 
     // zoom in and out
     $('canvas').on('wheel', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var oldWidth = canvs.csswidth()[0];
-        var oldHeight = canvs.cssheight()[0];
-        console.log(oldWidth.substring(0, oldWidth.length - 2))
-        
-        canvs.csswidth((parseInt(oldWidth.substring(0,oldWidth.length - 2)) - e.deltaY) + "px");
-        canvs.cssheight((parseInt(oldHeight.substring(0, oldHeight.length - 2)) - e.deltaY) + "px");
+        if (e.altKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            var oldWidth = canvs.csswidth()[0];
+            var oldHeight = canvs.cssheight()[0];
+            console.log(oldWidth.substring(0, oldWidth.length - 2));
+            
+            
+            canvs.csswidth((parseInt(oldWidth.substring(0,oldWidth.length - 2)) - e.deltaY) + "px");
+            canvs.cssheight((parseInt(oldHeight.substring(0, oldHeight.length - 2)) - e.deltaY) + "px");
+        }
+        if (e.ctrlKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.scrollBy(e.deltaY, 0);
+        }
     })
     
     // other onload
@@ -371,6 +379,7 @@ function draw(e) { // draws on the canvas, main function
     
     if (!pos.x < 0 || !pos.x > canvas.width || !pos.y < 0 || !pos.y > canvas.height) {
         e.preventDefault();
+        e.stopPropagation();
     }
     c.beginPath();
     if (mousedown && drawable && brush.mode == 'erase') {
@@ -380,7 +389,18 @@ function draw(e) { // draws on the canvas, main function
         c.shadowOffsetY = 0;
         c.fillStyle = brush.color;
         c.globalAlpha = 1;
-        c.clearRect(pos.x - ((brush.size + brush.calig.size) / 2), pos.y - ((brush.size + brush.calig.size) / 2), brush.size + brush.calig.size, brush.size + brush.calig.size);
+
+        if (brush.oldMode == 'grid') {
+            var x = Math.floor(pos.x / brush.gridSize) * brush.gridSize,
+                y = Math.floor(pos.y / brush.gridSize) * brush.gridSize,
+                dx = brush.gridSize,
+                dy = brush.gridSize;
+            c.clearRect(x, y, dx, dy);
+        }
+        else {
+            c.clearRect(pos.x - ((brush.size + brush.calig.size) / 2), pos.y - ((brush.size + brush.calig.size) / 2), brush.size + brush.calig.size, brush.size + brush.calig.size);
+        }
+
     }
     else if (mousedown && drawable && brush.mode == 'pixel') {
         c.fillStyle = brush.color;
@@ -431,7 +451,7 @@ function updateTop() {
     tc.clearRect(0, 0, window.innerWidth, window.innerHeight);
     
     // check if grid
-    if (brush.mode == 'grid') {
+    if (brush.mode == 'grid' || (brush.oldMode == 'grid' && brush.mode == 'eraser')) {
         tc.beginPath()
         tc.lineWidth = 1;
         tc.globalAlpha = .5
@@ -544,45 +564,52 @@ function setTransparency(val) { // sets tranparency
 function resizeCanvas(dir, val, elem) { // resizes canvas
     console.log(dir,val);
     
-    var canvasImg = c.getImageData(0, 0, canvas.width, canvas.height);
+    var canvasDatas = canvs.map(function (canv) {
+        var ctx = canv.getContext('2d');
+        console.log(canv.width, canv.height)
+        
+        return {
+            ctx: ctx,
+            data: ctx.getImageData(0,0,canv.width,canv.height)
+        };
+    });
+
     if (dir == 'w') { // width
-        canvas.width = val;
+        canvs.width(val);
     }
     
     if (dir == 'h') { // height
-        canvas.height = val;
+        canvs.height(val);
     }
-    
+
     if (dir == 'a') { // auto
-        canvas.width = window.innerWidth / 1.48;
-        canvas.height = window.innerHeight / 1.2;
+        canvs.width(window.innerWidth / 1.48);
+        canvs.height(window.innerHeight / 1.2);
     }
     else if (dir == 'f') {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvs.width(window.innerWidth);
+        canvs.height(window.innerHeight);
     }
-    
+
     $('.size-x').val(canvas.width);
     $('.size-y').val(canvas.height);
-    
-    canvs.width(canvas.width)
-    canvs.height(canvas.height)
 
-    canvs.csswidth(canvas.width + 'px')
-    canvs.cssheight(canvas.height + 'px')
-    
-    
+    canvs.style('width', canvas.width + 'px');
+    canvs.style('height', canvas.height + 'px');
+
+    canvasDatas.forEach(function (data) {
+        data.ctx.putImageData(data.data, 0,0,0,0,canvs.width()[0],canvs.height()[0]);
+    })
+
     $('canvas').each((el, i) => {
         el.style('zIndex', i);
-        el.width(canvas.width)
-        el.height(canvas.height);
     });
 
     
-    c.putImageData(canvasImg, 0, 0, 0, 0, canvas.width, canvas.height);
-
-    // set uniform
-    $("." + elem.className).value(elem.value);
+    console.log("NEW");
+    canvs.map(function (canv) {
+        console.log(canv.width,canv.height);
+    })
 }
 
 function changeType(obj) { // change types on <input>

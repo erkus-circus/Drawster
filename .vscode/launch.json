@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
-            "url": "http://192.168.1.107:8000",
+            "url": "http://lucid-detroit.com",
             "webRoot": "${workspaceFolder}/client"
         },
         {

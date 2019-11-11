@@ -96,11 +96,11 @@
         List.prototype.style = function (attr, val) {
             if (!isUndef(val)) {
                 return this.forEach(function (elem) {
-                    elem[attr] = val;
+                    elem.style[attr] = val;
                 });
             } else {
                 return this.map(function (elem) {
-                    return elem[attr]
+                    return elem.style[attr];
                 });
             }
         }
@@ -128,6 +128,15 @@
                     return this.map((elem) => elem.style[attr]);
                 }
                 return this.forEach((elem) => elem.style[attr] = val);
+            };
+        }
+
+        function _meth(name, dname) {
+            if (isUndef(dname)) {
+                dname = name;
+            }
+            List.prototype[dname] = function (...args) {
+                return this.map((elem) => elem[name](...args));
             };
         }
 
@@ -274,6 +283,9 @@
             });
             return this;
         };
+
+        //METHODS:
+        _meth('scroll');
 
         //ATTRS:
         _attr('innerHTML', 'html'); // change innerHTML

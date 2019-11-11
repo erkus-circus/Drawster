@@ -67,7 +67,7 @@ input:checked + .slider::before {
 	border: 1px solid black;
 	width: 100%;
 	background-color: rgb(69, 200, 245);
-	z-index: 99;
+	z-index: 1001;
 	position: fixed;
 	display: block;
 }

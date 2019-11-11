@@ -19,7 +19,7 @@ express.get('/',function (req,res) {
     res.sendFile(__dirname + '/client/index.html');
 });
 
-express.get(/[A-z0-9\s\.]/,(req,res)=>{
+express.get(/[A-z0-9\s\.]/, (req, res) => {
     res.sendFile(__dirname + '/client' + req.path);
 });
 
