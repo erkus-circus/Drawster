@@ -20,6 +20,12 @@
 .swicth input {
 	display: none;
 }
+
+b {
+	font-style: italic;
+	
+}
+
 .slider {
 	position: absolute;
 	cursor: pointer;

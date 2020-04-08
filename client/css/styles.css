@@ -101,6 +101,12 @@ img {
 	background-color: rgba(255,0,0,0.5);
 	border: 1px solid orange;
 }
+
+.feature-list {
+	background-color: aquamarine;
+	border-radius: 10px;
+}
+
 ul {
 	list-style-position: inside;
 }
@@ -136,3 +142,4 @@ ul.changelog > li {
 		width: 100%;
 	}
 }
+

@@ -1,0 +1,1 @@
+cat client/js/*.js > client/build/build.js

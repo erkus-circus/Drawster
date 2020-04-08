@@ -3,18 +3,6 @@ var http = require('http').Server(express);
 
 var exploits = []
 
-express.get("robots.txt", (req, res) => {
-    res.redirect("http://pornhub.com/");
-    console.log("EXPLOIT",req);
-    exploits.push(req)
-});
-
-express.get("/wp-login.php", (req, res) => {
-    res.redirect("http://pornhub.com / ");
-    console.log("EXPLOIT", req);
-    exploits.push(req)
-});
-
 express.get('/',function (req,res) {
     res.sendFile(__dirname + '/client/index.html');
 });

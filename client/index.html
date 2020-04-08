@@ -3,7 +3,7 @@
 <html>
 
 <head>	
-	<link rel="stylesheet" type="text/css" href="css/sheets/comic-sans.css">
+	<link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 	<link rel="icon" type="image/png" href="cursor/cursor16X16.png">
 	<link rel="stylesheet" href="css/modal.css">
@@ -14,10 +14,9 @@
 	<meta name="description" content="A simple image creator/editor" />
 	<meta name="author" content="Eric Diskin" />
 	<meta name="keywords" content="image,editor,drawster,creator,eric,diskin" />
-	<script type="text/javascript" src="js/erklib.js"></script>
-	<script src="js/modals.js"></script>
     <link rel="stylesheet" href="css/grid.css">
-
+	<style>
+	</style>
 </head>
 
 <body class="body">
@@ -25,17 +24,48 @@
 		<div class="modal-content aside">
 			<span class="close-btn"></span>
 			<h1>Welcome to Drawster</h1>
-			<h3>Version 0.3.0.0</h3 style="margin:0;padding:0;">
+			<h3>Version 0.3.1.0 Dev Build</h3 style="margin:0;padding:0;">
 			<h2>
-				Changes:
-				<ul>
+				<b><u>Changes:</b></u>
+				<ul class="feature-list">
+					<li>Begun basic implemintation of layers! to access layers go to the Canvas tab.</li>
 					<li>Added zoom! press Alt+Scroll to zoom and Ctrl+Scroll to scroll along the X axis</li>
 					<li>Fixed canvas sizing bugs</li>
 					<li>Under the hood cleanup for better perfomance</li>
 				</ul>
+				<b><u>Planned changes:</b></u>
+				<ul class="feature-list">
+					<li>Dedicated Layer tab.</li>
+					<li>Quick-tip on right side of screen.</li>
+					<li>Better UI for changing layers.</li>
+					<li>Create Layers with custom settings</li>
+					<li>More customization</li>
+				</ul>
+				<b><u>Known bugs:</b></u>
+				<ul class="feature-list">
+					<li>Switching brushes while using eraser does not disable eraser.</li>
+					<li>Eraser does not always show where it is going to paint.</li>
+					<li>When canvas is to long, the cursor leaves a trail.</li>
+					<li>When using shadows and transparency, the Pen brush overlaps itself.</li>
+					<li>Grid brush if you move the cursor to fast, there willl be gaps in between tiles.</li>
+				</ul>
+				<p>To report new bugs and feature requests, submit them 
+					<a href="mailto:lucid.detroit@gmail.com?subject=Drawster Bug/Request&body=Make sure to include detailed information on what you were doing. Please include screenshots or videos if possible.">here</a>.
+				</p>
 			</h2>
-			<h3>In the 0.4 update, expect better image saving support, Rotation, Import Images, Custom Brushes, Layers, and More!</h3>
-			<p>Drawster is created and maintained entirley by Eric Diskin.</p>
+			<h3>In future updates, expect better image saving support, rotation, themes, import images, bustom brushes, new color picker, better UI and More!</h3>
+			<p>Drawster is created and maintained entirley by Eric Diskin. For the most recent stable version, press <a href="https://erkus-circus.github.io/Drawster/client/">here</a>.</p>
+		</div>
+	</div>
+	<div class="modal" id="gen-new-layer-modal">
+		<div class="modal-content aside">
+			<span class="close-btn"></span>
+			<h1>Create New Layer</h1>
+			<form id="layer-maker">
+				<label>Layer name: </label><input type="text" id="new-layer-name"><br>
+				<label>Layer index: </label><input type="number" min="0" max="99" id="new-layer-name"><br>
+				<button type="submit">Create</button>
+			</form>
 		</div>
 	</div>
 	<div class="modal" id="loading-modal">
@@ -180,6 +210,12 @@
 				<ul class="menu" id="Canvas-tip">
 					<li>
 						<p>
+							Current Layer:
+							<select class="layer-selector"></select>
+						</p>
+					</li>
+					<li>
+						<p>
 							Adjust image size
 							<br>
 							<label>Width: </label><input value="500" onchange="resizeCanvas('w',this.value,this);" type="number"
@@ -224,16 +260,19 @@
         <br>
         <div class="col-9 col-s-9 canvas outer-canv-layer" style="padding:0;">
             <div class="canvs">
-                <canvas id="canvas" class="canv"></canvas>
                 <canvas id="top-canvas" class="canv difference-canvas"></canvas>
                 <canvas id="grid-canvas" class="canv"></canvas>
             </div>
         </div>
     </div>
-    </div>
+	</div>
+	<p class="aside" style="bottom: 0px; position:fixed;"><b>To report new bugs and feature requests, submit them
+		<a
+			href="mailto:lucid.detroit@gmail.com?subject=Drawster Bug/Request&body=Make sure to include detailed information on what you were doing. Please include screenshots or videos if possible.">here</a>.
+	</	b></p>
     <img src="" alt="Loading" class="img-hidden hidden">
     <img src="" alt="Loading" class="save-img hidden">
 
-    <script type="text/javascript" src="js/javascript.js"></script>
+    <script type="text/javascript" src="build/build.js"></script>
 </body>
 </html>
