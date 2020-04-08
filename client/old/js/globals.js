@@ -53,16 +53,19 @@ var canvasObj = {
 }; // redo and undo
 // TODO: redo
 
-var version = '0.8.0', vercsionFull = {
-    major: 0,
-    minor: 8,
-    build: 0,
-    patch: 0
-};
+var version = '0.8.0',
+    vercsionFull = {
+        major: 0,
+        minor: 8,
+        build: 0,
+        patch: 0
+    };
 
 var menuOpen = null; // the open menu
 
-var imageURL = '', drawable = true, makingSomething = 0;
+var imageURL = '',
+    drawable = true,
+    makingSomething = 0;
 
 let canvas;
 let topCanv, tc;

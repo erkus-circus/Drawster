@@ -5,7 +5,7 @@
     function isArray(arr) {
         return typeof arr === "object" && typeof arr.length === "number";
     }
-
+ 
     function undefVar(v, d) {
         if (typeof v === "undefined") {
             return d;
@@ -279,14 +279,13 @@
 
         //METHODS:
         _meth('scroll');
-        _meth("getContext", "ctx");
+
         //ATTRS:
         _attr('innerHTML', 'html'); // change innerHTML
         _attr('innerText', 'text'); // change Text
         _attr('value', 'val');
         _attr('download');
         _attr('id');
-        _attr("children");
         _attr("href");
         _attr('checked')
         _attr('className');
@@ -313,10 +312,10 @@
         _css('visibility', 'visi')
         //Margins:
         _css('margin')
-        _css('marginTop');
-        _css('marginBotton');
-        _css('marginLeft');
-        _css('marginRight');
+        _css('marginTop', 'margTop')
+        _css('marginBotton', 'margBotton')
+        _css('marginLeft', 'margLeft')
+        _css('marginRight', 'margRight')
         //Paddings:
         _css('padding')
         _css('paddingTop', 'padTop')
@@ -432,19 +431,25 @@
                     }
                     return arr1;
                 },
-                extend: function (toBeExt) {
+                extend: function (overwrite, toBeExt) {
                     var i = 2,
                         args = arguments;
                     for (; i < args.length; i++) {
                         for (var o in args[i]) {
-                            toBeExt[o] = args[i][o];
+                            if (overwrite) {
+                                toBeExt[o] = args[i][o];
+                            } else if (o in toBeExt) {
+                                continue;
+                            } else {
+                                toBeExt[o] = args[i][o];
+                            }
                         }
                     }
                     return toBeExt;
                 }
             });
 
-            return __;
+            return __
         }
         var _ = function (sel, scope) {
             var elems;
@@ -476,107 +481,4 @@
         module.exports = init()
     }
     window.$ = window._ = window.Erklib = init();
-})(window, window.document);/* /canvas.js */
-(function (window) {
-    window.Project.prototype.Canvas = {
-        width: 500,
-        height: 500,
-        resizeCanvases: function (canvases) {
-            for (i in canvases) {
-                var canvas = canvases[i];
-
-                canvas.width(this.width).csswidth(this.width).marginLeft(-this.width / 2);
-                canvas.height(this.height).cssheight(this.height);
-            }
-        }
-    };
-})(window);/* /editor.js */
-(function (window) {
-    window.Project.prototype.Editor = {
-        zoomOut: function () {
-            alert('zoomed in')
-        },
-        zoomIn: function () {
-            alert('zoomed in')
-        }
-    };
-})(window);(function (window, $) {
-
-})(window, window.$);/* /functions.js */
-(function (window) {
-    window.Project.prototype.Functions = {
-        clear: function () {
-            alert("Created new canvas!")
-        },
-        save: function () {
-            alert("saving")
-        },
-        saveAs: function () {},
-        open: function () {
-            alert("Opened new project")
-        },
-        idIndex: 0,
-        genID: function () {
-            return `ID${++this.idIndex}`;
-        }
-    };
-})(window);/* /layers.js */
-(function (window) {
-    window.Project.prototype.Layers = {
-        Layer: class {
-            ID = window.Project.Functions.genID();
-            constructor(name) {
-                this.name = name;
-                // Add canvas:
-                this.canvas = $("<canvas>").className("layer-canvas").id(this.ID);
-
-                //this.write = new window.Project.Write(this.canvas.ctx("2d"));
-            }
-        },
-        addLayer: function (name) {
-            var newLayer = new Project.Layers.Layer(name);
-            window.Project.Canvas.resizeCanvases([newLayer.canvas]);
-            Project.Layers.layers.push(newLayer);
-            $(".canvases").append(newLayer.canvas);
-        },
-        addLayerGUI: function () {
-            var name = prompt("Name?");
-            Project.Layers.addLayer(name);
-        },
-        layers: []
-    };
-})(window);/* /toolbar.js */
-(function (window) {
-    function createToolbar(data) {
-        var parent = $("<div>").className("nav-menu");
-        for (let i = 0; i < data.length; i++) {
-            const {
-                type,
-                name,
-            } = data[i];
-            if (type === "button") {
-                var elem = $("<span>").html(name).className("nav-button").click(function (e) {
-                    data[i]["action"].split('.').reduce((o, i) => o[i], window)();
-                });
-                parent.append(elem);
-            } else if (type === "dropdown") {
-                var elem = $("<div>").html(name).className("nav-dropdown");
-                elem.append(createToolbar(data[i].content));
-                parent.append(elem);
-            }
-            console.log("Loading?");
-
-        }
-        return parent;
-    }
-
-    $(window).load(async function () {
-        const response = await fetch("/data/toolbar.json");
-        const json = await response.json();
-        $(".nav-bar").append(createToolbar(json));
-    });
-})(window);(function (window) {
-    Project.prototype.Writer = class {
-
-    }
-})(window);
+})(window, window.document);

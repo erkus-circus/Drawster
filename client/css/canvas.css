@@ -1,0 +1,15 @@
+.layer-canvas {
+    border: 1px solid black;
+    background-color: white;
+    position: absolute;
+    display: block;
+    left: 50%;
+    z-index: 0;
+    width: 500px;
+    margin: auto;
+}
+
+.canvases {
+    display: block;
+    padding: 0;
+}

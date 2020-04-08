@@ -31,12 +31,17 @@
 }
 
 .side-bar {
-	margin-top: 60px;
+	margin-top: 50px;
 	background-color: white;
 	z-index: 99;
-    border: 1px solid black;
+	border: 1px solid black;
+	display: block;
 	overflow: auto;
 	position: fixed;
+}
+
+#quick-tip {
+	overflow: auto;
 }
 
 .difference-canvas {
@@ -56,7 +61,7 @@
 }
 
 html {
-	font-family: 'Quicksand', sans-serif;
+	font-family: 'Indie Flower', sans-serif;
 }
 #save-img {
 	display: none;

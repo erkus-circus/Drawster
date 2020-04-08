@@ -1,0 +1,54 @@
+[{
+        "name": "File",
+        "type": "dropdown",
+        "content": [{
+                "name": "New",
+                "action": "Project.Functions.clear",
+                "type": "button"
+            },
+            {
+                "name": "Open",
+                "action": "Project.Functions.open",
+                "type": "button"
+            },
+            {
+                "name": "Save",
+                "action": "Project.Functions.save",
+                "type": "button"
+            },
+            {
+                "name": "Save As",
+                "action": "Project.Functions.saveAs",
+                "type": "button"
+            }
+        ]
+    },
+    {
+        "name": "View",
+        "type": "dropdown",
+        "content": [{
+            "name": "Zoom > ",
+            "type": "dropdown",
+            "content": [{
+                    "name": "Zoom In",
+                    "type": "button",
+                    "action": "Project.Editor.zoomIn"
+                },
+                {
+                    "name": "Zoom Out",
+                    "type": "button",
+                    "action": "Project.Editor.zoomOut"
+                }
+            ]
+        }]
+    },
+    {
+        "name": "Layers",
+        "type": "dropdown",
+        "content": [{
+            "name": "Add New Layer",
+            "type": "button",
+            "action": "Project.Layers.addLayerGUI"
+        }]
+    }
+]

@@ -1,26 +1,26 @@
+/* /layers.js */
+(function (window) {
+    window.Project.prototype.Layers = {
+        Layer: class {
+            ID = window.Project.Functions.genID();
+            constructor(name) {
+                this.name = name;
+                // Add canvas:
+                this.canvas = $("<canvas>").className("layer-canvas").id(this.ID);
 
-/**
- * Create a layer with a canvas and context.
- * @param {string} name The name of the layer
- * @param {int} index The index of the layer.
- */
-function Layer(name, index) {
-    this.name = name;
-    this.index = index;
-    this.canvas = $('<canvas>').width(canvs.width()[0]).height(canvs.height()[0]).style('zIndex', index).className('canv');
-    $('.canvs').append(this.canvas);
-    canvs = $('canvas');
-    this.c = this.canvas[0].getContext('2d');
-    initNewCanvas(this.canvas)
-    resizeCanvas('w', topCanv.width);
-    resizeCanvas('h', topCanv.height);
-
-
-    var option = $('<option>').val(name).html(name);
-
-    $('.layer-selector').append(option);
-
-    this.remove = function () {
-        this.canvas.parentNode.removeChild(this.canvas);
-    }
-}
+                //this.write = new window.Project.Write(this.canvas.ctx("2d"));
+            }
+        },
+        addLayer: function (name) {
+            var newLayer = new Project.Layers.Layer(name);
+            window.Project.Canvas.resizeCanvases([newLayer.canvas]);
+            Project.Layers.layers.push(newLayer);
+            $(".canvases").append(newLayer.canvas);
+        },
+        addLayerGUI: function () {
+            var name = prompt("Name?");
+            Project.Layers.addLayer(name);
+        },
+        layers: []
+    };
+})(window);

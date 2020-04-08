@@ -6,16 +6,6 @@
         return typeof arr === "object" && typeof arr.length === "number";
     }
 
-    function isUndef(v) {
-        var is = false;
-
-        if (v === undefined) {
-            is = true;
-        }
-
-        return is;
-    }
-
     function undefVar(v, d) {
         if (typeof v === "undefined") {
             return d;
@@ -61,7 +51,8 @@
         }
 
         List.prototype.map = function (callback) {
-            var res = [], num;
+            var res = [],
+                num;
             if (typeof callback === "undefined") {
                 callback = function (elem) {
                     return elem;
@@ -82,9 +73,9 @@
             return res;
         };
 
-        List.prototype.each = function(callack) {
-            return this.forEach(function(el,i){
-                callack(Erklib(el),i);
+        List.prototype.each = function (callack) {
+            return this.forEach(function (el, i) {
+                callack(Erklib(el), i);
             });
         }
 
@@ -94,7 +85,7 @@
         }
 
         List.prototype.style = function (attr, val) {
-            if (!isUndef(val)) {
+            if (!val === undefined) {
                 return this.forEach(function (elem) {
                     elem.style[attr] = val;
                 });
@@ -104,13 +95,14 @@
                 });
             }
         }
+
         function _attr(attr, title) {
-            if (isUndef(title)) {
+            if (title === undefined) {
                 title = attr;
             }
 
             List.prototype[title] = function (val) {
-                if (isUndef(val)) {
+                if (val === undefined) {
                     return this.map(function (elem) {
                         return elem[attr]
                     });
@@ -120,11 +112,11 @@
         }
 
         function _css(attr, title) {
-            if (isUndef(title)) {
+            if (title === undefined) {
                 title = attr
             }
             List.prototype[title] = function (val) {
-                if (isUndef(val)) {
+                if (val === undefined) {
                     return this.map((elem) => elem.style[attr]);
                 }
                 return this.forEach((elem) => elem.style[attr] = val);
@@ -132,7 +124,7 @@
         }
 
         function _meth(name, dname) {
-            if (isUndef(dname)) {
+            if (dname === undefined) {
                 dname = name;
             }
             List.prototype[dname] = function (...args) {
@@ -141,11 +133,11 @@
         }
 
         function _evt(attr, title) {
-            if (isUndef(title)) {
+            if (title === undefined) {
                 title = attr
             }
             List.prototype[title] = function (callback) {
-                if (isUndef(callback)) {
+                if (callback === undefined) {
                     return this.forEach(el => {
                         el[attr];
                     });
@@ -164,7 +156,7 @@
                 });
             });
         };
-        
+
         List.prototype.copy = function (tf) {
             tf = typeof tf === "boolean" ? tf : false;
             return new List(this.map(function (elem) {
@@ -207,7 +199,7 @@
                 }
             }
             return this.forEach(function (elem) {
-                elem.addEventListener(evt, callback, false,Erklib(elem));
+                elem.addEventListener(evt, callback, false, Erklib(elem));
             });
         }
 
@@ -223,7 +215,7 @@
             });
         };
 
-        List.prototype.show = function (callback = () => { }) {
+        List.prototype.show = function (callback = () => {}) {
             return this.forEach(function (elem, ti, i) {
                 elem.style.display = 'block';
                 callback(this, ti, i);
@@ -234,14 +226,14 @@
             return this.on('load', callback);
         }
 
-        List.prototype.hide = function (callback = () => { }) {
+        List.prototype.hide = function (callback = () => {}) {
             return this.forEach(function (elem, ti, i) {
                 elem.style.display = 'none';
                 callback(this, ti, i);
             });
         }
 
-        List.prototype.toggle = function (callback = function () { }) {
+        List.prototype.toggle = function (callback = function () {}) {
             return this.forEach(function (elem, ti, i) {
                 if (elem.style.display == 'none') {
                     Erklib(elem).show();
@@ -260,7 +252,8 @@
 
         List.prototype.removeClass = function (c) {
             this.forEach(function (elem) {
-                var cn = elem.className.split(" "), i;
+                var cn = elem.className.split(" "),
+                    i;
                 while ((i = cn.indexOf(c)) > -1) {
                     cn = cn.slice(0, i).concat((cn.slice(++i)));
                 }
@@ -286,13 +279,14 @@
 
         //METHODS:
         _meth('scroll');
-
+        _meth("getContext", "ctx");
         //ATTRS:
         _attr('innerHTML', 'html'); // change innerHTML
         _attr('innerText', 'text'); // change Text
         _attr('value', 'val');
         _attr('download');
         _attr('id');
+        _attr("children");
         _attr("href");
         _attr('checked')
         _attr('className');
@@ -319,10 +313,10 @@
         _css('visibility', 'visi')
         //Margins:
         _css('margin')
-        _css('marginTop', 'margTop')
-        _css('marginBotton', 'margBotton')
-        _css('marginLeft', 'margLeft')
-        _css('marginRight', 'margRight')
+        _css('marginTop');
+        _css('marginBotton');
+        _css('marginLeft');
+        _css('marginRight');
         //Paddings:
         _css('padding')
         _css('paddingTop', 'padTop')
@@ -376,7 +370,8 @@
                 },
                 fn: List.prototype,
                 GET: function (attr) { // js equivelent to PHP `$_GET[]`
-                    var wind = window.location.href, h2 = wind.split("?")[1];
+                    var wind = window.location.href,
+                        h2 = wind.split("?")[1];
                     if (!strHasChar(wind, "?")) {
                         return {};
                     }
@@ -416,7 +411,9 @@
                     return this.sel(sel, scope);
                 },
                 merge: function (arr1, arr2) {
-                    var res = [], args = arguments, i = 0;
+                    var res = [],
+                        args = arguments,
+                        i = 0;
                     for (; i < arr2.length; i++) {
                         if (!isArray(arr2)) {
                             arr2 = [arr2];
@@ -435,24 +432,19 @@
                     }
                     return arr1;
                 },
-                extend: function (overwrite, toBeExt) {
-                    var i = 2, args = arguments;
+                extend: function (toBeExt) {
+                    var i = 2,
+                        args = arguments;
                     for (; i < args.length; i++) {
                         for (var o in args[i]) {
-                            if (overwrite) {
-                                toBeExt[o] = args[i][o];
-                            } else if (o in toBeExt) {
-                                continue;
-                            } else {
-                                toBeExt[o] = args[i][o];
-                            }
+                            toBeExt[o] = args[i][o];
                         }
                     }
                     return toBeExt;
                 }
             });
 
-            return __
+            return __;
         }
         var _ = function (sel, scope) {
             var elems;

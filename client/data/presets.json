@@ -1,0 +1,12 @@
+{
+    "Project": {
+        "Canvas": {
+            "width": 500,
+            "height": 500
+        },
+        "Editor": {
+            "zoom": "125%"
+        },
+        "saveState": ""
+    }
+}

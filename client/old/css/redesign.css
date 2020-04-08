@@ -1,0 +1,19 @@
+.nav-bar {
+    background-color: rgb(0, 39, 110);
+    width: 50px;
+    opacity: 95%;
+    height: 50px;
+    display: block;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+.nav-bar:hover>.nav-item {
+    display: block;
+
+}
+
+.nav-item {
+    display: none;
+}

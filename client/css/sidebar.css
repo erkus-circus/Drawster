@@ -1,0 +1,9 @@
+.sidebar {
+    width: 25%;
+    background:
+        /*SIDEBAR:BACKGROUND*/
+        rgb(65, 65, 65);
+    color:
+        /*SIDEBAR:COLOR*/
+        #fff;
+}
