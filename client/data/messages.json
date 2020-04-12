@@ -1,0 +1,53 @@
+{
+    "NewLayer": {
+        "title": "New Layer",
+        "content": "Create a new layer.",
+        "inputs": [{
+            "name": "name",
+            "content": "Name: ",
+            "value": "Layer"
+        }],
+        "buttons": [{
+                "args": {},
+                "title": "Cancel",
+                "action": "Project.MessageBox.hide"
+            },
+            {
+                "args": {},
+                "title": "Ok",
+                "action": "Project.Layers.addLayer"
+            }
+        ]
+    },
+    "RenameLayer": {
+        "title": "Rename Layer",
+        "content": "",
+        "inputs": [{
+            "name": "name",
+            "content": "Name: ",
+            "value": "Layer"
+        }],
+
+        "buttons": [{
+                "title": "Cancel",
+                "action": "Project.MessageBox.hide",
+                "args": {}
+            },
+            {
+                "args": {},
+                "title": "Ok",
+                "action": "Project.Layers.renameLayerConfirmed"
+            }
+        ]
+    },
+    "OneLayerError": {
+        "title": "Error",
+        "content": "Unable to delete the background layer. There must be at least one layer in the project.",
+        "inputs": [],
+        "buttons": [{
+            "title": "Cancel",
+            "args": {},
+            "action": "Project.MessageBox.hide"
+        }]
+    }
+}

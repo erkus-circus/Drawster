@@ -3,21 +3,43 @@
 <head>
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap" rel="stylesheet">
-
+    <title>Drawster2</title>
+    <link rel="icon" href="/data/Drawster2.png" type="image/png">
     <link rel="stylesheet" href="build/build.css">
     <!--For initializing window.Project for prototyping-->
     <script src="/build/__init.js"></script>
-    <script src="/build/build.js"></script>
 </head>
 
 <body>
+    <script src="/build/build.js"></script>
     <div class="nav-bar"></div>
-    <div class="canvases"></div>
     <div class="content">
-        <div class="sidebar left"></div>
-        <div class="sidebar right"></div>
-        <div class="side-bar bottom"></div>
+
+        <div class="selector-box selector-box-main" title="Double cilck for editing tools">
+            B
+            <div class="selector-box-menu selector-box"><span class="selector-box-title"></span>
+                <div class="selector-box-content"></div>
+            </div>
+        </div>
+
+        <div class="sidebar right layer-editor clearfix">
+        </div>
+        <div class="canvases"></div>
+
+
     </div>
+
+
+    <div class="outer-msg-box">
+        <div class="msg-box">
+            <span class="msg-title"></span>
+            <div class="msg-content"></div>
+            <div class="msg-inputs"></div>
+            <div class="msg-btns"></div>
+        </div>
+    </div>
+
+
     <script src="/build/init__.js"></script>
 </body>
 

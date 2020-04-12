@@ -1,8 +1,10 @@
 /* /functions.js */
 (function (window) {
-    window.Project.prototype.Functions = {
+    window.Project.prototype.Fn = {
         clear: function () {
-            alert("Created new canvas!")
+            localStorage.clear();
+            sessionStorage.clear();
+            window.Project = new window.ProjectConstructor;
         },
         save: function () {
             alert("saving")
@@ -13,7 +15,16 @@
         },
         idIndex: 0,
         genID: function () {
-            return `ID${++this.idIndex}`;
+            return `ID${++this.idIndex}-`;
+        },
+
+        getPath: function (path) {
+            return path.split('.').reduce((o, i) => o[i], window);
+        },
+
+        swapArrayElem: function (array, i, j) {
+            [array[i], array[j]] = [array[j], array[i]];
+            return array;
         }
     };
 })(window);

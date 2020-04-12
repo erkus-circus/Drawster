@@ -1,8 +1,8 @@
 /* /canvas.js */
 (function (window) {
     window.Project.prototype.Canvas = {
-        width: 500,
-        height: 500,
+        width: 1000,
+        height: 900,
         resizeCanvases: function (canvases) {
             for (i in canvases) {
                 var canvas = canvases[i];

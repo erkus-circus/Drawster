@@ -43,12 +43,23 @@
         }]
     },
     {
-        "name": "Layers",
+        "name": "Layer",
         "type": "dropdown",
         "content": [{
-            "name": "Add New Layer",
-            "type": "button",
-            "action": "Project.Layers.addLayerGUI"
-        }]
+                "name": "Add New Layer",
+                "type": "button",
+                "action": "Project.Layers.addLayerGUI"
+            },
+            {
+                "name": "Copy Layer",
+                "type": "button",
+                "action": "alert"
+            },
+            {
+                "name": "Merge Layers",
+                "type": "button",
+                "action": "alert"
+            }
+        ]
     }
 ]

@@ -17,8 +17,6 @@
                 elem.append(createToolbar(data[i].content));
                 parent.append(elem);
             }
-            console.log("Loading?");
-
         }
         return parent;
     }

@@ -85,7 +85,7 @@
         }
 
         List.prototype.style = function (attr, val) {
-            if (!val === undefined) {
+            if (val !== undefined) {
                 return this.forEach(function (elem) {
                     elem.style[attr] = val;
                 });
@@ -195,11 +195,13 @@
             if (evt.indexOf(' ') > 0) {
                 for (let i = 0; i < evt.split(' ').length; i++) {
                     const a = evt.split(' ')[i];
-                    this.on(a, callback)
+                    this.on(a, callback);
                 }
             }
             return this.forEach(function (elem) {
-                elem.addEventListener(evt, callback, false, Erklib(elem));
+                elem.addEventListener(evt, function (e) {
+                    callback(e, Erklib(elem));
+                }, false);
             });
         }
 
@@ -211,7 +213,9 @@
                 }
             }
             return this.forEach(function (elem) {
-                elem.removeEventListener(evt, callback, false);
+                elem.removeEventListener(evt, function (e) {
+                    callback(e, Erklib(elem));
+                }, false);
             });
         };
 
@@ -244,12 +248,6 @@
             });
         };
 
-        List.prototype.parent = function () {
-            return Erklib(this.map(function (el) {
-                return el.parentElement;
-            }));
-        }
-
         List.prototype.removeClass = function (c) {
             this.forEach(function (elem) {
                 var cn = elem.className.split(" "),
@@ -261,6 +259,12 @@
             });
             return this;
         };
+
+        List.prototype.hasClass = function (className) {
+            return this.map(function (elem) {
+                return elem.className.split(" ").indexOf(className) >= 0;
+            });
+        }
 
         List.prototype.addClass = function (c) {
             var cn = "";
@@ -277,14 +281,44 @@
             return this;
         };
 
+        List.prototype.remove = function () {
+            return this.forEach(function (elem) {
+                elem.parentNode.removeChild(elem);
+            });
+        };
+
+        List.prototype.ctx = function (name, ...args) {
+            if (args.length < 1) {
+                return this.map(function (elem) {
+                    return elem.getContext("2d")[name];
+                });
+            } else {
+                return this.map(function (elem) {
+                    var ctx = elem.getContext("2d");
+                    if (typeof ctx[name] === "function") {
+                        return ctx[name](...args);
+                    } else {
+                        return ctx[name] = args[0];
+                    }
+                });
+            }
+        };
+
+        List.prototype.parent = function () {
+            return new Erklib(this.map(function (elem) {
+                return elem.parentNode;
+            }));
+        }
+
         //METHODS:
         _meth('scroll');
         _meth("getContext", "ctx");
         //ATTRS:
         _attr('innerHTML', 'html'); // change innerHTML
         _attr('innerText', 'text'); // change Text
-        _attr('value', 'val');
+        _attr('value');
         _attr('download');
+        _attr("name");
         _attr('id');
         _attr("children");
         _attr("href");
@@ -293,44 +327,53 @@
         _attr('checked');
         _attr('title');
         _attr('src');
-
-        _attr('className', 'classes')
-        _attr('width')
-        _attr('height')
+        _attr('width');
+        _attr('height');
+        _attr("type");
+        _attr("min");
+        _attr("max");
         // CSS:
-        _css('width', 'csswidth')
-        _css('height', 'cssheight')
-        _css('cursor')
-        _css('backroundColor', 'bgcolor')
+        _css('width', 'csswidth');
+        _css('height', 'cssheight');
         _css('cursor');
-        _css('fontSize')
+        _css('backroundColor');
+        _css('cursor');
+        _css("top");
+        _css("left");
+        _css("right");
+        _css("bottom");
+        _css('fontSize');
         _css('display');
-        _css('background', 'bg')
-        _css('zIndex')
-        _css('scrollOverflow')
-        _css('color')
-        _css('transparency', 'transp')
-        _css('visibility', 'visi')
+        _css('background', 'bg');
+        _css('zIndex');
+        _css('scrollOverflow');
+        _css('color');
+        _css('transparency', 'transp');
+        _css('visibility', 'visi');
         //Margins:
-        _css('margin')
+        _css('margin');
         _css('marginTop');
         _css('marginBotton');
         _css('marginLeft');
         _css('marginRight');
         //Paddings:
-        _css('padding')
-        _css('paddingTop', 'padTop')
-        _css('paddingBotton', 'padBotton')
-        _css('paddingLeft', 'padLeft')
-        _css('paddingRight', 'padRight')
+        _css('padding');
+        _css('paddingTop', 'padTop');
+        _css('paddingBotton', 'padBotton');
+        _css('paddingLeft', 'padLeft');
+        _css('paddingRight', 'padRight');
 
         // events:
         _evt('click');
+        _evt("dblclick");
         _evt('focus');
-        _evt('change')
+        _evt('change');
         _evt('unfocus');
         _evt('mouseenter', 'mouseover');
         _evt('mouseleave', 'mouseout');
+        _evt("mouseup");
+        _evt("mousedown");
+        _evt('mousemove');
 
 
         function strHasChar(str, char) {
@@ -410,27 +453,15 @@
                 find: function (sel, scope, makeArr) {
                     return this.sel(sel, scope);
                 },
-                merge: function (arr1, arr2) {
-                    var res = [],
-                        args = arguments,
-                        i = 0;
-                    for (; i < arr2.length; i++) {
-                        if (!isArray(arr2)) {
-                            arr2 = [arr2];
-                        }
-                        arr1.push(arr2[i]);
-                    }
-                    if (args.length > 2) {
-                        for (var a = 2; a < args.length; a++) {
-                            if (!isArray(args[a])) {
-                                args[a] = [args[a]];
-                            }
-                            for (var e = 0; e < args[a].length; e++) {
-                                arr1.push(args[a][e]);
-                            }
+                merge: function (...args) {
+                    var res = [];
+                    for (var i = 0; i < args.length; i++) {
+                        var arr = args[i];
+                        for (var j = 0; j < arr.length; j++) {
+                            res.push(arr[j]);
                         }
                     }
-                    return arr1;
+                    return Erklib(res);
                 },
                 extend: function (toBeExt) {
                     var i = 2,

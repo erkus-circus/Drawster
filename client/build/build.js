@@ -85,7 +85,7 @@
         }
 
         List.prototype.style = function (attr, val) {
-            if (!val === undefined) {
+            if (val !== undefined) {
                 return this.forEach(function (elem) {
                     elem.style[attr] = val;
                 });
@@ -195,11 +195,13 @@
             if (evt.indexOf(' ') > 0) {
                 for (let i = 0; i < evt.split(' ').length; i++) {
                     const a = evt.split(' ')[i];
-                    this.on(a, callback)
+                    this.on(a, callback);
                 }
             }
             return this.forEach(function (elem) {
-                elem.addEventListener(evt, callback, false, Erklib(elem));
+                elem.addEventListener(evt, function (e) {
+                    callback(e, Erklib(elem));
+                }, false);
             });
         }
 
@@ -211,7 +213,9 @@
                 }
             }
             return this.forEach(function (elem) {
-                elem.removeEventListener(evt, callback, false);
+                elem.removeEventListener(evt, function (e) {
+                    callback(e, Erklib(elem));
+                }, false);
             });
         };
 
@@ -244,12 +248,6 @@
             });
         };
 
-        List.prototype.parent = function () {
-            return Erklib(this.map(function (el) {
-                return el.parentElement;
-            }));
-        }
-
         List.prototype.removeClass = function (c) {
             this.forEach(function (elem) {
                 var cn = elem.className.split(" "),
@@ -261,6 +259,12 @@
             });
             return this;
         };
+
+        List.prototype.hasClass = function (className) {
+            return this.map(function (elem) {
+                return elem.className.split(" ").indexOf(className) >= 0;
+            });
+        }
 
         List.prototype.addClass = function (c) {
             var cn = "";
@@ -277,14 +281,44 @@
             return this;
         };
 
+        List.prototype.remove = function () {
+            return this.forEach(function (elem) {
+                elem.parentNode.removeChild(elem);
+            });
+        };
+
+        List.prototype.ctx = function (name, ...args) {
+            if (args.length < 1) {
+                return this.map(function (elem) {
+                    return elem.getContext("2d")[name];
+                });
+            } else {
+                return this.map(function (elem) {
+                    var ctx = elem.getContext("2d");
+                    if (typeof ctx[name] === "function") {
+                        return ctx[name](...args);
+                    } else {
+                        return ctx[name] = args[0];
+                    }
+                });
+            }
+        };
+
+        List.prototype.parent = function () {
+            return new Erklib(this.map(function (elem) {
+                return elem.parentNode;
+            }));
+        }
+
         //METHODS:
         _meth('scroll');
         _meth("getContext", "ctx");
         //ATTRS:
         _attr('innerHTML', 'html'); // change innerHTML
         _attr('innerText', 'text'); // change Text
-        _attr('value', 'val');
+        _attr('value');
         _attr('download');
+        _attr("name");
         _attr('id');
         _attr("children");
         _attr("href");
@@ -293,44 +327,53 @@
         _attr('checked');
         _attr('title');
         _attr('src');
-
-        _attr('className', 'classes')
-        _attr('width')
-        _attr('height')
+        _attr('width');
+        _attr('height');
+        _attr("type");
+        _attr("min");
+        _attr("max");
         // CSS:
-        _css('width', 'csswidth')
-        _css('height', 'cssheight')
-        _css('cursor')
-        _css('backroundColor', 'bgcolor')
+        _css('width', 'csswidth');
+        _css('height', 'cssheight');
         _css('cursor');
-        _css('fontSize')
+        _css('backroundColor');
+        _css('cursor');
+        _css("top");
+        _css("left");
+        _css("right");
+        _css("bottom");
+        _css('fontSize');
         _css('display');
-        _css('background', 'bg')
-        _css('zIndex')
-        _css('scrollOverflow')
-        _css('color')
-        _css('transparency', 'transp')
-        _css('visibility', 'visi')
+        _css('background', 'bg');
+        _css('zIndex');
+        _css('scrollOverflow');
+        _css('color');
+        _css('transparency', 'transp');
+        _css('visibility', 'visi');
         //Margins:
-        _css('margin')
+        _css('margin');
         _css('marginTop');
         _css('marginBotton');
         _css('marginLeft');
         _css('marginRight');
         //Paddings:
-        _css('padding')
-        _css('paddingTop', 'padTop')
-        _css('paddingBotton', 'padBotton')
-        _css('paddingLeft', 'padLeft')
-        _css('paddingRight', 'padRight')
+        _css('padding');
+        _css('paddingTop', 'padTop');
+        _css('paddingBotton', 'padBotton');
+        _css('paddingLeft', 'padLeft');
+        _css('paddingRight', 'padRight');
 
         // events:
         _evt('click');
+        _evt("dblclick");
         _evt('focus');
-        _evt('change')
+        _evt('change');
         _evt('unfocus');
         _evt('mouseenter', 'mouseover');
         _evt('mouseleave', 'mouseout');
+        _evt("mouseup");
+        _evt("mousedown");
+        _evt('mousemove');
 
 
         function strHasChar(str, char) {
@@ -410,27 +453,15 @@
                 find: function (sel, scope, makeArr) {
                     return this.sel(sel, scope);
                 },
-                merge: function (arr1, arr2) {
-                    var res = [],
-                        args = arguments,
-                        i = 0;
-                    for (; i < arr2.length; i++) {
-                        if (!isArray(arr2)) {
-                            arr2 = [arr2];
-                        }
-                        arr1.push(arr2[i]);
-                    }
-                    if (args.length > 2) {
-                        for (var a = 2; a < args.length; a++) {
-                            if (!isArray(args[a])) {
-                                args[a] = [args[a]];
-                            }
-                            for (var e = 0; e < args[a].length; e++) {
-                                arr1.push(args[a][e]);
-                            }
+                merge: function (...args) {
+                    var res = [];
+                    for (var i = 0; i < args.length; i++) {
+                        var arr = args[i];
+                        for (var j = 0; j < arr.length; j++) {
+                            res.push(arr[j]);
                         }
                     }
-                    return arr1;
+                    return Erklib(res);
                 },
                 extend: function (toBeExt) {
                     var i = 2,
@@ -479,8 +510,8 @@
 })(window, window.document);/* /canvas.js */
 (function (window) {
     window.Project.prototype.Canvas = {
-        width: 500,
-        height: 500,
+        width: 1000,
+        height: 900,
         resizeCanvases: function (canvases) {
             for (i in canvases) {
                 var canvas = canvases[i];
@@ -490,6 +521,24 @@
             }
         }
     };
+})(window);(function (window) {
+    window.Project.prototype.Edit = {
+        modes: {
+            Pen: "Pen",
+            Pencil: "Pencil",
+            FromSource: "Source",
+            Square: "Square",
+        },
+        selected: {
+            from: [0, 0],
+            // Value 
+            to: [0, 0]
+        },
+        brushSize: 16,
+        connectPoints: true
+    };
+
+
 })(window);/* /editor.js */
 (function (window) {
     window.Project.prototype.Editor = {
@@ -504,9 +553,11 @@
 
 })(window, window.$);/* /functions.js */
 (function (window) {
-    window.Project.prototype.Functions = {
+    window.Project.prototype.Fn = {
         clear: function () {
-            alert("Created new canvas!")
+            localStorage.clear();
+            sessionStorage.clear();
+            window.Project = new window.ProjectConstructor;
         },
         save: function () {
             alert("saving")
@@ -517,14 +568,162 @@
         },
         idIndex: 0,
         genID: function () {
-            return `ID${++this.idIndex}`;
+            return `ID${++this.idIndex}-`;
+        },
+
+        getPath: function (path) {
+            return path.split('.').reduce((o, i) => o[i], window);
+        },
+
+        swapArrayElem: function (array, i, j) {
+            [array[i], array[j]] = [array[j], array[i]];
+            return array;
         }
     };
 })(window);/* /layers.js */
 (function (window) {
+    function updateLayers() {
+        $(".canvases").html("");
+        $(".layer-editor").html("");
+        for (let i = 0; i < Project.Layers.layers.length; i++) {
+            const layer = Project.Layers.layers[i];
+
+            $(".canvases").append(layer.canvas);
+
+            // selected layer
+
+            //layer editor
+            // ID of layer + S + (D|R|C|B(ox)) as selector, so when deleting layer, delete buttons
+            var btnDel = $("<span>").className("layer-button delete-layer").id(layer.ID + "D");
+            btnDel.text("D").title("Delete layer");
+            btnDel.click(function (e, elem) {
+                delLayer(elem.id()[0]);
+            });
+
+            var btnRen = $("<span>").className("layer-button rename-layer").id(layer.ID + "R").title("Rename layer");
+            btnRen.text("R");
+            btnRen.click(function (e, elem) {
+                renameLayer(elem.id()[0]);
+            });
+
+            // move layer up
+            var btnUp = $("<span>").className("layer-button up-layer").id(layer.ID + "UA").html("&uarr;").click(handleUpArrow).title("Move layer up");
+            var btnDown = $("<span>").className("layer-button up-layer").id(layer.ID + "DA").html("&darr;").click(handleDownArrow).title("Move layer down");
+
+            var btnShow = $("<pre>").className("layer-button toggle-layer").id(layer.ID + "SH").html("✓").click(handleToggleShow).title("Toggle if layer is showing");
+            var buttonBox = $("<span>").className("layer-buttons").append($.merge(btnShow));
+
+            var buttonBox2 = $("<span>").className("layer-buttons right").append($.merge(btnDel, btnRen, btnUp, btnDown));
+            var nameBox = $("<span>").className("layer-name").id(layer.ID + "N").text(layer.name).title("Select layer to edit");
+
+            var selector = $("<div>").className("layer-box left").id(layer.ID + "B").append(
+                $([buttonBox[0], nameBox[0], buttonBox2[0]])
+            );
+
+
+            $('.layer-editor').prepend(selector);
+
+        }
+        $("#" + Project.Layers.selected + "B").addClass("layer-selected")
+
+        // select layer
+        $(".layer-name").click(setLayer);
+    }
+
+    function getLayerByIndex(index) {
+        return Project.Layers.layers[index];
+    }
+
+    function setLayer(e, elem) {
+        $(".layer-box").removeClass("layer-selected");
+        elem.parent().addClass("layer-selected");
+
+        Project.Layers.selected = getLayerByIndex(getLayerIndexByID(elem.id()[0])).ID;
+    }
+
+    function rawID(ID) {
+        var ID2 = "";
+        for (let i = 0; i < ID.length; i++) {
+            ID2 += ID[i];
+            if (ID[i] === "-") {
+                break;
+            }
+        }
+        return ID2;
+    }
+
+    function getLayerIndexByID(ID) {
+        // SLICE ID TO ARG
+        ID = rawID(ID);
+
+        for (let i = 0; i < Project.Layers.layers.length; i++) {
+            const layer = Project.Layers.layers[i];
+            if (layer.ID == ID) {
+                return i;
+            }
+        }
+    }
+
+    function delLayer(ID) {
+        if (Project.Layers.layers.length < 2) {
+            Project.MessageBox.setMessage("OneLayerError");
+            Project.MessageBox.show();
+            return;
+        }
+        $("#" + rawID(ID)).remove();
+        $("#" + rawID(ID) + "B").remove();
+        Project.Layers.layers.splice(getLayerIndexByID(ID), 1);
+    }
+
+    function renameLayer(ID) {
+        Project.MessageBox.setMessage("RenameLayer");
+        Project.MessageBox.set("ID", ID.slice(0, -1));
+        Project.MessageBox.show();
+    }
+
+
+    function handleToggleShow(e, elem) {
+        var ID = elem.id()[0];
+
+        if (elem.text()[0] === "_") {
+            elem.html("✓")
+        } else {
+            elem.html("_")
+        }
+
+        $("#" + Project.Layers.layers[getLayerIndexByID(ID)].ID).toggle();
+    }
+
+    function handleUpArrow(e, elem) {
+        var ID = elem.id()[0];
+
+        var index = getLayerIndexByID(ID);
+
+        if (index === Project.Layers.layers.length - 1) {
+            return;
+        }
+        Project.Fn.swapArrayElem(Project.Layers.layers, index, index + 1);
+        updateLayers();
+    }
+
+    function handleDownArrow(e, elem) {
+        var ID = elem.id()[0];
+
+        var index = getLayerIndexByID(ID);
+
+        if (index === 0) {
+            return;
+        }
+        Project.Fn.swapArrayElem(Project.Layers.layers, index, index - 1);
+        updateLayers();
+    }
+
+    // Rename
+
     window.Project.prototype.Layers = {
+        selected: 'ID1-',
         Layer: class {
-            ID = window.Project.Functions.genID();
+            ID = window.Project.Fn.genID();
             constructor(name) {
                 this.name = name;
                 // Add canvas:
@@ -533,18 +732,181 @@
                 //this.write = new window.Project.Write(this.canvas.ctx("2d"));
             }
         },
-        addLayer: function (name) {
+        renameLayerConfirmed: function renameLayerConfirmed(input) {
+            $("#" + Project.MessageBox.get("ID") + "N").text(input.name);
+            Project.Layers.layers[getLayerIndexByID(Project.MessageBox.get("ID"))].name = input.name;
+            Project.MessageBox.hide();
+        },
+        addLayer: function (input) {
+            var name = input.name;
+
+            // actual layer
             var newLayer = new Project.Layers.Layer(name);
             window.Project.Canvas.resizeCanvases([newLayer.canvas]);
             Project.Layers.layers.push(newLayer);
-            $(".canvases").append(newLayer.canvas);
+            updateLayers();
+            setLayer(null, $("#" + newLayer.ID + "N"));
+            Project.MessageBox.hide();
         },
         addLayerGUI: function () {
-            var name = prompt("Name?");
-            Project.Layers.addLayer(name);
+            Project.MessageBox.setMessage("NewLayer");
+            Project.MessageBox.show();
         },
         layers: []
     };
+
+    //LOADER: add background
+    $(window).load(function () {
+        Project.Layers.addLayer({
+            name: "Background"
+        });
+
+    });
+})(window);(function (window) {
+
+    function createButton(btn, inputs) {
+        var action = btn.action;
+        var btnElem = $("<span>").className("msg-btn").text(btn.title).click(function () {
+            // get inputs into object, name: value
+            var inputObject = btn.args;
+            $(".msg-input-value").map(function (l) {
+                inputObject[l.name] = l.value;
+            });
+            window.Project.Fn.getPath(action)(inputObject);
+        });
+        $(".msg-btns").append(btnElem);
+    }
+
+    window.Project.prototype.MessageBox = {
+        messageData: null,
+        setMessage: function setMessage(name) {
+            var message = messageData[name];
+            $(".msg-title").text(message.title);
+            $(".msg-content").text(message.content);
+
+            $(".msg-btns").html("");
+            $(".msg-inputs").html("");
+
+            for (let i = 0; i < message.inputs.length; i++) {
+                const input = message.inputs[i];
+                var inputElem = $("<span>").className(".msg-input").text(input.content)
+                    .append(
+                        $("<input>").value(input.value).name(input.name).className("msg-input-value")
+                    );
+                $(".msg-inputs").append(inputElem);
+            }
+
+            for (let i = 0; i < message.buttons.length; i++) {
+                createButton(message.buttons[i]);
+            }
+        },
+        attrs: {},
+        set: function (a, b) {
+            this.attrs[a] = b;
+        },
+        get: function (a) {
+            return this.attrs[a];
+        },
+        hide: function hide() {
+            $(".outer-msg-box").hide();
+            console.log("?");
+
+        },
+        show: function show() {
+            $(".outer-msg-box").show();
+        },
+    };
+
+    //LOADER:
+    var messageData;
+    $(window).load(async function () {
+        const response = await fetch('/data/messages.json');
+        const json = await response.json();
+        window.Project.MessageBox.messageData = messageData = json;
+
+    });
+})(window);(function (window) {
+
+    function createMenu(json) {
+        json = json.B;
+        $(".selector-box-title").text(json.title);
+
+        for (let i = 0; i < json.inputs.length; i++) {
+            const input = json.inputs[i];
+            var inputElem = $("<span>").className("selector-input").text(input.title);
+
+            if (input.type === "number") {
+                inputElem.append($("<input>").type("number").value(input.value)
+                    .className("selector-box-input").display("inline")
+                    .min(input.range[0]).max(input.range[1]));
+            }
+
+            if (input.type === "checkbox") {
+                var box = $("<label>").className("selector-box-switch").append($.merge(
+                    $("<input>").type("checkbox").checked(input.value),
+                    $("<span>").className("selector-box-slider")
+                ))
+
+                inputElem.append(box);
+            }
+
+            $(".selector-box-content").append(inputElem);
+        }
+    }
+
+    function setMovement() {
+        var sel = $(".selector-box-main");
+        console.log(sel);
+
+        sel.left(window.innerWidth / 5 + "px");
+        sel.top(window.innerHeight / 5 + "px");
+
+
+        sel.mousedown(function (e) {
+            if (e.target === sel[0]) {
+                Project.Selector.mouseDown = true;
+            }
+        });
+
+        sel.dblclick(function (e) {
+            if (e.target === sel[0]) {
+                $(".selector-box-menu").toggle();
+            }
+        });
+
+        $(window).mouseup(function (e) {
+            Project.Selector.mouseDown = false;
+            var sel = $(".selector-box-main");
+        });
+
+        $(window).mousemove(function (e) {
+            var sel = $(".selector-box-main");
+            if (Project.Selector.mouseDown) {
+                if (e.clientX - 16 < 0 || e.clientX + 16 > window.innerWidth ||
+                    e.clientY - 16 < 0 || e.clientY + 16 > window.innerHeight) {
+                    return;
+                }
+                sel.style("top", e.clientY - 16).style("left", e.clientX - 16);
+                $(".selector-box-menu").hide();
+            }
+        });
+    }
+
+    $(window).load(async function () {
+        var response = await fetch("/data/editConfigPages.json");
+        var json = await response.json();
+
+        window.Project.Selector = {
+            mouseDown: false
+        };
+
+        setMovement();
+        createMenu(json);
+    });
+})(window);(function (window) {
+    window.Project.Theme = {
+
+    }
 })(window);/* /toolbar.js */
 (function (window) {
     function createToolbar(data) {
@@ -564,8 +926,6 @@
                 elem.append(createToolbar(data[i].content));
                 parent.append(elem);
             }
-            console.log("Loading?");
-
         }
         return parent;
     }

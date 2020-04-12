@@ -1,0 +1,44 @@
+.selector-box {
+    z-index: 51;
+    position: absolute;
+    border-radius: 25%;
+    font-weight: bold;
+    color: white;
+    background: rgba(117, 113, 113, 0.9);
+}
+
+.selector-box-main {
+    line-height: 32px;
+    cursor: all-scroll;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.selector-box-text {
+    color: black;
+}
+
+.selector-box-menu {
+    width: 250px;
+    border-radius: 3%;
+    cursor: initial;
+    padding: 5px;
+    display: none;
+    top: -8px;
+    height: 350px;
+    left: 36px;
+    position: absolute;
+}
+
+.selector-box-content {
+    font-weight: normal;
+    text-align: left;
+}
+
+.selector-box-input {
+    display: block;
+    background: rgba(117, 113, 113, 0.9);
+
+}

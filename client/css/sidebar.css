@@ -1,9 +1,27 @@
 .sidebar {
-    width: 25%;
-    background:
-        /*SIDEBAR:BACKGROUND*/
-        rgb(65, 65, 65);
+    width: fit-content;
+    z-index: 50;
+
+    max-width: 25%;
+    margin-right: 10px;
+    padding-right: 10px;
+    position: relative;
+    display: inline-block;
+    /*SIDEBAR:BACKGROUND*/
+    background: rgb(17, 0, 0);
+
     color:
         /*SIDEBAR:COLOR*/
         #fff;
+
+}
+
+.right {
+    float: right;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
 }

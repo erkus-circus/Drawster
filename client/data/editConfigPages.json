@@ -1,0 +1,19 @@
+{
+    "B": {
+        "title": "Brush Settings",
+        "inputs": [{
+                "title": "Brush size (px): ",
+                "type": "number",
+                "value": 16,
+                "range": [1, 300],
+                "path": "Project.Config.brushize"
+            },
+            {
+                "title": "Connect Drawn Points: ",
+                "type": "checkbox",
+                "value": true,
+                "path": "Project.Config.connectPoints"
+            }
+        ]
+    }
+}
