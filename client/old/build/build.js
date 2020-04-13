@@ -8,14 +8,15 @@
  * 3/21/20
  * Store project settings in one object
    no name yet, like erkspace
- */(function (window, document) { // Erklib
+ */
+(function (window, document) { // Erklib
 
     "use strict";
 
     function isArray(arr) {
         return typeof arr === "object" && typeof arr.length === "number";
     }
- 
+
     function undefVar(v, d) {
         if (typeof v === "undefined") {
             return d;
@@ -491,7 +492,8 @@
         module.exports = init()
     }
     window.$ = window._ = window.Erklib = init();
-})(window, window.document);var projectVersion = 0;
+})(window, window.document);
+var projectVersion = 0;
 var altPressed = false;
 
 var brush = {
@@ -546,16 +548,19 @@ var canvasObj = {
 }; // redo and undo
 // TODO: redo
 
-var version = '0.8.0', vercsionFull = {
-    major: 0,
-    minor: 8,
-    build: 0,
-    patch: 0
-};
+var version = '0.8.0',
+    vercsionFull = {
+        major: 0,
+        minor: 8,
+        build: 0,
+        patch: 0
+    };
 
 var menuOpen = null; // the open menu
 
-var imageURL = '', drawable = true, makingSomething = 0;
+var imageURL = '',
+    drawable = true,
+    makingSomething = 0;
 
 let canvas;
 let topCanv, tc;
@@ -591,7 +596,9 @@ function drawCanvGrid() {
         $("#loading-modal").hide();
     }, 10);
 
-}function initNewCanvas(canv) {
+}
+
+function initNewCanvas(canv) {
     canv.on('touchmove', draw, true);
     canv.on('touchstart', function (e) {
         e.preventDefault();
@@ -662,7 +669,7 @@ function Layer(name, index) {
     this.remove = function () {
         this.canvas.parentNode.removeChild(this.canvas);
     }
-}/*
+}
 // OLD LOADER
 $(window).load(function () { // window onload
     //vars:
@@ -720,33 +727,25 @@ $(window).load(function () { // window onload
         var cd = e.keyCode || e.wich;
         if (cd == 90 && e.ctrlKey) {
             undo();
-        }
-        else if (e.ctrlKey && cd == 89) {
+        } else if (e.ctrlKey && cd == 89) {
             redo();
-        }
-        else if (e.ctrlKey && e.altKey && !e.shiftKey && cd == 67) {
+        } else if (e.ctrlKey && e.altKey && !e.shiftKey && cd == 67) {
             $('.color').click();
-        }
-        else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 67) {
+        } else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 67) {
             c.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        else if (cd == 32) {
+        } else if (cd == 32) {
             brush.spaceBar = !brush.spaceBar;
-        }
-        else if (cd == 221 && e.ctrlKey && !e.shiftKey && !e.altKey) {
+        } else if (cd == 221 && e.ctrlKey && !e.shiftKey && !e.altKey) {
             brush.size += (++brush.size * .04);
             $('.brush-size').html(Math.floor(brush.size))
-        }
-        else if (cd == 219 && e.ctrlKey && !e.shiftKey && !e.altKey) {
+        } else if (cd == 219 && e.ctrlKey && !e.shiftKey && !e.altKey) {
             if (brush.size > 2) {
                 brush.size -= (++brush.size * .04);
             }
             $('.brush-size').html(Math.floor(brush.size))
-        }
-        else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 70) {
+        } else if (e.ctrlKey && e.altKey && e.shiftKey && cd == 70) {
             resizeCanvas('f');
-        }
-        else if (e.ctrlKey && cd == 83 && e.altKey) {
+        } else if (e.ctrlKey && cd == 83 && e.altKey) {
             //	_('#info-sheet').unfade();
             //	_('@wait',function() {
             //		_('#info-sheet').fade();
@@ -787,7 +786,7 @@ $(window).load(function () { // window onload
 
     $("*").style('fontFamily', "'Indie Flower', cursive");
     // layer maker:
-    
+
 
     // other onload
     // PARAMS
@@ -795,11 +794,12 @@ $(window).load(function () { // window onload
     $('#loading-modal').hide();
 
 });
-*/
+
 // NEW LOADER
 $(window).load(function () {
 
-});(function ($) {
+});
+(function ($) {
     $.fn.modal = function () {
 
         // click gray part
@@ -813,13 +813,15 @@ $(window).load(function () {
 
         return this.forEach(el => {
 
-            $('.close-btn',el).click(function () {
+            $('.close-btn', el).click(function () {
                 $(el).hide();
             });
         });
-        
+
     }
-})(Erklib);function changeBrushColor(val) { // change color of brush,
+})(Erklib);
+
+function changeBrushColor(val) { // change color of brush,
     // sets it in session storage
     brush.color = val;
     sessionStorage.setItem('color', val);
@@ -862,8 +864,7 @@ function resizeCanvas(dir, val, elem) { // resizes canvas
     if (dir == 'a') { // auto
         canvs.width(window.innerWidth / 1.48);
         canvs.height(window.innerHeight / 1.2);
-    }
-    else if (dir == 'f') {
+    } else if (dir == 'f') {
         canvs.width(window.innerWidth);
         canvs.height(window.innerHeight);
     }
@@ -871,7 +872,7 @@ function resizeCanvas(dir, val, elem) { // resizes canvas
     $('.size-x').val(canvs[0].width);
     $('.size-y').val(canvs[0].height);
 
-    canvs.style('width', canvs[0].width+ 'px');
+    canvs.style('width', canvs[0].width + 'px');
     canvs.style('height', canvs[0].height + 'px');
 
     canvasDatas.forEach(function (data) {
@@ -892,8 +893,7 @@ function resizeCanvas(dir, val, elem) { // resizes canvas
 function changeType(obj) { // change types on <input>
     if (obj.type == 'range') {
         obj.type = 'number';
-    }
-    else {
+    } else {
         obj.type = 'range';
     }
 }
@@ -951,9 +951,7 @@ function toggleSwitch(type, elem) { // for toggle switches
         $('.draw-mode').html('on');
         brush.oldMode = brush.mode;
         brush.mode = 'erase';
-    }
-
-    else if (type == 'eraser') {
+    } else if (type == 'eraser') {
         $('.draw-mode').html("off");
         brush.mode = brush.oldMode;
     }
@@ -964,8 +962,7 @@ function toggleSwitch(type, elem) { // for toggle switches
             drawCanvGrid();
             $('.grid-option').show();
             $('.canvas-grid-text').html("on")
-        }
-        else {
+        } else {
             brush.grid = false;
             drawCanvGrid();
             $('.grid-option').hide();
@@ -985,8 +982,7 @@ function toggleSwitch(type, elem) { // for toggle switches
     if (type == 'img') {
         if (checked) {
             $('.img-stretch-show').html('on');
-        }
-        else {
+        } else {
             $('.img-stretch-show').html('off');
         }
     }
@@ -997,8 +993,7 @@ function changeOFF(kind, obj) { // change offset for shadows
     var val = obj.value;
     if (kind == 'x') {
         brush.shadow.offX = val;
-    }
-    else if (kind == 'y') {
+    } else if (kind == 'y') {
         brush.shadow.offY = val;
     }
 
@@ -1015,7 +1010,7 @@ function changeSize(val) { // change brush size
     $('.brush-size').html(val);
 }
 
-function changeBlur(obj) {// change shadow blur
+function changeBlur(obj) { // change shadow blur
 
     var val = obj.value;
     brush.shadow.blur = val;
@@ -1042,11 +1037,9 @@ function draw(e) { // draws on the canvas, main function
 
     if (mousedown && brush.spaceBar) {
         brush.calig.size++;
-    }
-    else if (mousedown && !brush.spaceBar && brush.calig.size > 0) {
+    } else if (mousedown && !brush.spaceBar && brush.calig.size > 0) {
         brush.calig.size--;
-    }
-    else {
+    } else {
         brush.calig.size = 0;
     }
 
@@ -1075,22 +1068,18 @@ function draw(e) { // draws on the canvas, main function
                 dx = brush.gridSize,
                 dy = brush.gridSize;
             c.clearRect(x, y, dx, dy);
-        }
-        else {
+        } else {
             c.clearRect(pos.x - ((brush.size + brush.calig.size) / 2), pos.y - ((brush.size + brush.calig.size) / 2), brush.size + brush.calig.size, brush.size + brush.calig.size);
         }
 
-    }
-    else if (mousedown && drawable && brush.mode == 'pixel') {
+    } else if (mousedown && drawable && brush.mode == 'pixel') {
         c.fillStyle = brush.color;
         c.fillRect(pos.x - ((brush.size + brush.calig.size) / 4), pos.y - ((brush.size + brush.calig.size) / 4), (brush.size + brush.calig.size) / 2, (brush.size + brush.calig.size) / 2);
-    }
-    else if (mousedown && drawable && brush.mode == 'image') {
+    } else if (mousedown && drawable && brush.mode == 'image') {
         c.strokeStyle = brush.color;
         c.lineWidth = brush.line.lineWidth;
         c.drawImage(brush.img, pos.x - (brush.width / 2), pos.y - (brush.height / 2), brush.width, brush.height);
-    }
-    else if (mousedown && brush.mode == 'pen' && drawable) {
+    } else if (mousedown && brush.mode == 'pen' && drawable) {
         c.lineJoin = 'round';
         c.lineCap = 'round';
         c.lineWidth = brush.size / 2 + brush.calig.size;
@@ -1098,8 +1087,7 @@ function draw(e) { // draws on the canvas, main function
         c.moveTo(brush.lastPos.x, brush.lastPos.y);
         c.lineTo(pos.x, pos.y);
         c.stroke();
-    }
-    else if (mousedown && brush.mode == 'grid' && drawable) {
+    } else if (mousedown && brush.mode == 'grid' && drawable) {
         c.beginPath()
         c.fillStyle = brush.color;
         var x = Math.floor(pos.x / brush.gridSize) * brush.gridSize,
@@ -1118,8 +1106,7 @@ function draw(e) { // draws on the canvas, main function
     brush.lastPos.y = pos.y;
     if (brush.grid) {
         $('.mouse-pos').html(Math.round(pos.x / brush.gridSize) + ", " + Math.round(pos.y / brush.gridSize));
-    }
-    else {
+    } else {
         $('.mouse-pos').html(Math.round(pos.x) + ", " + Math.round(pos.y));
     }
 }
@@ -1152,8 +1139,7 @@ function updateTop() {
         tc.stroke()
         tc.arc(pos.x + c.shadowOffsetX, pos.y + c.shadowOffsetY, (brush.size / 4 + brush.calig.size + c.shadowBlur / 1.5 / 2), 0, Math.PI * 2);
         tc.stroke();
-    }
-    else if (brush.mode === 'pixel') {
+    } else if (brush.mode === 'pixel') {
         tc.beginPath()
         tc.fillStyle = brush.color;
         tc.rect(pos.x - ((brush.size + brush.calig.size)) / 4,
@@ -1170,8 +1156,8 @@ function updateTop() {
 
 function mPos(e) { // find mouse position on "canvas"
     var rt = canvas.getBoundingClientRect(), // abs. size of element
-        scaleX = canvas.width / rt.width,    // relationship bitmap vs. element for X
-        scaleY = canvas.height / rt.height;  // relationship bitmap vs. element for Y
+        scaleX = canvas.width / rt.width, // relationship bitmap vs. element for X
+        scaleY = canvas.height / rt.height; // relationship bitmap vs. element for Y
 
     if (e.touches) {
         // if touch evt
@@ -1186,7 +1172,9 @@ function mPos(e) { // find mouse position on "canvas"
     };
 }
 
-function decur(str) { return decodeURIComponent(str); }
+function decur(str) {
+    return decodeURIComponent(str);
+}
 
 function undo() { // undo canvas
     let dataImg = canvasObj.oldImages.pop();

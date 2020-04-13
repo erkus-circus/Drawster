@@ -41,15 +41,9 @@
             }
         });
 
-        sel.dblclick(function (e) {
-            if (e.target === sel[0]) {
-                $(".selector-box-menu").toggle();
-            }
-        });
 
         $(window).mouseup(function (e) {
             Project.Selector.mouseDown = false;
-            var sel = $(".selector-box-main");
         });
 
         $(window).mousemove(function (e) {
@@ -59,8 +53,7 @@
                     e.clientY - 16 < 0 || e.clientY + 16 > window.innerHeight) {
                     return;
                 }
-                sel.style("top", e.clientY - 16).style("left", e.clientX - 16);
-                $(".selector-box-menu").hide();
+                sel.style("top", e.clientY - 32).style("left", e.clientX - 16);
             }
         });
     }

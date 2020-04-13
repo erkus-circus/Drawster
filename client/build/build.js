@@ -332,6 +332,11 @@
         _attr("type");
         _attr("min");
         _attr("max");
+        _attr("offsetLeft");
+        _attr("offsetTop");
+        _attr("offsetRight");
+        _attr("offsetBottom");
+
         // CSS:
         _css('width', 'csswidth');
         _css('height', 'cssheight');
@@ -522,7 +527,7 @@
         }
     };
 })(window);(function (window) {
-    window.Project.prototype.Edit = {
+    window.Project.prototype.Config = {
         modes: {
             Pen: "Pen",
             Pencil: "Pencil",
@@ -868,15 +873,9 @@
             }
         });
 
-        sel.dblclick(function (e) {
-            if (e.target === sel[0]) {
-                $(".selector-box-menu").toggle();
-            }
-        });
 
         $(window).mouseup(function (e) {
             Project.Selector.mouseDown = false;
-            var sel = $(".selector-box-main");
         });
 
         $(window).mousemove(function (e) {
@@ -886,8 +885,7 @@
                     e.clientY - 16 < 0 || e.clientY + 16 > window.innerHeight) {
                     return;
                 }
-                sel.style("top", e.clientY - 16).style("left", e.clientX - 16);
-                $(".selector-box-menu").hide();
+                sel.style("top", e.clientY - 32).style("left", e.clientX - 16);
             }
         });
     }

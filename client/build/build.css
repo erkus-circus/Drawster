@@ -215,19 +215,9 @@
 }.selector-box {
     z-index: 51;
     position: absolute;
-    border-radius: 25%;
     font-weight: bold;
     color: white;
     background: rgba(117, 113, 113, 0.9);
-}
-
-.selector-box-main {
-    line-height: 32px;
-    cursor: all-scroll;
-    width: 32px;
-    height: 32px;
-    text-align: center;
-    vertical-align: middle;
 }
 
 .selector-box-text {
@@ -236,10 +226,8 @@
 
 .selector-box-menu {
     width: 250px;
-    border-radius: 3%;
     cursor: initial;
     padding: 5px;
-    display: none;
     top: -8px;
     height: 350px;
     left: 36px;
@@ -253,8 +241,46 @@
 
 .selector-box-input {
     display: block;
+    border: 1px solid black;
     background: rgba(117, 113, 113, 0.9);
+}
 
+.selector-box-section {
+    width: 32px;
+    height: 32px;
+    margin: 3px 0;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    left: 0px;
+    line-height: 32px;
+    display: block;
+    transition: width .1s, transform .2s;
+}
+
+.selector-box-section-hidden {
+    display: none;
+}
+
+.selector-box-section:hover .selector-box-section-hidden {
+    display: inline;
+}
+
+.selector-box-main .selector-box-section:hover {
+    width: 52px;
+    transform: translateX(-20px);
+}
+
+.selector-box-main {
+    cursor: all-scroll;
+    width: 32px;
+    height: 32px;
+    margin: 3px 0;
+    text-align: center;
+    position: relative;
+    left: 0px;
+    line-height: 32px;
+    display: block;
 }.selector-box-switch {
     position: relative;
     display: inline-block;

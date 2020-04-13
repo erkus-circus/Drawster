@@ -332,6 +332,11 @@
         _attr("type");
         _attr("min");
         _attr("max");
+        _attr("offsetLeft");
+        _attr("offsetTop");
+        _attr("offsetRight");
+        _attr("offsetBottom");
+
         // CSS:
         _css('width', 'csswidth');
         _css('height', 'cssheight');
