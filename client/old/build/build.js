@@ -185,13 +185,13 @@
         };
 
         List.prototype.attr = function (attr, val) {
-            if (typeof val !== "undefined") {
-                return this.forEach(function (elem) {
-                    elem.setAttribute(attr, val);
-                });
-            } else {
+            if (typeof val === "undefined") {
                 return this.map(function (elem) {
                     return elem.getAttribute(attr);
+                });
+            } else {
+                return this.forEach(function (elem) {
+                    elem.setAttribute(attr, val);
                 });
             }
         };
