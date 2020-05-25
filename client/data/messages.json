@@ -2,12 +2,15 @@
     "NewLayer": {
         "title": "New Layer",
         "content": "Create a new layer.",
-        "inputs": [{
-            "name": "name",
-            "content": "Name: ",
-            "value": "Layer"
-        }],
-        "buttons": [{
+        "inputs": [
+            {
+                "name": "name",
+                "content": "Name: ",
+                "value": "Layer"
+            }
+        ],
+        "buttons": [
+            {
                 "args": {},
                 "title": "Cancel",
                 "action": "Project.MessageBox.hide"
@@ -22,13 +25,15 @@
     "RenameLayer": {
         "title": "Rename Layer",
         "content": "",
-        "inputs": [{
-            "name": "name",
-            "content": "Name: ",
-            "value": "Layer"
-        }],
-
-        "buttons": [{
+        "inputs": [
+            {
+                "name": "name",
+                "content": "Name: ",
+                "value": "Layer"
+            }
+        ],
+        "buttons": [
+            {
                 "title": "Cancel",
                 "action": "Project.MessageBox.hide",
                 "args": {}
@@ -44,10 +49,24 @@
         "title": "Error",
         "content": "Unable to delete the background layer. There must be at least one layer in the project.",
         "inputs": [],
-        "buttons": [{
-            "title": "Cancel",
-            "args": {},
-            "action": "Project.MessageBox.hide"
-        }]
+        "buttons": [
+            {
+                "title": "Cancel",
+                "args": {},
+                "action": "Project.MessageBox.hide"
+            }
+        ]
+    },
+    "SelectionEmptyError": {
+        "title": "Error",
+        "content": "The selection is empty.",
+        "inputs": [],
+        "buttons": [
+            {
+                "title": "Cancel",
+                "args": {},
+                "action": "Project.MessageBox.hide"
+            }
+        ]
     }
 }

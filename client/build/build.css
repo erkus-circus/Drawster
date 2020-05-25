@@ -1,6 +1,6 @@
 .layer-canvas {
     border: 1px solid black;
-    background-color: white;
+    background-color: transparent;
     position: absolute;
     display: block;
     left: 50%;
@@ -8,16 +8,22 @@
     margin: auto;
 }
 
-.canvases {
+.all-canvases {
     z-index: 0;
+    /*cursor: none;*/
     display: block;
     padding: 0;
+}
 
+.top-canvas {
+    z-index: 99;
+    background-color: transparent;
 }.layer-box {
     width: 100%;
     padding: 5px;
     margin: 5px 0;
     color: gray;
+    z-index: 60;
     border-top: 1px solid white;
 }
 
@@ -58,7 +64,7 @@
     height: 100%;
 }
 
-*:not(input) {
+:not(input) {
     -webkit-touch-callout: none;
     /* iOS Safari */
     -webkit-user-select: none;
@@ -213,8 +219,9 @@
     display: block;
     position: absolute;
 }.selector-box {
-    z-index: 51;
+    z-index: 99;
     position: absolute;
+    border-radius: 5%;
     font-weight: bold;
     color: white;
     background: rgba(117, 113, 113, 0.9);
@@ -228,8 +235,11 @@
     width: 250px;
     cursor: initial;
     padding: 5px;
+    overflow-y: auto;
     top: -8px;
-    height: 350px;
+    height: 250px;
+    transition: min-height .5s;
+    max-height: 350px;
     left: 36px;
     position: absolute;
 }
@@ -240,22 +250,27 @@
 }
 
 .selector-box-input {
-    display: block;
+    color: white;
     border: 1px solid black;
     background: rgba(117, 113, 113, 0.9);
+}
+
+.selector-input {
+    display: block;
+    margin-top: 5px;
 }
 
 .selector-box-section {
     width: 32px;
     height: 32px;
-    margin: 3px 0;
+    margin: 2px 0;
     text-align: center;
     cursor: pointer;
     position: relative;
     left: 0px;
     line-height: 32px;
     display: block;
-    transition: width .1s, transform .2s;
+    transition: width .05s, transform .1s;
 }
 
 .selector-box-section-hidden {
@@ -266,10 +281,19 @@
     display: inline;
 }
 
-.selector-box-main .selector-box-section:hover {
-    width: 52px;
-    transform: translateX(-20px);
+.selector-box-menu-section-box:hover {
+    width: 92px;
 }
+
+.selector-box-section:hover {
+    width: 92px;
+    transform: translateX(-60px);
+}
+
+.selector-box-menu-sections {
+    position: absolute;
+}
+
 
 .selector-box-main {
     cursor: all-scroll;
@@ -277,10 +301,55 @@
     height: 32px;
     margin: 3px 0;
     text-align: center;
-    position: relative;
+    position: absolute;
     left: 0px;
+    top: -8px;
     line-height: 32px;
     display: block;
+}
+
+.selector-box-color {
+    background-color: rgb(128, 128, 128, .9);
+    border: none;
+    height: 32px;
+    width: 32px;
+}
+
+.selector-box-menu-section-box {
+    width: 32px;
+    height: 32px;
+    margin: 2px 0;
+    top: -96px;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    left: 300px;
+    line-height: 32px;
+    display: block;
+    z-index: 99;
+    position: relative;
+    border-radius: 5%;
+    font-weight: bold;
+    background: rgba(117, 113, 113, 0.9);
+    transition: width .05s,
+        transform .1s;
+}
+
+.selector-box-menu-section-box:hover .selector-box-section-hidden {
+    display: inline;
+}
+
+.selector-box-title {
+    font-size: 22px;
+}
+
+.btn-selected {
+    width: 48px;
+    transform: translateX(-16px);
+}
+
+.btn-menu-selected {
+    width: 48px;
 }.selector-box-switch {
     position: relative;
     display: inline-block;
@@ -427,7 +496,7 @@ input[type=range].selector-slider:focus::-ms-fill-upper {
     background: rgba(54, 126, 189, 0.78);
 }.sidebar {
     width: fit-content;
-    z-index: 50;
+    z-index: 61;
 
     max-width: 25%;
     margin-right: 10px;

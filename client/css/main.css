@@ -10,7 +10,7 @@ body {
     height: 100%;
 }
 
-*:not(input) {
+:not(input) {
     -webkit-touch-callout: none;
     /* iOS Safari */
     -webkit-user-select: none;

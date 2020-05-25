@@ -6,7 +6,8 @@
         for (let i = 0; i < Project.Layers.layers.length; i++) {
             const layer = Project.Layers.layers[i];
 
-            $(".canvases").append(layer.canvas);
+            // Set Z-Index for canvases, untested
+            $(".canvases").append(layer.canvas.zIndex(i));
 
             // selected layer
 
@@ -56,7 +57,12 @@
         $(".layer-box").removeClass("layer-selected");
         elem.parent().addClass("layer-selected");
 
-        Project.Layers.selected = getLayerByIndex(getLayerIndexByID(elem.id()[0])).ID;
+        var layer = getLayerByIndex(getLayerIndexByID(elem.id()[0]));
+        Project.Layers.selected = layer.ID;
+        Project.Layers.selectedCanvas = layer.canvas;
+        Project.Layers.selectedContext = layer.ctx;
+
+
     }
 
     function rawID(ID) {
@@ -140,6 +146,8 @@
 
     window.Project.prototype.Layers = {
         selected: 'ID1-',
+        selectedCanvas: null,
+        selectedContext: null,
         Layer: class {
             ID = window.Project.Fn.genID();
             constructor(name) {
@@ -147,7 +155,7 @@
                 // Add canvas:
                 this.canvas = $("<canvas>").className("layer-canvas").id(this.ID);
 
-                //this.write = new window.Project.Write(this.canvas.ctx("2d"));
+                this.ctx = this.canvas[0].getContext("2d");
             }
         },
         renameLayerConfirmed: function renameLayerConfirmed(input) {
@@ -178,6 +186,12 @@
         Project.Layers.addLayer({
             name: "Background"
         });
+        var bottomCanvas = $("<canvas>").className("layer-canvas bottom-canvas").zIndex(-1);
+        Project.Canvas.resizeCanvases([bottomCanvas]);
+        $(".bottom-canvases").append(bottomCanvas);
 
+        var c = bottomCanvas[0].getContext("2d");
+        c.fillStyle = "#fff";
+        c.fillRect(0, 0, Project.Canvas.width, Project.Canvas.height);
     });
 })(window);

@@ -8,30 +8,32 @@
     <link rel="stylesheet" href="build/build.css">
     <!--For initializing window.Project for prototyping-->
     <script src="/build/__init.js"></script>
+    <script src="/build/lib.js"></script>
 </head>
 
 <body>
-    <script src="/build/build.js"></script>
+    <script src="/build/tools.js"></script>
+    <script src="/build/editor.js"></script>
     <div class="nav-bar"></div>
     <div class="content">
 
-        <div class="selector-box selector-box-main" title="Double cilck for editing tools">
+        <div class="selector-box selector-box-main" title="Menu">
             &bull;
-            <div class="selector-box-sections">
-                <span class="selector-box-section selector-box">B<span
-                        class="selector-box-section-hidden">rush</span></span>
+            <div class="selector-box-sections"></div>
+            <div class="selector-box-menu selector-box"></div>
+            <div class="selector-box-menu-sections">
+            </div>
 
-                <span class="selector-box-section selector-box">M<span
-                        class="selector-box-section-hidden">ode</span></span>
-            </div>
-            <div class="selector-box-menu selector-box"><span class="selector-box-title"></span>
-                <div class="selector-box-content"></div>
-            </div>
         </div>
 
         <div class="sidebar right layer-editor clearfix">
         </div>
-        <div class="canvases"></div>
+        <div class="all-canvases">
+            <div class="canvases"></div>
+            <div class="draw-canvases"></div>
+            <div class="top-canvases"></div>
+            <div class="bottom-canvases"></div>
+        </div>
 
 
     </div>

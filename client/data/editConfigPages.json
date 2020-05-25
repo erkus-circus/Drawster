@@ -1,19 +1,119 @@
 {
-    "B": {
-        "title": "Brush Settings",
-        "inputs": [{
-                "title": "Brush size (px): ",
-                "type": "number",
-                "value": 16,
-                "range": [1, 300],
-                "path": "Project.Config.brushize"
-            },
-            {
-                "title": "Connect Drawn Points: ",
-                "type": "checkbox",
-                "value": true,
-                "path": "Project.Config.connectPoints"
-            }
-        ]
-    }
+    "pages": {
+        "color": {
+            "inputs":[
+                {
+                    "title": "Color: ",
+                    "width":64,
+                    "height": 64,
+                    "type": "color",
+                    "value": "#000",
+                    "option": "color"
+                }
+            ],
+            "name":"Color"
+        },
+        "opacity": {
+            "name":"Opacity",
+            "inputs":[
+                {
+                    "title": "Opacity (0-100): ",
+                    "type": "number",
+                    "value": 100,
+                    "range": [
+                        1,
+                        100
+                    ],
+                    "option": "globalAlpha"
+                }
+            ]
+        },
+        "shadow": {
+            "name": "Shadow",
+            "inputs": [
+                {
+                    "title": "Shadow blur: ",
+                    "type": "number",
+                    "value": 0,
+                    "range": [
+                        1,
+                        300
+                    ],
+                    "option": "shadowBlur"
+                },
+                {
+                    "title": "Shadow Offset (X): ",
+                    "type": "number",
+                    "value": 0,
+                    "range": [
+                        1,
+                        300
+                    ],
+                    "option": "shadowOffsetX"
+                },
+                {
+                    "title": "Shadow Offset (Y): ",
+                    "type": "number",
+                    "value": 0,
+                    "range": [
+                        1,
+                        300
+                    ],
+                    "option": "shadowOffsetY"
+                },
+                {
+                    "title": "Shadow Color: ",
+                    "type": "color",
+                    "value": "#000",
+                    "option": "shadowColor"
+                }
+            ]
+        },
+        "size": {
+            "name": "Settings",
+            "inputs": [
+                {
+                    "title": "size (px): ",
+                    "type": "number",
+                    "value": 8,
+                    "range": [
+                        1,
+                        300
+                    ],
+                    "option": "size"
+                }
+            ]
+        },
+        "selector": {
+            "name": "Type",
+            "inputs": [
+                {
+                    "title": "Selection Mode",
+                    "type": "select",
+                    "options": {
+                        "Rectangle": "Rectangle",
+                        "Free Draw": "FreeDraw"
+                    },
+                    "option": "SelectMode"
+                }
+            ]
+        }
+    },
+    "sidebuttons": [
+        {
+            "name": "Pen",
+            "options": [
+                "color",
+                "size",
+                "opacity",
+                "shadow"
+            ],
+            "defaultPage": "color"
+        },
+        {
+            "name": "Select",
+            "options": [],
+            "defaultPage": "selector"
+        }
+    ]
 }

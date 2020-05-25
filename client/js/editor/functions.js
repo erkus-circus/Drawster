@@ -25,6 +25,19 @@
         swapArrayElem: function (array, i, j) {
             [array[i], array[j]] = [array[j], array[i]];
             return array;
+        },
+        getMousePosition: function (canvas, e) { // find mouse position on "canvas"
+            var rt = canvas[0].getBoundingClientRect(), // abs. size of element
+                scaleX = canvas.width()[0] / rt.width, // relationship bitmap vs. element for X
+                scaleY = canvas.height()[0] / rt.height; // relationship bitmap vs. element for Y
+
+            return [
+                (e.clientX - rt.left) * scaleX,
+                (e.clientY - rt.top) * scaleY
+            ];
+        },
+        distance: function (pos1, pos2) {
+            return Math.sqrt(Math.pow(pos2[0] - pos1[0], 2) + Math.pow(pos2[1] - pos1[1], 2));
         }
     };
 })(window);

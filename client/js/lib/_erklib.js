@@ -104,7 +104,7 @@
             List.prototype[title] = function (val) {
                 if (val === undefined) {
                     return this.map(function (elem) {
-                        return elem[attr]
+                        return elem[attr];
                     });
                 }
                 return this.forEach((elem) => elem[attr] = val);
@@ -310,9 +310,15 @@
             }));
         }
 
+        List.prototype.clone = function (deep=false) {
+            return this.forEach(function (elem) {
+                return elem.cloneNode(deep);
+            });
+        };
+
         //METHODS:
         _meth('scroll');
-        _meth("getContext", "ctx");
+        _meth("getContext");
         //ATTRS:
         _attr('innerHTML', 'html'); // change innerHTML
         _attr('innerText', 'text'); // change Text
@@ -340,7 +346,12 @@
         // CSS:
         _css('width', 'csswidth');
         _css('height', 'cssheight');
+        _css("minWidth");
+        _css("minHeight");
+        _css("maxWidth");
+        _css("maxHeight");
         _css('cursor');
+        _css('order');
         _css('backroundColor');
         _css('cursor');
         _css("top");
@@ -353,7 +364,7 @@
         _css('zIndex');
         _css('scrollOverflow');
         _css('color');
-        _css('transparency', 'transp');
+        _css('transparency');
         _css('visibility', 'visi');
         //Margins:
         _css('margin');
@@ -378,6 +389,9 @@
         _evt('mouseleave', 'mouseout');
         _evt("mouseup");
         _evt("mousedown");
+        _evt("keydown");
+        _evt("keyup");
+
         _evt('mousemove');
 
 

@@ -1,7 +1,9 @@
-[{
+[
+    {
         "name": "File",
         "type": "dropdown",
-        "content": [{
+        "content": [
+            {
                 "name": "New",
                 "action": "Project.Functions.clear",
                 "type": "button"
@@ -26,26 +28,30 @@
     {
         "name": "View",
         "type": "dropdown",
-        "content": [{
-            "name": "Zoom > ",
-            "type": "dropdown",
-            "content": [{
-                    "name": "Zoom In",
-                    "type": "button",
-                    "action": "Project.Editor.zoomIn"
-                },
-                {
-                    "name": "Zoom Out",
-                    "type": "button",
-                    "action": "Project.Editor.zoomOut"
-                }
-            ]
-        }]
+        "content": [
+            {
+                "name": "Zoom > ",
+                "type": "dropdown",
+                "content": [
+                    {
+                        "name": "Zoom In",
+                        "type": "button",
+                        "action": "Project.Editor.zoomIn"
+                    },
+                    {
+                        "name": "Zoom Out",
+                        "type": "button",
+                        "action": "Project.Editor.zoomOut"
+                    }
+                ]
+            }
+        ]
     },
     {
         "name": "Layer",
         "type": "dropdown",
-        "content": [{
+        "content": [
+            {
                 "name": "Add New Layer",
                 "type": "button",
                 "action": "Project.Layers.addLayerGUI"
@@ -59,6 +65,17 @@
                 "name": "Merge Layers",
                 "type": "button",
                 "action": "alert"
+            }
+        ]
+    },
+    {
+        "name": "Selection",
+        "type": "dropdown",
+        "content": [
+            {
+                "name": "Deselect",
+                "type": "button",
+                "action": "Project.Draw.restore"
             }
         ]
     }

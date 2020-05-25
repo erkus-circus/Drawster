@@ -96,7 +96,7 @@
         }
 
         List.prototype.style = function (attr, val) {
-            if (!val === undefined) {
+            if (val !== undefined) {
                 return this.forEach(function (elem) {
                     elem.style[attr] = val;
                 });
