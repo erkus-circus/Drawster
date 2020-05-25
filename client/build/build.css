@@ -10,7 +10,7 @@
 
 .all-canvases {
     z-index: 0;
-    /*cursor: none;*/
+    cursor: none;
     display: block;
     padding: 0;
 }
@@ -18,7 +18,12 @@
 .top-canvas {
     z-index: 99;
     background-color: transparent;
-}.layer-box {
+}.layer-editor-wrapper {
+    
+    margin-top: 18px;
+}
+
+.layer-box {
     width: 100%;
     padding: 5px;
     margin: 5px 0;
@@ -42,7 +47,7 @@
 }
 
 .layer-name {
-    overflow: hidden;
+    overflow: auto;
 }
 
 .toggle-layer {
@@ -54,7 +59,7 @@
     font-weight: bold;
 }body {
     font-family: 'Comfortaa', cursive;
-    overflow: hidden;
+    overflow: auto;
     margin: 0;
     background-color: rgb(29, 20, 20);
 }
@@ -62,6 +67,7 @@
 .content {
     width: 100%;
     height: 100%;
+    overflow: auto;
 }
 
 :not(input) {
@@ -160,6 +166,7 @@
     width: 100%;
     margin: 0;
     display: block;
+    position: fixed;
     z-index: 100;
     background:
         /*NAV:BACKGROUND*/
@@ -238,8 +245,6 @@
     overflow-y: auto;
     top: -8px;
     height: 250px;
-    transition: min-height .5s;
-    max-height: 350px;
     left: 36px;
     position: absolute;
 }
@@ -319,7 +324,7 @@
     width: 32px;
     height: 32px;
     margin: 2px 0;
-    top: -96px;
+    top: -168px;
     text-align: center;
     cursor: pointer;
     color: white;

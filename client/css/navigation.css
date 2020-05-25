@@ -3,6 +3,7 @@
     width: 100%;
     margin: 0;
     display: block;
+    position: fixed;
     z-index: 100;
     background:
         /*NAV:BACKGROUND*/

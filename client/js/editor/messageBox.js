@@ -27,7 +27,7 @@
                 const input = message.inputs[i];
                 var inputElem = $("<span>").className(".msg-input").text(input.content)
                     .append(
-                        $("<input>").value(input.value).name(input.name).className("msg-input-value")
+                        $("<input>").value(input.value).name(input.name).className("msg-input-value").type(input.type)
                     );
                 $(".msg-inputs").append(inputElem);
             }
@@ -45,8 +45,6 @@
         },
         hide: function hide() {
             $(".outer-msg-box").hide();
-            console.log("?");
-
         },
         show: function show() {
             $(".outer-msg-box").show();

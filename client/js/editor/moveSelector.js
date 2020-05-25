@@ -9,6 +9,9 @@
 
         $('.page').hide();
         $(`.page-${defaultPage}`).show();
+
+        Project.Config.pageOpen = defaultPage;
+
         $(".selector-box-menu-sections").html("");
         
         for (let i = 0; i < opts.length; i++) {
@@ -47,6 +50,7 @@
             btnElem.click(function (e, elem) {
                 $(".selector-box-menu-section-box").removeClass("btn-menu-selected");
                 elem.addClass("btn-menu-selected");
+                Project.Config.pageOpen = key;
                 $(`.page`).hide();
                 $(`.page-${key}`).show();
             });
@@ -86,8 +90,8 @@
                 
 
                 page.append(inputElem)
-                $(".selector-box-menu").append(page);
             }
+            $(".selector-box-menu").append(page);
         }
 
         // left buttons toggle right buttons

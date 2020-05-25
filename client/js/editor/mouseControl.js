@@ -20,7 +20,8 @@
         var pos = Project.Fn.getMousePosition($(".top-canvas"), e);
         var [a, b] = pos;
         var [c, d] = lastPos;
-
+        
+        
         // Options
         var options = {
             pos: pos,
@@ -36,15 +37,18 @@
             config: Project.Config
         };
 
+        
         // Modes
         if (lastMode === null) {
             lastMode = mode;
         }
         if (mode != lastMode) {
+            options.topCtx = Project.Draw[lastMode].ctx;
             Project.Draw[lastMode].Deselect(options);
-            lastMode = mode;
-            Project.Draw[mode].Init(options);
 
+            lastMode = mode;
+            options.topCtx = Project.Draw[mode].ctx;
+            Project.Draw[mode].Init(options);
         }
 
 
@@ -71,6 +75,10 @@
             handleMove(e);
         });
 
+        $(".content").on("contextMenu",function (e) {
+            e.preventDefault();
+        })
+
         $(window).mousemove(handleMove);
 
         $(window).mouseup(function (e) {
@@ -78,7 +86,7 @@
             Project.Canvas.mousedown = false;
         });
 
-
+        
         const response = await fetch("/data/modes.json");
         const json = await response.json();
 

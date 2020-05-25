@@ -85,18 +85,41 @@
             ]
         },
         "selector": {
-            "name": "Type",
+            "name": "Selection",
             "inputs": [
-                {
-                    "title": "Selection Mode",
-                    "type": "select",
-                    "options": {
-                        "Rectangle": "Rectangle",
-                        "Free Draw": "FreeDraw"
-                    },
-                    "option": "SelectMode"
-                }
             ]
+        },
+        "transform": {
+            "name": "Transform",
+            "inputs": []
+        },
+        "skew": {
+            "name": "Skew",
+            "inputs": []
+        },
+        "warp": {
+            "name": "Warp",
+            "inputs": []
+        },
+        "move": {
+            "name": "Move",
+            "inputs": []
+        },
+        "square": {
+            "name": "Square",
+            "inputs": []
+        },
+        "rectangle": {
+            "name": "Rectangle",
+            "inputs": []
+        },
+        "triangle": {
+            "name": "Triangle",
+            "inputs": []
+        },
+        "circle": {
+            "name": "Circle",
+            "inputs": []
         }
     },
     "sidebuttons": [
@@ -112,8 +135,29 @@
         },
         {
             "name": "Select",
-            "options": [],
+            "options": [
+                
+            ],
             "defaultPage": "selector"
+        },
+        {
+            "name": "Transform",
+            "options": [
+                "transform",
+                "warp",
+                "skew",
+                "move"
+            ],
+            "defaultPage":"transform"
+        },
+        {
+            "name":"Shapes",
+            "options":[
+                "square",
+                "triangle",
+                "circle",
+                "rectangle"
+            ]
         }
     ]
 }

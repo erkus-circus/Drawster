@@ -29,7 +29,7 @@
             var btnUp = $("<span>").className("layer-button up-layer").id(layer.ID + "UA").html("&uarr;").click(handleUpArrow).title("Move layer up");
             var btnDown = $("<span>").className("layer-button up-layer").id(layer.ID + "DA").html("&darr;").click(handleDownArrow).title("Move layer down");
 
-            var btnShow = $("<pre>").className("layer-button toggle-layer").id(layer.ID + "SH").html("✓").click(handleToggleShow).title("Toggle if layer is showing");
+            var btnShow = $("<pre>").className("layer-button toggle-layer").id(layer.ID + "SH").html(layer.showing ? "✓" : "_").click(handleToggleShow).title("Toggle if layer is showing");
             var buttonBox = $("<span>").className("layer-buttons").append($.merge(btnShow));
 
             var buttonBox2 = $("<span>").className("layer-buttons right").append($.merge(btnDel, btnRen, btnUp, btnDown));
@@ -114,7 +114,7 @@
         } else {
             elem.html("_")
         }
-
+        Project.Layers.layers[getLayerIndexByID(ID)].showing = !Project.Layers.layers[getLayerIndexByID(ID)].showing;
         $("#" + Project.Layers.layers[getLayerIndexByID(ID)].ID).toggle();
     }
 
@@ -150,6 +150,7 @@
         selectedContext: null,
         Layer: class {
             ID = window.Project.Fn.genID();
+            showing = true;
             constructor(name) {
                 this.name = name;
                 // Add canvas:

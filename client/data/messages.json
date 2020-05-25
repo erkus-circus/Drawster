@@ -1,4 +1,35 @@
 {
+    "ResizeCanvases": {
+        "title":"Resize Canvas",
+        "content": "Resize Canvas (px)",
+        "inputs": [
+            {
+                "name": "width",
+                "content": "Width:",
+                "value": "900",
+                "type":"number"
+                
+            },
+            {
+                "name": "height", 
+                "content": "Height:",
+                "value": "900",
+                "type": "number"
+            }
+        ],
+        "buttons":[
+            {
+                "args":{},
+                "title":"Cancel",
+                "action":"Project.MessageBox.hide"
+            },
+            {
+                "args": {},
+                "title": "Ok",
+                "action": "Project.Canvas.resizeConfirmed"
+            }
+        ]
+    },
     "NewLayer": {
         "title": "New Layer",
         "content": "Create a new layer.",
@@ -6,7 +37,8 @@
             {
                 "name": "name",
                 "content": "Name: ",
-                "value": "Layer"
+                "value": "Layer",
+                "type": "textarea"
             }
         ],
         "buttons": [
@@ -29,7 +61,8 @@
             {
                 "name": "name",
                 "content": "Name: ",
-                "value": "Layer"
+                "value": "Layer",
+                "type": "textarea"
             }
         ],
         "buttons": [

@@ -5,8 +5,11 @@
             Pencil: "Pencil",
             FromSource: "Source",
             Select: "Select",
+            Transform: "Transform",
+            Shapes: "Shapes"
         },
         mode: "Pen",
+        pageOpen:"color",
         selected: {
             from: [0, 0],
             // Value 

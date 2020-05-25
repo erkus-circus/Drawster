@@ -189,7 +189,7 @@
             return this.forEach(function (elem) {
                 elem.removeAttribute(attr)
             });
-        }
+        };
 
         List.prototype.on = function (evt, callback) {
             if (evt.indexOf(' ') > 0) {
@@ -201,9 +201,9 @@
             return this.forEach(function (elem) {
                 elem.addEventListener(evt, function (e) {
                     callback(e, Erklib(elem));
-                }, false);
+                }, Array.prototype.slice.call(arguments).slice(2, arguments.length));
             });
-        }
+        };
 
         List.prototype.off = function (evt, callback) {
             if (evt.index(' ') >= 0) {
@@ -215,7 +215,7 @@
             return this.forEach(function (elem) {
                 elem.removeEventListener(evt, function (e) {
                     callback(e, Erklib(elem));
-                }, false);
+                }, Array.prototype.slice.call(arguments).slice(2,arguments.length));
             });
         };
 

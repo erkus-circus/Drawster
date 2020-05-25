@@ -1,5 +1,7 @@
 [
     "Pen",
     "Select",
-    "Move"
+    "Move",
+    "Transform",
+    "Shapes"
 ]

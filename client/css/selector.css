@@ -18,8 +18,6 @@
     overflow-y: auto;
     top: -8px;
     height: 250px;
-    transition: min-height .5s;
-    max-height: 350px;
     left: 36px;
     position: absolute;
 }
@@ -99,7 +97,7 @@
     width: 32px;
     height: 32px;
     margin: 2px 0;
-    top: -96px;
+    top: -168px;
     text-align: center;
     cursor: pointer;
     color: white;

@@ -42,8 +42,25 @@
                         "name": "Zoom Out",
                         "type": "button",
                         "action": "Project.Editor.zoomOut"
+                    },
+                    
+                    {
+                        "name": "Reset Zoom",
+                        "type": "button",
+                        "action": "Project.Editor.resetZoom"
                     }
                 ]
+            }
+        ]
+    },
+    {
+        "name":"Canvas",
+        "type":"dropdown",
+        "content":[
+            {
+                "name":"Resize Canvas",
+                "type":"button",
+                "action":"Project.Canvas.resize"
             }
         ]
     },
