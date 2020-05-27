@@ -1,4 +1,3 @@
-/* /layers.js */
 (function (window) {
     function updateLayers() {
         $(".canvases").html("");
@@ -43,7 +42,7 @@
             $('.layer-editor').prepend(selector);
 
         }
-        $("#" + Project.Layers.selected + "B").addClass("layer-selected")
+        $("#" + Project.Layers.selected + "B").addClass("layer-selected");
 
         // select layer
         $(".layer-name").click(setLayer);
@@ -55,14 +54,12 @@
 
     function setLayer(e, elem) {
         $(".layer-box").removeClass("layer-selected");
-        elem.parent().addClass("layer-selected");
+        $(elem[0]).parent().addClass("layer-selected");
 
         var layer = getLayerByIndex(getLayerIndexByID(elem.id()[0]));
         Project.Layers.selected = layer.ID;
         Project.Layers.selectedCanvas = layer.canvas;
         Project.Layers.selectedContext = layer.ctx;
-
-
     }
 
     function rawID(ID) {
@@ -94,9 +91,14 @@
             Project.MessageBox.show();
             return;
         }
+        // here: layer is still selected
         $("#" + rawID(ID)).remove();
         $("#" + rawID(ID) + "B").remove();
         Project.Layers.layers.splice(getLayerIndexByID(ID), 1);
+
+        // set layer to layer 0
+        // picks the 0th ID
+        setLayer(null, $(".layer-name"));
     }
 
     function renameLayer(ID) {
@@ -178,7 +180,11 @@
         addLayerGUI: function () {
             Project.MessageBox.setMessage("NewLayer");
             Project.MessageBox.show();
+
         },
+
+        getLayerByID: function (id) { return Project.Layers.layers[getLayerIndexByID(id)] },
+        
         layers: []
     };
 

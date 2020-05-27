@@ -10,24 +10,16 @@
     Project.prototype.Draw.Pen.Top = function (opts) {
         alternating = !alternating;
         
-        var c = opts.topCtx;
-        c.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
-        c.beginPath();
-        c.shadowBlur = 1;
-        c.shadowColor = alternating ? "#fff": "#000";
-        c.strokeStyle = !alternating ? "#fff" : "#000";
-
-
-        c.arc(opts.pos[0], opts.pos[1], opts.config.size / 2, 0, 2 * Math.PI);
-        c.stroke();
-        c.beginPath();
-        c.shadowBlur = 1;
-        c.shadowColor = alternating ? "#fff" : "#000";
-        c.strokeStyle = !alternating ? "#fff" : "#000";
-
-
-        c.arc(opts.pos[0], opts.pos[1], 1, 0, 2 * Math.PI);
-        c.fill();
+        var tc = opts.topCtx;
+        tc.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
+        tc.beginPath();
+        
+        tc.arc(opts.pos[0], opts.pos[1], opts.config.size / 2, 0, 2 * Math.PI);
+        tc.stroke();
+        tc.beginPath();
+        tc.shadowBlur = 1;
+        tc.arc(opts.pos[0], opts.pos[1], 1, 0, 2 * Math.PI);
+        tc.fill();
 
     }
     Project.prototype.Draw.Pen.Move = function (opts) {
@@ -42,7 +34,7 @@
         c.lineWidth = config.size;
         c.shadowColor = config.shadowColor;
         c.shadowBlur = config.shadowBlur;
-        c.globalAlpha = config.globalAlpha / 100;
+        c.globalAlpha = config.strokeOpacity / 100;
         c.shadowOffsetX = config.shadowOffsetX;
         c.shadowOffsetY = config.shadowOffsetY;
         c.lineCap = "round";
@@ -62,7 +54,7 @@
         dc.lineWidth = config.size;
         dc.shadowColor = config.shadowColor;
         dc.shadowBlur = config.shadowBlur;
-        dc.globalAlpha = config.globalAlpha / 100;
+        dc.globalAlpha = config.strokeOpacity / 100;
         dc.shadowOffsetX = config.shadowOffsetX;
         dc.shadowOffsetY = config.shadowOffsetY;
         dc.lineCap = "round";

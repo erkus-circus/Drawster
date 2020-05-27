@@ -1,6 +1,6 @@
 {
     "pages": {
-        "color": {
+        "outline": {
             "inputs":[
                 {
                     "title": "Color: ",
@@ -9,13 +9,7 @@
                     "type": "color",
                     "value": "#000",
                     "option": "color"
-                }
-            ],
-            "name":"Color"
-        },
-        "opacity": {
-            "name":"Opacity",
-            "inputs":[
+                },
                 {
                     "title": "Opacity (0-100): ",
                     "type": "number",
@@ -24,9 +18,20 @@
                         1,
                         100
                     ],
-                    "option": "globalAlpha"
+                    "option": "strokeOpacity"
+                },
+                {
+                    "title": "Line Width (px): ",
+                    "type": "number",
+                    "value": 8,
+                    "range": [
+                        1,
+                        300
+                    ],
+                    "option": "size"
                 }
-            ]
+            ],
+            "name":"Color"
         },
         "shadow": {
             "name": "Shadow",
@@ -69,21 +74,6 @@
                 }
             ]
         },
-        "size": {
-            "name": "Settings",
-            "inputs": [
-                {
-                    "title": "size (px): ",
-                    "type": "number",
-                    "value": 8,
-                    "range": [
-                        1,
-                        300
-                    ],
-                    "option": "size"
-                }
-            ]
-        },
         "selector": {
             "name": "Selection",
             "inputs": [
@@ -105,6 +95,30 @@
             "name": "Move",
             "inputs": []
         },
+
+        "fill": {
+            "name": "Fill",
+            "inputs": [
+                {
+                    "title": "Fill Color: ",
+                    "type": "color",
+                    "value": "#000",
+                    "option": "fillStyle"
+                },
+                {
+                    "title": "Opacity (0-100): ",
+                    "type": "number",
+                    "value": 100,
+                    "range": [
+                        1,
+                        100
+                    ],
+                    "option": "fillOpacity"
+                }
+            ]
+        },
+
+
         "square": {
             "name": "Square",
             "inputs": []
@@ -125,19 +139,12 @@
     "sidebuttons": [
         {
             "name": "Pen",
-            "options": [
-                "color",
-                "size",
-                "opacity",
-                "shadow"
-            ],
+            "options": [],
             "defaultPage": "color"
         },
         {
             "name": "Select",
-            "options": [
-                
-            ],
+            "options": [],
             "defaultPage": "selector"
         },
         {
@@ -153,11 +160,21 @@
         {
             "name":"Shapes",
             "options":[
+                "rectangle",
                 "square",
                 "triangle",
-                "circle",
-                "rectangle"
-            ]
+                "circle"
+            ],
+            "defaultPage":"rectangle"
+        },
+        {
+            "name": "Options",
+            "options":[
+                "outline",
+                "fill",
+                "shadow"
+            ],
+            "defaultPage":"outline"
         }
     ]
 }

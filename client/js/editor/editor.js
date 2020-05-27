@@ -28,9 +28,9 @@
         zoomLevel: 1,
         zoom: function (delta) {
             if (delta < 0) {
-                delta = 30
+                delta = 90
             } else {
-                delta = -30
+                delta = -90
             }
             Project.Editor.zoomLevel += delta / 1000;
             Project.Canvas.resizeCanvases([$("canvas")]);

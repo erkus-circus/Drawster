@@ -16,12 +16,14 @@
             return;
         }
         e.preventDefault();
+
+
+
         const mode = Project.Config.mode;
         var pos = Project.Fn.getMousePosition($(".top-canvas"), e);
         var [a, b] = pos;
         var [c, d] = lastPos;
-        
-        
+
         // Options
         var options = {
             pos: pos,
@@ -53,6 +55,14 @@
 
 
         Project.Draw[mode].Top(options);
+        if (!Project.Layers.getLayerByID(Project.Layers.selected).showing) {
+            // show warning
+            return;
+        }
+        else {
+            // show warning
+
+        }
         if (Project.Canvas.mousedown) {
             if (e.type === "mousedown") {
                 Project.Draw[mode].Down(options);

@@ -4,7 +4,7 @@
         Project.Layers.selectedContext.restore();
         Project.Draw.drawCtx.restore();
         Project.Draw.Select.selected = false;
-        Project.Draw.clear(Project.Draw["Select"].ctx)
+        Project.Draw.clear(Project.Draw["Select"].ctx);
     };
     Project.prototype.Draw.clear = function (ctx) {
         ctx.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
@@ -25,7 +25,8 @@
             FromSource: "Source",
             Select: "Select",
             Transform: "Transform",
-            Shapes: "Shapes"
+            Shapes: "Shapes",
+            Options: "Options"
         },
         mode: "Pen",
         pageOpen:"color",
@@ -39,7 +40,8 @@
         lineCap: "round",
         lineJoin: "round",
         color: "#000",
-        globalAlpha: 100,
+        strokeOpacity: 100,
+        fillOpacity: 100,
         shadowBlur: 0,
         shadowOffsetX: 0,
         shadowOffsetY: 0,
@@ -98,6 +100,16 @@
     Project.prototype.Draw.Move.Init = function (opts) {
         $(".layer-canvas").cursor("all-scroll");
     };
+})(window);
+/* options.js */
+(function (window) {
+    Project.prototype.Draw.Options = {};
+    Project.prototype.Draw.Options.Top = function (opts) { };
+    Project.prototype.Draw.Options.Down = function (opts) { };
+    Project.prototype.Draw.Options.Move = function (opts) { };
+    Project.prototype.Draw.Options.Init = function (opts) { };
+    Project.prototype.Draw.Options.Deselect = function (opts) { };
+    Project.prototype.Draw.Options.Up = function (opts) {};
 })(window);(function (window) {
     // alternate color of selector
     var alternating = true;
@@ -110,24 +122,16 @@
     Project.prototype.Draw.Pen.Top = function (opts) {
         alternating = !alternating;
         
-        var c = opts.topCtx;
-        c.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
-        c.beginPath();
-        c.shadowBlur = 1;
-        c.shadowColor = alternating ? "#fff": "#000";
-        c.strokeStyle = !alternating ? "#fff" : "#000";
-
-
-        c.arc(opts.pos[0], opts.pos[1], opts.config.size / 2, 0, 2 * Math.PI);
-        c.stroke();
-        c.beginPath();
-        c.shadowBlur = 1;
-        c.shadowColor = alternating ? "#fff" : "#000";
-        c.strokeStyle = !alternating ? "#fff" : "#000";
-
-
-        c.arc(opts.pos[0], opts.pos[1], 1, 0, 2 * Math.PI);
-        c.fill();
+        var tc = opts.topCtx;
+        tc.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
+        tc.beginPath();
+        
+        tc.arc(opts.pos[0], opts.pos[1], opts.config.size / 2, 0, 2 * Math.PI);
+        tc.stroke();
+        tc.beginPath();
+        tc.shadowBlur = 1;
+        tc.arc(opts.pos[0], opts.pos[1], 1, 0, 2 * Math.PI);
+        tc.fill();
 
     }
     Project.prototype.Draw.Pen.Move = function (opts) {
@@ -142,7 +146,7 @@
         c.lineWidth = config.size;
         c.shadowColor = config.shadowColor;
         c.shadowBlur = config.shadowBlur;
-        c.globalAlpha = config.globalAlpha / 100;
+        c.globalAlpha = config.strokeOpacity / 100;
         c.shadowOffsetX = config.shadowOffsetX;
         c.shadowOffsetY = config.shadowOffsetY;
         c.lineCap = "round";
@@ -162,7 +166,7 @@
         dc.lineWidth = config.size;
         dc.shadowColor = config.shadowColor;
         dc.shadowBlur = config.shadowBlur;
-        dc.globalAlpha = config.globalAlpha / 100;
+        dc.globalAlpha = config.strokeOpacity / 100;
         dc.shadowOffsetX = config.shadowOffsetX;
         dc.shadowOffsetY = config.shadowOffsetY;
         dc.lineCap = "round";
@@ -200,7 +204,7 @@
     };
     Project.prototype.Draw.Pen.Init = function (opts) {}
 })(window);(function (window) {
-
+    var spaces;
     /*
             var options = {
                 pos: pos,
@@ -220,60 +224,61 @@
         topPos: [0,0],
         bottomPos: [0, 0],
         // if selected
-        selected: false
+        selected: false,
     };
 
     Project.prototype.Draw.Select.Top = function (opts) {
-        var tc = opts.topCtx;
+        var tc = Project.Draw.drawCtx;
         tc.setLineDash([3, 3]);
         tc.beginPath();
         Project.Draw.clear(tc);
         tc.arc(...opts.pos, 1, 0, 2 * Math.PI);
         tc.fill();
+        tc.beginPath();
         tc.arc(...opts.pos, 6, 0, 2 * Math.PI);
         tc.stroke();
 
-        tc.beginPath();
-        tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1]);
     };
 
     Project.prototype.Draw.Select.Down = function (opts) {
         Project.Draw.Select.topPos = [...opts.pos];
         Project.Draw.Select.bottomPos = [...opts.pos];
+        Project.Draw.Select.selected = true;
     };
 
     Project.prototype.Draw.Select.Move = function (opts) {
         Project.Draw.Select.bottomPos = opts.pos;
         var tc = opts.topCtx;
-        
-        /*tc.beginPath();
-        Project.Draw.clear(tc);
-        tc.setLineDash([3, 3]);
-        tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1]);*/
     };
 
     Project.prototype.Draw.Select.Init = function (opts) { }
     
     Project.prototype.Draw.Select.Deselect = function (opts) {
-        var tc = opts.topCtx;
-        tc.beginPath();
-        Project.Draw.clear(tc);
-        tc.setLineDash([3, 3]);
-        tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1]);
+        Project.Draw.clear(Project.Draw.drawCtx);
     }
     
     Project.prototype.Draw.Select.Up = function (opts) {
         Project.Draw.Select.selected = true;
-        
     };
 
 
-
-
     $(window).load(function () {
+        setInterval(() => {
+            spaces = ++spaces < 17 ? spaces : 0;
+            var tc = Project.Draw.Select.ctx;
+            if (Project.Draw.Select.selected) {
+                
+                tc.beginPath();
+                Project.Draw.clear(tc);
+                tc.setLineDash([3, 3]);
+                tc.lineDashOffset = spaces;
+                tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1])
+            }
+        }, 1000/60);
     });
 })(window);(function (window) {
-
+    var start = [0, 0];
+    var end = [0, 0];
     /*
             var options = {
                 pos: pos,
@@ -286,27 +291,88 @@
                 deltaX: a - c,
                 outOfBounds: true,
                 deltaY: b - d,
-                config: Project.Config
+                config: Project.Config // pageOpen
             };*/
 
     Project.prototype.Draw.Shapes = {};
 
     Project.prototype.Draw.Shapes.Top = function (opts) {
+        var tc = opts.topCtx;
+        tc.beginPath();
+        Project.Draw.clear(tc);
+        tc.lineWidth = 1;
+        tc.arc(...opts.pos, 1, 0, 2 * Math.PI);
+        tc.fill();
+        tc.beginPath();
+        tc.arc(...opts.pos, 6, 0, 2 * Math.PI);
+        tc.stroke();
+    };
+
+    Project.prototype.Draw.Shapes.Down = function (opts) {
+        start = [...opts.pos];
+        end = [...opts.pos];
 
     };
 
-    Project.prototype.Draw.Shapes.Down = function (opts) {};
+    Project.prototype.Draw.Shapes.Move = function (opts) {
+        end = [...opts.pos];
 
-    Project.prototype.Draw.Shapes.Move = function (opts) {};
+        var tc = opts.topCtx;
 
-    Project.prototype.Draw.Shapes.Init = function (opts) {}
+        var pageOpen = opts.config.pageOpen;
+        
+        Project.Draw.clip(tc);
 
-    Project.prototype.Draw.Shapes.Deselect = function (opts) {}
+        if (pageOpen == "rectangle") {
+            tc.beginPath();
+            //Project.Draw.clear(tc);
+            tc.strokeStyle = opts.config.color;
+            tc.fillStyle = opts.config.fillStyle;
+            tc.lineWidth = opts.config.size;
+            tc.globalAlpha = opts.config.fillOpacity / 100;
+            tc.rect(...start,end[0]-start[0],end[1]-start[1]);
+            tc.fill();
+            tc.beginPath();
+            tc.globalAlpha = opts.config.strokeOpacity / 100;
+            tc.rect(...start, end[0] - start[0], end[1] - start[1]);
+            tc.stroke();
+        }
 
-    Project.prototype.Draw.Shapes.Up = function (opts) {};
+        tc.restore();
+    };
 
+    Project.prototype.Draw.Shapes.Init = function (opts) {
+        
+    }
 
+    Project.prototype.Draw.Shapes.Deselect = function (opts) { }
 
+    Project.prototype.Draw.Shapes.Up = function (opts) {
+
+        var c = opts.ctx;
+        
+        var pageOpen = opts.config.pageOpen;
+
+        Project.Draw.clip(c);
+
+        if (pageOpen == "rectangle") {
+            c.beginPath();
+            c.strokeStyle = opts.config.color;
+            c.fillStyle = opts.config.fillStyle;
+            c.lineWidth = opts.config.size;
+            c.globalAlpha = opts.config.fillOpacity / 100;
+            c.rect(...start, end[0] - start[0], end[1] - start[1]);
+            c.fill();
+            c.beginPath();
+            c.globalAlpha = opts.config.strokeOpacity / 100;
+            c.rect(...start, end[0] - start[0], end[1] - start[1]);
+            c.stroke();
+
+            Project.Draw.clear(opts.topCtx);
+        }
+
+        c.restore();
+    };
 
     $(window).load(function () {});
 })(window);(function (window) {

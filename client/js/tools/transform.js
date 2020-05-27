@@ -25,9 +25,12 @@
     };
 
     Project.prototype.Draw.Transform.Move = function (opts) {
+
     };
 
-    Project.prototype.Draw.Transform.Init = function (opts) {}
+    Project.prototype.Draw.Transform.Init = function (opts) {
+        Project.Draw.Select.selected = false;
+    }
 
     Project.prototype.Draw.Transform.Deselect = function (opts) {}
 

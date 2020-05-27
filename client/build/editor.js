@@ -65,9 +65,9 @@
         zoomLevel: 1,
         zoom: function (delta) {
             if (delta < 0) {
-                delta = 30
+                delta = 90
             } else {
-                delta = -30
+                delta = -90
             }
             Project.Editor.zoomLevel += delta / 1000;
             Project.Canvas.resizeCanvases([$("canvas")]);
@@ -113,6 +113,11 @@
         },
         distance: function (pos1, pos2) {
             return Math.sqrt(Math.pow(pos2[0] - pos1[0], 2) + Math.pow(pos2[1] - pos1[1], 2));
+        },
+        oppositeRGB: function (rgb) {
+            return rgb.map(function (color) {
+                return 255 - color;
+            });
         }
     };
 })(window);(function (window) {
@@ -194,8 +199,7 @@
             }
         });
     });
-})(window);/* /layers.js */
-(function (window) {
+})(window);(function (window) {
     function updateLayers() {
         $(".canvases").html("");
         $(".layer-editor").html("");
@@ -239,7 +243,7 @@
             $('.layer-editor').prepend(selector);
 
         }
-        $("#" + Project.Layers.selected + "B").addClass("layer-selected")
+        $("#" + Project.Layers.selected + "B").addClass("layer-selected");
 
         // select layer
         $(".layer-name").click(setLayer);
@@ -251,14 +255,12 @@
 
     function setLayer(e, elem) {
         $(".layer-box").removeClass("layer-selected");
-        elem.parent().addClass("layer-selected");
+        $(elem[0]).parent().addClass("layer-selected");
 
         var layer = getLayerByIndex(getLayerIndexByID(elem.id()[0]));
         Project.Layers.selected = layer.ID;
         Project.Layers.selectedCanvas = layer.canvas;
         Project.Layers.selectedContext = layer.ctx;
-
-
     }
 
     function rawID(ID) {
@@ -290,9 +292,14 @@
             Project.MessageBox.show();
             return;
         }
+        // here: layer is still selected
         $("#" + rawID(ID)).remove();
         $("#" + rawID(ID) + "B").remove();
         Project.Layers.layers.splice(getLayerIndexByID(ID), 1);
+
+        // set layer to layer 0
+        // picks the 0th ID
+        setLayer(null, $(".layer-name"));
     }
 
     function renameLayer(ID) {
@@ -374,7 +381,11 @@
         addLayerGUI: function () {
             Project.MessageBox.setMessage("NewLayer");
             Project.MessageBox.show();
+
         },
+
+        getLayerByID: function (id) { return Project.Layers.layers[getLayerIndexByID(id)] },
+        
         layers: []
     };
 
@@ -470,12 +481,14 @@
             return;
         }
         e.preventDefault();
+
+
+
         const mode = Project.Config.mode;
         var pos = Project.Fn.getMousePosition($(".top-canvas"), e);
         var [a, b] = pos;
         var [c, d] = lastPos;
-        
-        
+
         // Options
         var options = {
             pos: pos,
@@ -507,6 +520,14 @@
 
 
         Project.Draw[mode].Top(options);
+        if (!Project.Layers.getLayerByID(Project.Layers.selected).showing) {
+            // show warning
+            return;
+        }
+        else {
+            // show warning
+
+        }
         if (Project.Canvas.mousedown) {
             if (e.type === "mousedown") {
                 Project.Draw[mode].Down(options);

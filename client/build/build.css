@@ -240,11 +240,12 @@
 
 .selector-box-menu {
     width: 250px;
+    transition: width 1s;
     cursor: initial;
     padding: 5px;
     overflow-y: auto;
     top: -8px;
-    height: 250px;
+    height: 300px;
     left: 36px;
     position: absolute;
 }

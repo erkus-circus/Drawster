@@ -6,7 +6,8 @@
             FromSource: "Source",
             Select: "Select",
             Transform: "Transform",
-            Shapes: "Shapes"
+            Shapes: "Shapes",
+            Options: "Options"
         },
         mode: "Pen",
         pageOpen:"color",
@@ -20,7 +21,8 @@
         lineCap: "round",
         lineJoin: "round",
         color: "#000",
-        globalAlpha: 100,
+        strokeOpacity: 100,
+        fillOpacity: 100,
         shadowBlur: 0,
         shadowOffsetX: 0,
         shadowOffsetY: 0,

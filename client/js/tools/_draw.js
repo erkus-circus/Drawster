@@ -4,7 +4,7 @@
         Project.Layers.selectedContext.restore();
         Project.Draw.drawCtx.restore();
         Project.Draw.Select.selected = false;
-        Project.Draw.clear(Project.Draw["Select"].ctx)
+        Project.Draw.clear(Project.Draw["Select"].ctx);
     };
     Project.prototype.Draw.clear = function (ctx) {
         ctx.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
