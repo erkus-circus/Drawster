@@ -10,6 +10,7 @@
 
 .all-canvases {
     z-index: 0;
+    color: white;
     cursor: none;
     display: block;
     padding: 0;

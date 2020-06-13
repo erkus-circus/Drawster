@@ -67,7 +67,15 @@
                     Project.Config[input.option] = value;
                 });
 
-                if (input.type === "number") {
+
+                if (input.type === "button") {
+                    inputElem.append($("<button>").html(input.value)
+                        .className("selector-box-input"));
+                    inputElem.click(function() {
+                        Project.Fn.getPath(input.option)();
+                    });
+                }
+                else if (input.type === "number") {
                     inputElem.append($("<input>").type("number").value(input.value)
                         .className("selector-box-input").display("inline")
                         .min(input.range[0]).max(input.range[1]));

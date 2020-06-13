@@ -1,5 +1,6 @@
 (function (window) {
     var spaces;
+    var alternating = false;
     /*
             var options = {
                 pos: pos,
@@ -16,7 +17,7 @@
             };*/
     
     Project.prototype.Draw.Select = {
-        topPos: [0,0],
+        topPos: [0, 0],
         bottomPos: [0, 0],
         // if selected
         selected: false,
@@ -46,10 +47,11 @@
         var tc = opts.topCtx;
     };
 
-    Project.prototype.Draw.Select.Init = function (opts) { }
+    Project.prototype.Draw.Select.Init = function (opts) {
+    }
     
     Project.prototype.Draw.Select.Deselect = function (opts) {
-        Project.Draw.clear(Project.Draw.drawCtx);
+        Project.Draw.clear(opts.topCtx);
     }
     
     Project.prototype.Draw.Select.Up = function (opts) {
@@ -58,17 +60,24 @@
 
 
     $(window).load(function () {
+
+        
+
         setInterval(() => {
-            spaces = ++spaces < 17 ? spaces : 0;
+            spaces = ++spaces < 40 ? spaces : 0;
             var tc = Project.Draw.Select.ctx;
             if (Project.Draw.Select.selected) {
-                
                 tc.beginPath();
+
                 Project.Draw.clear(tc);
-                tc.setLineDash([3, 3]);
+                tc.setLineDash([5, 5]);
                 tc.lineDashOffset = spaces;
-                tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1])
+                tc.shadowBlur = .01;
+                tc.shadowColor = "#fff"
+
+                
+                tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1]);
             }
-        }, 1000/60);
+        }, 1000 / 60);
     });
 })(window);

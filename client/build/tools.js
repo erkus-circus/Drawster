@@ -110,7 +110,8 @@
     Project.prototype.Draw.Options.Init = function (opts) { };
     Project.prototype.Draw.Options.Deselect = function (opts) { };
     Project.prototype.Draw.Options.Up = function (opts) {};
-})(window);(function (window) {
+})(window);/* penDraw.js */
+(function (window) {
     // alternate color of selector
     var alternating = true;
 
@@ -125,11 +126,11 @@
         var tc = opts.topCtx;
         tc.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
         tc.beginPath();
-        
         tc.arc(opts.pos[0], opts.pos[1], opts.config.size / 2, 0, 2 * Math.PI);
         tc.stroke();
         tc.beginPath();
-        tc.shadowBlur = 1;
+        tc.shadowBlur = .01;
+        tc.shadowColor = "#fff"
         tc.arc(opts.pos[0], opts.pos[1], 1, 0, 2 * Math.PI);
         tc.fill();
 
@@ -205,6 +206,7 @@
     Project.prototype.Draw.Pen.Init = function (opts) {}
 })(window);(function (window) {
     var spaces;
+    var alternating = false;
     /*
             var options = {
                 pos: pos,
@@ -221,7 +223,7 @@
             };*/
     
     Project.prototype.Draw.Select = {
-        topPos: [0,0],
+        topPos: [0, 0],
         bottomPos: [0, 0],
         // if selected
         selected: false,
@@ -251,10 +253,11 @@
         var tc = opts.topCtx;
     };
 
-    Project.prototype.Draw.Select.Init = function (opts) { }
+    Project.prototype.Draw.Select.Init = function (opts) {
+    }
     
     Project.prototype.Draw.Select.Deselect = function (opts) {
-        Project.Draw.clear(Project.Draw.drawCtx);
+        Project.Draw.clear(opts.topCtx);
     }
     
     Project.prototype.Draw.Select.Up = function (opts) {
@@ -263,18 +266,25 @@
 
 
     $(window).load(function () {
+
+        
+
         setInterval(() => {
-            spaces = ++spaces < 17 ? spaces : 0;
+            spaces = ++spaces < 40 ? spaces : 0;
             var tc = Project.Draw.Select.ctx;
             if (Project.Draw.Select.selected) {
-                
                 tc.beginPath();
+
                 Project.Draw.clear(tc);
-                tc.setLineDash([3, 3]);
+                tc.setLineDash([5, 5]);
                 tc.lineDashOffset = spaces;
-                tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1])
+                tc.shadowBlur = .01;
+                tc.shadowColor = "#fff"
+
+                
+                tc.strokeRect(...Project.Draw.Select.topPos, Project.Draw.Select.bottomPos[0] - Project.Draw.Select.topPos[0], Project.Draw.Select.bottomPos[1] - Project.Draw.Select.topPos[1]);
             }
-        }, 1000/60);
+        }, 1000 / 60);
     });
 })(window);(function (window) {
     var start = [0, 0];
@@ -376,7 +386,9 @@
 
     $(window).load(function () {});
 })(window);(function (window) {
-
+    var noTransform;
+    var start;
+    var end;
     /*
             var options = {
                 pos: pos,
@@ -399,20 +411,50 @@
     };
 
     Project.prototype.Draw.Transform.Down = function (opts) {
+        if (noTransform) {
+            Project.MessageBox.setMessage("NoSelectError");
+            Project.MessageBox.show();
+        }
     };
 
     Project.prototype.Draw.Transform.Move = function (opts) {
+        var tc = opts.topCtx;
+        var { pageOpen } = opts.config;
+
+        Project.Draw.clear(tc);
+        tc.beginPath();
+        if (pageOpen == "move") {
+            end[0] += opts.deltaX;
+            end[1] += opts.deltaY;
+            start[0] += opts.deltaX;
+            start[1] += opts.deltaY;
+            tc.strokeRect(...start, end[0] - start[0], end[1] - start[1]);
+        }
+        else if (pageOpen == "skew") {
+            tc.transform(1,start[0]-end[0],start[1]-end[1],1,0,0);
+            tc.strokeRect(...start, end[0] - start[0], end[1] - start[1]);
+        }
     };
 
-    Project.prototype.Draw.Transform.Init = function (opts) {}
-
-    Project.prototype.Draw.Transform.Deselect = function (opts) {}
-
-    Project.prototype.Draw.Transform.Up = function (opts) {
+    Project.prototype.Draw.Transform.finish = function() {
+        
     };
 
-
-
-
-    $(window).load(function () {});
+    Project.prototype.Draw.Transform.Init = function (opts) {
+        if (!Project.Draw.Select.selected) {
+            // ERROR
+            noTransform = true;
+            return;
+        }
+        noTransform = false;
+        Project.Draw.restore();
+        start = Project.Draw.Select.topPos;
+        end = Project.Draw.Select.bottomPos;
+        
+        
+    };
+    Project.prototype.Draw.Transform.Up = function (opts) { };
+    Project.prototype.Draw.Transform.Deselect = function (opts) {
+        opts.ctx.setTransform(1,0,0,1,0,0);
+    };
 })(window);

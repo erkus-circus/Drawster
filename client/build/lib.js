@@ -526,4 +526,13 @@
         module.exports = init()
     }
     window.$ = window._ = window.Erklib = init();
-})(window, window.document);
+})(window, window.document);(function (window) {
+    var ctx;
+    class ClickPoint {
+        x = 0;
+        y = 0;
+        constructor(x, y, draggable, clickCall, dragCall) {
+
+        }
+    }
+})(window);

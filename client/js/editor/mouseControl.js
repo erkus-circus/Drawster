@@ -4,23 +4,31 @@
     var lastMode = null;
 
     function initCanvas(name) {
-        var newCanvas = $("<canvas>").className(`layer-canvas ${name}-canvas`);
+        var newCanvas = $("<canvas>");
+        newCanvas.className(`layer-canvas ${name}-canvas`);
         Project.Canvas.resizeCanvases([newCanvas]);
         Project.Draw[name].canvas = newCanvas;
         Project.Draw[name].ctx = newCanvas[0].getContext("2d");
         $(".top-canvases").append(newCanvas);
     }
 
+    function emulateOpts() {
+        return handleMove(null);
+    }
+
     function handleMove(e) {
         if (!inited) {
             return;
         }
-        e.preventDefault();
-
-
-
+        
         const mode = Project.Config.mode;
-        var pos = Project.Fn.getMousePosition($(".top-canvas"), e);
+        var pos;
+        if(e === null) {
+            pos = [null,null];
+        } else {
+            e.preventDefault();
+            pos = Project.Fn.getMousePosition($(".top-canvas"), e);
+        }
         var [a, b] = pos;
         var [c, d] = lastPos;
 
@@ -30,9 +38,9 @@
             canvas: Project.Layers.selectedCanvas,
             ctx: Project.Layers.selectedContext,
             topCtx: Project.Draw[mode].ctx,
-            topCanvas: Project.Draw.topCanvas,
+            topCanvas: Project.Draw[mode].canvas,
             lastPos: lastPos,
-            eventType: e.type,
+            eventType: e === null ? null : e.type,
             deltaX: a - c,
             outOfBounds: true,
             deltaY: b - d,
@@ -53,7 +61,9 @@
             Project.Draw[mode].Init(options);
         }
 
-
+        if (e === null) {
+            return options;
+        }
         Project.Draw[mode].Top(options);
         if (!Project.Layers.getLayerByID(Project.Layers.selected).showing) {
             // show warning
@@ -104,6 +114,8 @@
             const name = json[i];
             initCanvas(name);
         }
+
+        Project.Draw.emulateDraw = emulateOpts;
 
         inited = true;
     }

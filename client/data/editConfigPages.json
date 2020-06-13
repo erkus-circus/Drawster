@@ -81,19 +81,47 @@
         },
         "transform": {
             "name": "Transform",
-            "inputs": []
+            "inputs": [
+                {
+                    "title":"",
+                    "value":"Finish",
+                    "type":"button",
+                    "option":"Project.Draw.Transform.finish"
+                }
+            ]
         },
         "skew": {
             "name": "Skew",
-            "inputs": []
+            "inputs": [
+                {
+                    "title":"",
+                    "value":"Finish",
+                    "type":"button",
+                    "option":"Project.Draw.Transform.finish"
+                }
+            ]
         },
         "warp": {
             "name": "Warp",
-            "inputs": []
+            "inputs": [
+                {
+                    "title":"",
+                    "value":"Finish",
+                    "type":"button",
+                    "option":"Project.Draw.Transform.finish"
+                }
+            ]
         },
         "move": {
             "name": "Move",
-            "inputs": []
+            "inputs": [
+                {
+                    "title":"",
+                    "value":"Finish",
+                    "type":"button",
+                    "option":"Project.Draw.Transform.finish"
+                }
+            ]
         },
 
         "fill": {

@@ -1,4 +1,16 @@
 {
+    "NoSelectError": {
+        "title": "Unable to transform; no selection",
+        "content": "Select something to transform it",
+        "inputs":[],
+        "buttons":[
+            {
+                "args": {},
+                "title": "Cancel",
+                "action": "Project.MessageBox.hide"
+            }
+        ]
+    },
     "ResizeCanvases": {
         "title":"Resize Canvas",
         "content": "Resize Canvas (px)",

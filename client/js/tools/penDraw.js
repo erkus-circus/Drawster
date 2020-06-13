@@ -1,3 +1,4 @@
+/* penDraw.js */
 (function (window) {
     // alternate color of selector
     var alternating = true;
@@ -13,11 +14,11 @@
         var tc = opts.topCtx;
         tc.clearRect(0, 0, Project.Canvas.width, Project.Canvas.height);
         tc.beginPath();
-        
         tc.arc(opts.pos[0], opts.pos[1], opts.config.size / 2, 0, 2 * Math.PI);
         tc.stroke();
         tc.beginPath();
-        tc.shadowBlur = 1;
+        tc.shadowBlur = .01;
+        tc.shadowColor = "#fff"
         tc.arc(opts.pos[0], opts.pos[1], 1, 0, 2 * Math.PI);
         tc.fill();
 
