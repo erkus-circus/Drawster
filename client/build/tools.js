@@ -389,6 +389,7 @@
     var noTransform;
     var start;
     var end;
+    var imageData;
     /*
             var options = {
                 pos: pos,
@@ -416,10 +417,11 @@
             Project.MessageBox.show();
         }
     };
-
+    
     Project.prototype.Draw.Transform.Move = function (opts) {
         var tc = opts.topCtx;
         var { pageOpen } = opts.config;
+
 
         Project.Draw.clear(tc);
         tc.beginPath();
@@ -438,6 +440,15 @@
 
     Project.prototype.Draw.Transform.finish = function() {
         
+        // get opts
+
+        var {pageOpen, ctx, topCtx} = Project.Draw.emulateDraw();
+        console.log(pageOpen)
+        console.log("ffff");
+        
+        if(pageOpen === "move") {
+            ctx.putImageData(imageData,...start);
+        }
     };
 
     Project.prototype.Draw.Transform.Init = function (opts) {
@@ -450,7 +461,7 @@
         Project.Draw.restore();
         start = Project.Draw.Select.topPos;
         end = Project.Draw.Select.bottomPos;
-        
+        imageData = opts.ctx.getImageData(...start, end[0] - start[0], end[1] - start[1]);
         
     };
     Project.prototype.Draw.Transform.Up = function (opts) { };

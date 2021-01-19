@@ -2,6 +2,7 @@
 (function (window) {
     window.Project.prototype.Canvas = {
         width: 900,
+        
         height: 900,
         resizeCanvases: function (canvases) {
             for (i in canvases) {

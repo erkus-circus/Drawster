@@ -1,51 +1,89 @@
 (function (window) {
     function updateLayers() {
-        $(".canvases").html("");
-        $(".layer-editor").html("");
+        $(".canvases")
+            .html("");
+        $(".layer-editor")
+            .html("");
         for (let i = 0; i < Project.Layers.layers.length; i++) {
             const layer = Project.Layers.layers[i];
 
             // Set Z-Index for canvases, untested
-            $(".canvases").append(layer.canvas.zIndex(i));
+            $(".canvases")
+                .append(layer.canvas.zIndex(i));
 
             // selected layer
 
             //layer editor
             // ID of layer + S + (D|R|C|B(ox)) as selector, so when deleting layer, delete buttons
-            var btnDel = $("<span>").className("layer-button delete-layer").id(layer.ID + "D");
-            btnDel.text("D").title("Delete layer");
-            btnDel.click(function (e, elem) {
-                delLayer(elem.id()[0]);
-            });
+            var btnDel = $("<span>")
+                .className("layer-button delete-layer")
+                .id(layer.ID + "D");
+            btnDel
+                .text("D")
+                .title("Delete layer");
+            btnDel
+                .click(function (e, elem) {
+                    delLayer(elem.id()[0]);
+                });
 
-            var btnRen = $("<span>").className("layer-button rename-layer").id(layer.ID + "R").title("Rename layer");
-            btnRen.text("R");
-            btnRen.click(function (e, elem) {
-                renameLayer(elem.id()[0]);
-            });
+            var btnRen = $("<span>")
+                .className("layer-button rename-layer")
+                .id(layer.ID + "R")
+                .title("Rename layer");
+            btnRen
+                .text("R");
+            btnRen
+                .click(function (e, elem) {
+                    renameLayer(elem.id()[0]);
+                });
 
             // move layer up
-            var btnUp = $("<span>").className("layer-button up-layer").id(layer.ID + "UA").html("&uarr;").click(handleUpArrow).title("Move layer up");
-            var btnDown = $("<span>").className("layer-button up-layer").id(layer.ID + "DA").html("&darr;").click(handleDownArrow).title("Move layer down");
+            var btnUp = $("<span>")
+                .className("layer-button up-layer")
+                .id(layer.ID + "UA")
+                .html("&uarr;")
+                .click(handleUpArrow)
+                .title("Move layer up");
+            var btnDown=$("<span>")
+                .className("layer-button up-layer")
+                .id(layer.ID + "DA")
+                .html("&darr;")
+                .click(handleDownArrow)
+                .title("Move layer down");
 
-            var btnShow = $("<pre>").className("layer-button toggle-layer").id(layer.ID + "SH").html(layer.showing ? "✓" : "_").click(handleToggleShow).title("Toggle if layer is showing");
-            var buttonBox = $("<span>").className("layer-buttons").append($.merge(btnShow));
+            var btnShow = $("<pre>")
+                .className("layer-button toggle-layer")
+                .id(layer.ID + "SH")
+                .html(layer.showing ? "&check;" : "_")
+                .click(handleToggleShow)
+                .title("Toggle if layer is showing");
+            var buttonBox = $("<span>")
+                .className("layer-buttons")	.append($.merge(btnShow));
 
-            var buttonBox2 = $("<span>").className("layer-buttons right").append($.merge(btnDel, btnRen, btnUp, btnDown));
-            var nameBox = $("<span>").className("layer-name").id(layer.ID + "N").text(layer.name).title("Select layer to edit");
+            var buttonBox2 = $("<span>")
+                .className("layer-buttons right")
+                .append($.merge(btnDel, btnRen, btnUp, btnDown));
+            var nameBox = $("<span>")
+                .className("layer-name")
+                .id(layer.ID + "N")
+                .text(layer.name)
+                .title("Select layer to edit");
 
-            var selector = $("<div>").className("layer-box left").id(layer.ID + "B").append(
-                $([buttonBox[0], nameBox[0], buttonBox2[0]])
-            );
+            var selector = $("<div>")
+                .className("layer-box left")
+                .id(layer.ID + "B")
+                .append($([buttonBox[0], nameBox[0], buttonBox2[0]]));
 
 
             $('.layer-editor').prepend(selector);
 
         }
-        $("#" + Project.Layers.selected + "B").addClass("layer-selected");
+        $("#" + Project.Layers.selected + "B")
+            .addClass("layer-selected");
 
         // select layer
-        $(".layer-name").click(setLayer);
+        $(".layer-name")
+            .click(setLayer);
     }
 
     function getLayerByIndex(index) {
@@ -53,8 +91,11 @@
     }
 
     function setLayer(e, elem) {
-        $(".layer-box").removeClass("layer-selected");
-        $(elem[0]).parent().addClass("layer-selected");
+        $(".layer-box")
+            .removeClass("layer-selected");
+        $(elem[0])
+            .parent()
+            .addClass("layer-selected");
 
         var layer = getLayerByIndex(getLayerIndexByID(elem.id()[0]));
         Project.Layers.selected = layer.ID;
@@ -93,7 +134,7 @@
         }
         // here: layer is still selected
         $("#" + rawID(ID)).remove();
-        $("#" + rawID(ID) + "B").remove();
+        $("#" + rawID(ID) + "B")	.remove();
         Project.Layers.layers.splice(getLayerIndexByID(ID), 1);
 
         // set layer to layer 0
@@ -112,7 +153,7 @@
         var ID = elem.id()[0];
 
         if (elem.text()[0] === "_") {
-            elem.html("✓")
+            elem.html("&check;")
         } else {
             elem.html("_")
         }
@@ -156,13 +197,13 @@
             constructor(name) {
                 this.name = name;
                 // Add canvas:
-                this.canvas = $("<canvas>").className("layer-canvas").id(this.ID);
+                this.canvas = $("<canvas>")	.className("layer-canvas")	.id(this.ID);
 
                 this.ctx = this.canvas[0].getContext("2d");
             }
         },
         renameLayerConfirmed: function renameLayerConfirmed(input) {
-            $("#" + Project.MessageBox.get("ID") + "N").text(input.name);
+            $("#" + Project.MessageBox.get("ID") + "N")	.text(input.name);
             Project.Layers.layers[getLayerIndexByID(Project.MessageBox.get("ID"))].name = input.name;
             Project.MessageBox.hide();
         },
@@ -193,9 +234,9 @@
         Project.Layers.addLayer({
             name: "Background"
         });
-        var bottomCanvas = $("<canvas>").className("layer-canvas bottom-canvas").zIndex(-1);
+        var bottomCanvas = $("<canvas>")	.className("layer-canvas bottom-canvas")	.zIndex(-1);
         Project.Canvas.resizeCanvases([bottomCanvas]);
-        $(".bottom-canvases").append(bottomCanvas);
+        $(".bottom-canvases")	.append(bottomCanvas);
 
         var c = bottomCanvas[0].getContext("2d");
         c.fillStyle = "#fff";
