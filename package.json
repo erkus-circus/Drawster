@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
-    "simple-git": "^1.126.0",
+    "simple-git": "^3.3.0",
     "socket.io": "^2.2.0"
   }
 }
